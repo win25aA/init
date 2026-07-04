@@ -1,0 +1,214 @@
+
+{ config, pkgs, inputs, ... }:
+
+let
+  # Получаем пакеты spicetify из inputs
+  spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+in
+
+
+
+
+{
+environment.systemPackages = with pkgs; [
+  hyfetch 
+  wireplumber         
+  brightnessctl     
+  playerctl
+  git
+  hyprland
+  firefox
+  kitty
+  fish 
+  fastfetch  
+  adw-gtk3
+  papirus-icon-theme
+  amnezia-vpn-bin
+  osu-lazer-bin 
+  wget
+  telegram-desktop
+  vesktop
+  rose-pine-gtk-theme
+  spotify
+  btop
+  grim
+  slurp
+  wl-clipboard
+  eza
+  starship
+  gzip
+  zip
+  unzip
+  inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
+
+programs.dconf.enable = true;
+programs.amnezia-vpn.enable = true;
+programs.steam.enable = true;
+boot.loader.grub.device = "/dev/sdc";
+boot.loader.grub.enable = true;
+boot.loader.grub.useOSProber = true;
+
+
+
+
+programs.spicetify = {
+    enable = true;
+    theme = spicePkgs.themes.comfy;
+    colorScheme = "Mono";
+    # Убраны запятые из списка
+    enabledExtensions = with spicePkgs.extensions; [ adblock shuffle ];
+  };
+
+
+
+hardware.graphics = {
+  enable = true;
+  enable32Bit = true; # Нужно для Steam и старых игр
+};
+boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+# Указываем системе использовать драйвер Nvidia
+services.xserver.videoDrivers = [ "nvidia" ];
+
+hardware.nvidia = {
+open = false;  
+modesetting.enable = true;
+  powerManagement.enable = false;
+  powerManagement.finegrained = false;
+  
+  nvidiaSettings = true;
+  package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
+};
+
+
+
+
+
+home-manager = {
+  useGlobalPkgs = true;
+  useUserPackages = true;
+
+users.winarowk = { pkgs, ... }: {
+home.stateVersion = "26.11";
+
+gtk = {
+  enable = true;
+  
+  theme = {
+   name = "adw-gtk3-dark";
+   package = pkgs.adw-gtk3;
+    };
+
+    iconTheme = {
+      name = "Papirus";
+      package = pkgs.papirus-icon-theme;
+    };
+  };
+
+qt = {
+        enable = true;
+        platformTheme.name = "gtk";
+      };
+    };
+  };
+
+
+
+
+
+
+
+
+
+
+
+programs.hyprland = {
+  enable = true;
+  xwayland.enable = true; # Нужен, чтобы старые X11-приложения запускались без проблем
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  imports = [./hardware-configuration.nix ];
+
+
+  networking.hostName = "winarowk"; 
+
+  networking.networkmanager.enable = true;
+
+  time.timeZone = "Europe/Moscow";
+
+  i18n.defaultLocale = "en_US.UTF-8";
+
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "ru_RU.UTF-8";
+    LC_IDENTIFICATION = "ru_RU.UTF-8";
+    LC_MEASUREMENT = "ru_RU.UTF-8";
+    LC_MONETARY = "ru_RU.UTF-8";
+    LC_NAME = "ru_RU.UTF-8";
+    LC_NUMERIC = "ru_RU.UTF-8";
+    LC_PAPER = "ru_RU.UTF-8";
+    LC_TELEPHONE = "ru_RU.UTF-8";
+    LC_TIME = "ru_RU.UTF-8";
+  };
+
+fileSystems."/mnt/games" = {
+  device = "/dev/disk/by-uuid/3f80c736-41e1-4e16-a46e-716f4650aa8b";
+  fsType = "ext4";
+  options = [ "users" "nofail" "x-systemd.automount" ];
+};
+
+
+  services.xserver.enable = true;
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.xfce.enable = true;
+
+  services.xserver.xkb = {
+    layout = "us,ru";
+    options = "grp:alt_shift_toggle";    
+    variant = "";
+  };
+  services.spice-vdagentd.enable = true;
+  services.printing.enable = true;
+  services.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+  users.users."winarowk" = {
+    isNormalUser = true;
+    description = "winarowk";
+    extraGroups = [ "networkmanager" "wheel" ];
+    packages = with pkgs; [
+    ];
+  };
+  programs.firefox.enable = true;
+  nixpkgs.config.allowUnfree = true;
+  system.stateVersion = "26.05"; 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];  
+}
