@@ -1,0 +1,125 @@
+
+{ config, pkgs, inputs, ... }:
+{
+environment.systemPackages = with pkgs; [
+  hyfetch 
+  wireplumber         
+  brightnessctl     
+  playerctl
+  git
+  hyprland
+  firefox
+  spotify
+  kitty
+  fish 
+  fastfetch  
+  amnezia-vpn-bin
+  osu-lazer-bin 
+  inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
+
+programs.amnezia-vpn.enable = true;
+
+boot.loader.grub.device = "/dev/sdc";
+boot.loader.grub.enable = true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  imports = [./hardware-configuration.nix ];
+
+
+  networking.hostName = "winarowk"; 
+
+  networking.networkmanager.enable = true;
+
+  time.timeZone = "Europe/Moscow";
+
+  i18n.defaultLocale = "en_US.UTF-8";
+
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "ru_RU.UTF-8";
+    LC_IDENTIFICATION = "ru_RU.UTF-8";
+    LC_MEASUREMENT = "ru_RU.UTF-8";
+    LC_MONETARY = "ru_RU.UTF-8";
+    LC_NAME = "ru_RU.UTF-8";
+    LC_NUMERIC = "ru_RU.UTF-8";
+    LC_PAPER = "ru_RU.UTF-8";
+    LC_TELEPHONE = "ru_RU.UTF-8";
+    LC_TIME = "ru_RU.UTF-8";
+  };
+
+  services.xserver.enable = true;
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.xfce.enable = true;
+
+  services.xserver.xkb = {
+    layout = "us,ru";
+    options = "grp:alt_shift_toggle";    
+    variant = "";
+  };
+  services.spice-vdagentd.enable = true;
+  services.printing.enable = true;
+  services.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+  users.users."winarowk" = {
+    isNormalUser = true;
+    description = "winarowk";
+    extraGroups = [ "networkmanager" "wheel" ];
+    packages = with pkgs; [
+    ];
+  };
+  programs.firefox.enable = true;
+  nixpkgs.config.allowUnfree = true;
+  system.stateVersion = "26.05"; 
+  
+}

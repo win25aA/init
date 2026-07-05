@@ -11,14 +11,19 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  claude-code
+  upscayl
+  matugen
   hyfetch 
   wireplumber         
   brightnessctl     
   playerctl
+  spotiflac
   git
   hyprland
   firefox
   kitty
+  cava
   fish 
   fastfetch  
   adw-gtk3
@@ -29,6 +34,7 @@ environment.systemPackages = with pkgs; [
   telegram-desktop
   vesktop
   rose-pine-gtk-theme
+  neovim
   spotify
   btop
   grim
@@ -37,6 +43,7 @@ environment.systemPackages = with pkgs; [
   eza
   starship
   gzip
+  
   zip
   unzip
   inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -49,6 +56,8 @@ boot.loader.grub.device = "/dev/sdc";
 boot.loader.grub.enable = true;
 boot.loader.grub.useOSProber = true;
 
+virtualisation.libvirtd.enable = true;
+programs.virt-manager.enable = true;
 
 
 
@@ -89,6 +98,8 @@ home-manager = {
   useUserPackages = true;
 
 users.winarowk = { pkgs, ... }: {
+  imports = [ ./home.nix ]; 
+
 home.stateVersion = "26.11";
 
 gtk = {
@@ -111,13 +122,6 @@ qt = {
       };
     };
   };
-
-
-
-
-
-
-
 
 
 
@@ -203,7 +207,7 @@ fileSystems."/mnt/games" = {
   users.users."winarowk" = {
     isNormalUser = true;
     description = "winarowk";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
     packages = with pkgs; [
     ];
   };
