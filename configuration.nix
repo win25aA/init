@@ -49,6 +49,7 @@ environment.systemPackages = with pkgs; [
 programs.dconf.enable = true;
 programs.amnezia-vpn.enable = true;
 programs.steam.enable = true;
+services.flatpak.enable = true;
 programs.nix-ld.enable = true;
 boot.loader.grub.device = "/dev/sdc";
 boot.loader.grub.enable = true;
