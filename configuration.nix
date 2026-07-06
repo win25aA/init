@@ -11,9 +11,6 @@ in
 
 {
 environment.systemPackages = with pkgs; [
-  claude-code
-  upscayl
-  matugen
   hyfetch 
   wireplumber         
   brightnessctl     
@@ -23,7 +20,6 @@ environment.systemPackages = with pkgs; [
   hyprland
   firefox
   kitty
-  cava
   fish 
   fastfetch  
   adw-gtk3
@@ -46,7 +42,6 @@ environment.systemPackages = with pkgs; [
   
   zip
   unzip
-  inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
 programs.dconf.enable = true;
@@ -56,8 +51,6 @@ boot.loader.grub.device = "/dev/sdc";
 boot.loader.grub.enable = true;
 boot.loader.grub.useOSProber = true;
 
-virtualisation.libvirtd.enable = true;
-programs.virt-manager.enable = true;
 
 
 
@@ -96,6 +89,7 @@ modesetting.enable = true;
 home-manager = {
   useGlobalPkgs = true;
   useUserPackages = true;
+  extraSpecialArgs = { inherit inputs; };
 
 users.winarowk = { pkgs, ... }: {
   imports = [ ./home.nix ]; 
@@ -181,7 +175,7 @@ programs.hyprland = {
 fileSystems."/mnt/games" = {
   device = "/dev/disk/by-uuid/3f80c736-41e1-4e16-a46e-716f4650aa8b";
   fsType = "ext4";
-  options = [ "users" "nofail" "x-systemd.automount" "exec" ];
+  options = [ "users" "nofail" "x-systemd.automount" ];
 };
 
 
@@ -207,7 +201,7 @@ fileSystems."/mnt/games" = {
   users.users."winarowk" = {
     isNormalUser = true;
     description = "winarowk";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
+    extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
     ];
   };
