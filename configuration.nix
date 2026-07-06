@@ -12,9 +12,7 @@ in
 {
 environment.systemPackages = with pkgs; [
   hyfetch 
-  uv
   wireplumber         
-  nodejs_22
   brightnessctl     
   playerctl
   spotiflac
@@ -49,6 +47,7 @@ environment.systemPackages = with pkgs; [
 programs.dconf.enable = true;
 programs.amnezia-vpn.enable = true;
 programs.steam.enable = true;
+programs.nix-ld.enable = true;
 boot.loader.grub.device = "/dev/sdc";
 boot.loader.grub.enable = true;
 boot.loader.grub.useOSProber = true;
