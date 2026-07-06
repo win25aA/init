@@ -12,7 +12,6 @@ in
 {
 environment.systemPackages = with pkgs; [
   mpc
-  mpd
   rmpc
   nodejs_22
   uv
