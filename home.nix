@@ -319,6 +319,11 @@ in
     };
   };
 
+  home.file."Pictures/wallpapers" = {
+    source = ./wallpapers;
+    recursive = true;
+  };
+
   xdg.configFile."matugen/config.toml".text = ''
     [config]
     image_mode = "dark"
