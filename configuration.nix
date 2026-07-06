@@ -58,7 +58,6 @@ programs.nix-ld.enable = true;
 boot.loader.grub.device = "/dev/sdc";
 boot.loader.grub.enable = true;
 boot.loader.grub.useOSProber = true;
-services.mpd.enable = true;
 
 
 
@@ -91,6 +90,11 @@ modesetting.enable = true;
 };
 
 
+services.mpd = {
+  enable = true;
+  musicDirectory = "/home/winarowk/Music"; 
+
+};
 
 
 
