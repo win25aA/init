@@ -12,6 +12,7 @@ in
 {
 environment.systemPackages = with pkgs; [
   hyfetch 
+  uv
   wireplumber         
   nodejs_22
   brightnessctl     
