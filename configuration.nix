@@ -11,6 +11,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  uv
   hyfetch 
   wireplumber         
   brightnessctl     
