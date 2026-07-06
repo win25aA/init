@@ -13,6 +13,7 @@ in
 environment.systemPackages = with pkgs; [
   hyfetch 
   wireplumber         
+  nodejs_22
   brightnessctl     
   playerctl
   spotiflac
