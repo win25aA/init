@@ -11,6 +11,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  rmpc
   nodejs_22
   uv
   hyfetch 
