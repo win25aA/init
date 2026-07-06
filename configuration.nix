@@ -11,8 +11,6 @@ in
 
 {
 environment.systemPackages = with pkgs; [
-  mpc
-  rmpc
   nodejs_22
   uv
   hyfetch 
@@ -88,20 +86,6 @@ modesetting.enable = true;
   package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
 };
 
-services.mpd = {
-  enable = true;
-  musicDirectory = "/home/winarowk/Music"; 
-  
-  settings = {
-    # Обратите внимание на квадратные скобки — теперь это список
-    audio_output = [
-      {
-        type = "pipewire";
-        name = "PipeWire Sound Server";
-      }
-    ];
-  };
-};
 
 home-manager = {
   useGlobalPkgs = true;
