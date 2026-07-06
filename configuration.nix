@@ -11,6 +11,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  nodejs_22
   uv
   hyfetch 
   wireplumber         
