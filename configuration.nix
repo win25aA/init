@@ -44,6 +44,7 @@ environment.systemPackages = with pkgs; [
   
   zip
   unzip
+  inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
 programs.dconf.enable = true;
