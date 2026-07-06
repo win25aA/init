@@ -6,7 +6,6 @@
     ./modules/kitty.nix
     ./modules/fish.nix
     ./modules/fastfetch.nix
-    ./modules/noctalia.nix
     ./modules/matugen.nix
     ./modules/nodejs.nix
     ./modules/wallpapers.nix
