@@ -22,6 +22,7 @@ in
       monitor = [
         "DVI-D-1,1440x900@74.98,0x0,1"
         "HDMI-A-1,1024x768@70.07,1440x355,1"
+        ",preferred,auto,1"
       ];
 
       workspace =
@@ -221,6 +222,32 @@ in
         body = ''echo -en "\e]133;A\e\\"'';
         onEvent = "fish_prompt";
       };
+
+      nrs = ''
+        set -l config_dir /etc/nixos
+
+        sudo nixos-rebuild switch --flake $config_dir#winarowk
+
+        if test $status -eq 0
+            echo ""
+            set_color green
+            echo "Сборка прошла успешно, пушу конфиг в GitHub..."
+            set_color normal
+
+            cd $config_dir
+            git add -A
+            if git diff --cached --quiet
+                echo "Изменений нет, пушить нечего."
+            else
+                git commit -m "auto: successful rebuild "(date "+%Y-%m-%d %H:%M")
+                git push
+            end
+        else
+            set_color red
+            echo "Сборка упала — пуш отменён, чинить конфиг."
+            set_color normal
+        end
+      '';
     };
 
     interactiveShellInit = ''
