@@ -78,6 +78,8 @@ hardware.graphics = {
   enable = true;
   enable32Bit = true; # Нужно для Steam и старых игр
 };
+
+environment.sessionVariables.NIXOS_OZONE_WL = "1";
 boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
 # Указываем системе использовать драйвер Nvidia
 services.xserver.videoDrivers = [ "nvidia" ];
