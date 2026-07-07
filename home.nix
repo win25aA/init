@@ -8,6 +8,7 @@
     ./modules/fastfetch.nix
     ./modules/matugen.nix
     ./modules/nodejs.nix
+    ./modules/btop.nix
     ./modules/wallpapers.nix
   ];
 
