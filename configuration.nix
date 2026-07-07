@@ -18,6 +18,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  asciiquarium
   ayugram-desktop
   vulkan-tools
   nodejs_22
