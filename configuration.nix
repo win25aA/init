@@ -67,7 +67,7 @@ boot.loader.grub.enable = true;
 boot.loader.grub.theme = ./grub-theme;
 boot.loader.grub.useOSProber = true;
   services.xserver.enable = true;
-
+services.gvfs.enable = true;
 
 programs.spicetify = {
     enable = true;
