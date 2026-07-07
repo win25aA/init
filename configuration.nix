@@ -18,6 +18,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  ncdu
   asciiquarium
   ayugram-desktop
   vulkan-tools
