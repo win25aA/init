@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "creamlinux-installer": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1779501972,
+        "narHash": "sha256-gH2Yyl8IEVgACimMb5G+EWUWyJtu5yBDqKjOdZ5gyts=",
+        "owner": "novattz",
+        "repo": "creamlinux-installer",
+        "rev": "a1be636a8c00bc1c077cd37fa6a83f5cc8e5e17f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "novattz",
+        "repo": "creamlinux-installer",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -58,6 +74,7 @@
     },
     "root": {
       "inputs": {
+        "creamlinux-installer": "creamlinux-installer",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "noctalia": "noctalia",

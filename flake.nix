@@ -3,6 +3,15 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    creamlinux-installer = {
+     type = "github";
+     owner = "novattz";
+     repo = "creamlinux-installer";
+     flake = false;
+     };
+
+
     
     noctalia = {
       url = "github:noctalia-dev/noctalia";

@@ -10,9 +10,9 @@ let
   simple-sddm-2-theme = pkgs.runCommand "simple-sddm-2-theme" {} ''
     mkdir -p $out/share/sddm/themes/simple-sddm-2
     cp -r ${./simple-sddm-2}/* $out/share/sddm/themes/simple-sddm-2/
+
   '';
 in
-
 
 
 
@@ -50,6 +50,7 @@ environment.systemPackages = with pkgs; [
   gzip
   zip
   unzip
+  (import inputs.creamlinux-installer { inherit pkgs; })
   inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   ] ++ [ simple-sddm-2-theme ];
 
