@@ -190,9 +190,12 @@ services.displayManager.sddm = {
   enable = true;
   wayland.enable = true;
   theme = "simple-sddm-2";
+  extraPackages = with pkgs.kdePackages; [
+    qtmultimedia
+    qtsvg
+    qtvirtualkeyboard
+  ];
 };
-
-
   services.xserver.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
 
