@@ -4,6 +4,13 @@
 let
   # Получаем пакеты spicetify из inputs
   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+
+
+  
+  simple-sddm-2-theme = pkgs.runCommand "simple-sddm-2-theme" {} ''
+    mkdir -p $out/share/sddm/themes/simple-sddm-2
+    cp -r ${./simple-sddm-2}/* $out/share/sddm/themes/simple-sddm-2/
+  '';
 in
 
 
@@ -43,7 +50,7 @@ environment.systemPackages = with pkgs; [
   zip
   unzip
   inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
-  ];
+  ] ++ [ simple-sddm-2-theme ];
 
 programs.dconf.enable = true;
 programs.amnezia-vpn.enable = true;
@@ -179,8 +186,14 @@ fileSystems."/mnt/games" = {
 };
 
 
+services.displayManager.sddm = {
+  enable = true;
+  wayland.enable = true;
+  theme = "simple-sddm-2";
+};
+
+
   services.xserver.enable = true;
-  services.xserver.displayManager.lightdm.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
 
   services.xserver.xkb = {
