@@ -30,9 +30,7 @@ environment.systemPackages = with pkgs; [
   amnezia-vpn-bin
   osu-lazer-bin 
   wget
-  telegram-desktop
   vesktop
-  rose-pine-gtk-theme
   neovim
   spotify
   btop
@@ -42,7 +40,6 @@ environment.systemPackages = with pkgs; [
   eza
   starship
   gzip
-  
   zip
   unzip
   inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default

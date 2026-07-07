@@ -83,7 +83,7 @@ in
           "SUPER, A, exec, kitty"
           "SUPER, E, exec, thunar"
           "SUPER, W, exec, firefox"
-          "SUPER, T, exec, Telegram"
+          "SUPER, T, exec, AyuGram"
           "SUPER, S, exec, steam"
           "SUPER, P, exec, ${ipc} panel-toggle session"
 
