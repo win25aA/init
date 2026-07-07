@@ -18,6 +18,17 @@ in
         ",preferred,auto,1"
       ];
 
+
+
+env = [
+  "LIBVA_DRIVER_NAME,nvidia"
+  "GBM_BACKEND,nvidia-drm"
+  "__GLX_VENDOR_LIBRARY_NAME,nvidia"
+  "NVD_BACKEND,direct"
+  "WLR_NO_HARDWARE_CURSORS,1"
+]; 
+
+
       workspace =
         (map (n: "${toString n}, monitor:DVI-D-1") [ 1 2 3 4 5 ])
         ++ (map (n: "${toString n}, monitor:HDMI-A-1") [ 6 7 8 9 10 ]);
