@@ -52,6 +52,7 @@ services.flatpak.enable = true;
 programs.nix-ld.enable = true;
 boot.loader.grub.device = "/dev/sdc";
 boot.loader.grub.enable = true;
+boot.loader.grub.theme = ./grub-theme;
 boot.loader.grub.useOSProber = true;
 
 
