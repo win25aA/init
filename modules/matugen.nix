@@ -16,7 +16,14 @@
     [templates.fish]
     input_path = "~/.config/matugen/fish-colors.fish"
     output_path = "~/.config/fish/matugen-colors.fish"
+
+[templates.spicetify]
+    input_path = "~/.config/matugen/spicetify-colors.ini"
+    output_path = "~/.config/spicetify/Themes/Comfy/color.ini"
+    post_hook = "spicetify apply"
+
   '';
+
 
   xdg.configFile."matugen/kitty.conf".text = ''
     foreground            {{colors.on_surface.default.hex}}
@@ -100,5 +107,35 @@
     set -U fish_color_comment {{colors.surface_variant.default.hex_stripped}}
     set -U fish_color_selection --background={{colors.surface_container_highest.default.hex_stripped}}
     set -U fish_color_search_match --background={{colors.surface_container_highest.default.hex_stripped}}
+  '';
+
+xdg.configFile."matugen/spicetify-colors.ini".text = ''
+    [Matugen]
+    text = {{colors.on_surface.default.hex_stripped}}
+    subtext = {{colors.on_surface_variant.default.hex_stripped}}
+    main = {{colors.surface.default.hex_stripped}}
+    main-elevated = {{colors.surface_container.default.hex_stripped}}
+    main-transition = {{colors.surface.default.hex_stripped}}
+    highlight = {{colors.surface_variant.default.hex_stripped}}
+    highlight-elevated = {{colors.surface_container_high.default.hex_stripped}}
+    sidebar = {{colors.surface_container_lowest.default.hex_stripped}}
+    player = {{colors.surface.default.hex_stripped}}
+    card = {{colors.surface_container_high.default.hex_stripped}}
+    shadow = {{colors.shadow.default.hex_stripped}}
+    selected-row = {{colors.on_surface.default.hex_stripped}}
+    button = {{colors.primary.default.hex_stripped}}
+    button-active = {{colors.primary_container.default.hex_stripped}}
+    button-disabled = {{colors.surface_variant.default.hex_stripped}}
+    tab-active = {{colors.surface_container_high.default.hex_stripped}}
+    notification = {{colors.primary.default.hex_stripped}}
+    notification-error = {{colors.error.default.hex_stripped}}
+    misc = {{colors.outline.default.hex_stripped}}
+    play-button = {{colors.primary.default.hex_stripped}}
+    play-button-active = {{colors.primary_container.default.hex_stripped}}
+    progress-fg = {{colors.primary.default.hex_stripped}}
+    progress-bg = {{colors.surface_variant.default.hex_stripped}}
+    heart = {{colors.tertiary.default.hex_stripped}}
+    pagelink-active = {{colors.primary.default.hex_stripped}}
+    radio-btn-active = {{colors.primary.default.hex_stripped}}
   '';
 }
