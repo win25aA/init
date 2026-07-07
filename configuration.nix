@@ -11,6 +11,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  ayugram-desktop
   nodejs_22
   uv
   hyfetch 
