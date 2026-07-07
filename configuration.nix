@@ -19,6 +19,7 @@ in
 {
 environment.systemPackages = with pkgs; [
   ayugram-desktop
+  vulkan-tools
   nodejs_22
   uv
   hyfetch 
