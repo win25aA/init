@@ -202,8 +202,6 @@ services.displayManager.sddm = {
     qtvirtualkeyboard
   ];
 };
-  services.xserver.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
 
   services.xserver.xkb = {
     layout = "us,ru";
