@@ -18,6 +18,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  thunar
   ncdu
   asciiquarium
   ayugram-desktop
@@ -65,7 +66,7 @@ boot.loader.grub.device = "/dev/sdc";
 boot.loader.grub.enable = true;
 boot.loader.grub.theme = ./grub-theme;
 boot.loader.grub.useOSProber = true;
-
+  services.xserver.enable = true;
 
 
 programs.spicetify = {
