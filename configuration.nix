@@ -15,9 +15,9 @@ let
 in
 
 
+
 {
 environment.systemPackages = with pkgs; [
-  matugen
   appimage-run
   thunar
   ncdu
@@ -55,12 +55,6 @@ environment.systemPackages = with pkgs; [
   (import inputs.creamlinux-installer { inherit pkgs; })
   inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   ] ++ [ simple-sddm-2-theme ];
-
-
-fonts.packages = with pkgs; [
-  nerd-fonts.jetbrains-mono
-];
-
 
 programs.dconf.enable = true;
 programs.amnezia-vpn.enable = true;

@@ -9,7 +9,6 @@
     ./modules/matugen.nix
     ./modules/nodejs.nix
     ./modules/btop.nix
-    ./modules/waybar.nix
     ./modules/wallpapers.nix
   ];
 

@@ -65,7 +65,7 @@ env = [
       };
 
       "exec-once" = [
-        "waybar"
+        "noctalia"
       ];
 
       bind =
@@ -118,6 +118,10 @@ env = [
         "match:class ^(vesktop)$, workspace 4"
         "match:class ^(Spotify)$, workspace special:music"
         "match:class ^(vesktop)$, workspace special:communication"
+      ];
+
+      layerrule = [
+        "blur on, blur_popups on, ignore_alpha 1.0, match:namespace noctalia-background-.*$"
       ];
 
       source = [

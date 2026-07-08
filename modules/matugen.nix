@@ -17,9 +17,6 @@
     input_path = "~/.config/matugen/fish-colors.fish"
     output_path = "~/.config/fish/matugen-colors.fish"
 
-    [templates.waybar]
-    input_path = "~/.config/matugen/waybar.css"
-    output_path = "~/.config/waybar/colors-waybar.css"
   '';
 
 
@@ -105,17 +102,5 @@
     set -U fish_color_comment {{colors.surface_variant.default.hex_stripped}}
     set -U fish_color_selection --background={{colors.surface_container_highest.default.hex_stripped}}
     set -U fish_color_search_match --background={{colors.surface_container_highest.default.hex_stripped}}
-  '';
-
-  xdg.configFile."matugen/waybar.css".text = ''
-    @define-color surface {{colors.surface.default.hex}};
-    @define-color on_surface {{colors.on_surface.default.hex}};
-    @define-color surface_variant {{colors.surface_variant.default.hex}};
-    @define-color on_surface_variant {{colors.on_surface_variant.default.hex}};
-    @define-color primary {{colors.primary.default.hex}};
-    @define-color on_primary {{colors.on_primary.default.hex}};
-    @define-color secondary {{colors.secondary.default.hex}};
-    @define-color tertiary {{colors.tertiary.default.hex}};
-    @define-color error {{colors.error.default.hex}};
   '';
 }
