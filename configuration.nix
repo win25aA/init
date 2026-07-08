@@ -18,6 +18,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  matugen
   appimage-run
   thunar
   ncdu
