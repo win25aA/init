@@ -73,49 +73,60 @@
     style = ''
       @import "colors-waybar.css";
 
-      * {
-        font-family: "JetBrains Mono Nerd Font";
-        font-size: 13px;
-        border: none;
-        border-radius: 0;
-      }
-
+* {
+  font-family: "JetBrains Mono Nerd Font";
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 0;
+}
       window#waybar {
         background: transparent;
       }
 
-      #workspaces,
-      #clock,
-      #pulseaudio,
-      #network,
-      #cpu,
-      #memory,
-      #battery,
-      #tray {
-        background-color: @surface;
-        color: @on_surface;
-        margin: 5px 3px;
-        padding: 0 10px;
-        border-radius: 12px;
-      }
+#workspaces,
+#clock,
+#pulseaudio,
+#network,
+#cpu,
+#memory,
+#battery,
+#tray {
+  background-color: @surface;
+  color: @on_surface;
+  margin: 5px 3px;
+  padding: 0 10px;
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+}
 
-      #workspaces button {
-        padding: 0 6px;
-        color: @on_surface_variant;
-        background: transparent;
-      }
+#pulseaudio:hover,
+#network:hover,
+#cpu:hover,
+#memory:hover,
+#battery:hover {
+  background-color: @surface_variant;
+  padding: 0 14px;
+}
+#workspaces button {
+  padding: 0 6px;
+  color: @on_surface_variant;
+  background: transparent;
+  transition: all 0.25s ease-in-out;
+}
 
-      #workspaces button.active {
-        color: @on_primary;
-        background-color: @primary;
-        border-radius: 10px;
-      }
+#workspaces button.active {
+  color: @on_primary;
+  background-color: @primary;
+  border-radius: 10px;
+  padding: 0 12px;
+}
 
-      #workspaces button:hover {
-        background-color: @surface_variant;
-        border-radius: 10px;
-      }
-
+#workspaces button:hover {
+  background-color: @surface_variant;
+  border-radius: 10px;
+  padding: 0 10px;
+}
       #battery.warning {
         color: @tertiary;
       }

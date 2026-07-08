@@ -18,6 +18,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  nerd-fonts.jetbrains-mono
   matugen
   appimage-run
   thunar
