@@ -85,7 +85,6 @@
         background: transparent;
       }
 
-      #workspaces,
       #clock,
       #pulseaudio,
       #network,
@@ -110,11 +109,21 @@
         padding: 0 14px;
       }
 
+      /* Единая полоса воркспейсов, как в noctalia — один общий фон,
+         кнопки внутри просто меняют цвет, а не сидят отдельными капсулами */
+      #workspaces {
+        background-color: @surface;
+        border-radius: 999px;
+        padding: 0 6px;
+        margin: 5px 3px;
+      }
+
       #workspaces button {
-        padding: 2px 10px;
-        margin: 4px 2px;
+        padding: 0 8px;
+        margin: 6px 3px;
+        min-width: 10px;
         color: @on_surface_variant;
-        background-color: @surface_variant;
+        background: transparent;
         border-radius: 999px;
         transition: all 0.25s ease-in-out;
       }
@@ -126,8 +135,8 @@
       }
 
       #workspaces button:hover {
-        background-color: @secondary;
-        color: @on_primary;
+        background-color: @surface_variant;
+        color: @on_surface;
       }
 
       #battery.warning {
