@@ -18,18 +18,17 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  appimage-run
   thunar
   ncdu
   asciiquarium
   ayugram-desktop
-  vulkan-tools
   nodejs_22
   uv
   hyfetch 
   wireplumber         
   brightnessctl     
   playerctl
-  spotiflac
   git
   hyprland
   firefox
@@ -61,6 +60,7 @@ programs.dconf.enable = true;
 programs.amnezia-vpn.enable = true;
 programs.steam.enable = true;
 services.flatpak.enable = true;
+services.usbmuxd.enable = true;
 programs.nix-ld.enable = true;
 boot.loader.grub.device = "/dev/sdc";
 boot.loader.grub.enable = true;

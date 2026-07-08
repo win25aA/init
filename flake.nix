@@ -11,7 +11,6 @@
      flake = false;
      };
 
-
     
     noctalia = {
       url = "github:noctalia-dev/noctalia";
