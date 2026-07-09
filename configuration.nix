@@ -18,6 +18,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  notion
   android-tools
   matugen
   appimage-run
