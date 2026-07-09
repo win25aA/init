@@ -38,9 +38,17 @@ let
 
     echo "$WALL" > "$CACHE"
 
-    # генерим цвета и перезагружаем стили waybar
+    # генерим новую тему matugen из обоев
     matugen image "$WALL"
-    pkill -SIGUSR2 waybar 2>/dev/null || true
+
+    # перезапускаем waybar, чтобы тема применилась
+    if systemctl --user is-active --quiet waybar.service; then
+      systemctl --user restart waybar.service
+    else
+      pkill waybar 2>/dev/null
+      sleep 0.3
+      hyprctl dispatch exec waybar >/dev/null 2>&1 || waybar & disown
+    fi
   '';
 in
 {
