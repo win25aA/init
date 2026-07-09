@@ -75,7 +75,7 @@ programs.spicetify = {
     theme = spicePkgs.themes.comfy;
     colorScheme = "Mono";
     # Убраны запятые из списка
-    enabledExtensions = with spicePkgs.extensions; [ adblock shuffle ];
+enabledExtensions = [ ];
   };
 
 
