@@ -18,6 +18,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  android-tools
   matugen
   appimage-run
   thunar
@@ -223,7 +224,7 @@ services.displayManager.sddm = {
   users.users."winarowk" = {
     isNormalUser = true;
     description = "winarowk";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "adbusers" ];
     packages = with pkgs; [
     ];
   };
