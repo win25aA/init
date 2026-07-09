@@ -66,7 +66,7 @@ env = [
       };
 
       "exec-once" = [
-        "noctalia"
+        "waybar"
       ];
 
       bind =
@@ -91,7 +91,7 @@ env = [
           "SUPER, V, togglefloating"
           "SUPER, M, exec, command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit"
 
-          "SUPER, space, exec, ${ipc} panel-toggle launcher"
+          "SUPER, space, exec, rofi -show drun"
           "SUPER, A, exec, kitty"
           "SUPER, E, exec, thunar"
           "SUPER, W, exec, firefox"
