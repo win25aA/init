@@ -109,6 +109,12 @@
         color: @text;
       }
 
+      window.popup,
+      window.popup decoration {
+        background: transparent;
+        border-radius: 12px;
+      }
+
       menu {
         background: @background;
         border: 1px solid alpha(@primary, 0.5);
