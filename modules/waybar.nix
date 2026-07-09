@@ -90,7 +90,7 @@
       * {
         font-family: "Roboto", "Symbols Nerd Font", sans-serif;
         font-size: 12px;
-        font-weight: 700;
+        font-weight: 900;
         border: none;
         border-radius: 0;
         min-height: 0;
