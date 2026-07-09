@@ -3,7 +3,7 @@
 {
   programs.rofi = {
     enable = true;
-    package = pkgs.rofi-wayland;
+    package = pkgs.rofi;
     font = "sans-serif Bold 12";
     location = "center";
     terminal = "${pkgs.kitty}/bin/kitty";
