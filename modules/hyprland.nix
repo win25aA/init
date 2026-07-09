@@ -66,6 +66,7 @@ env = [
       };
 
       "exec-once" = [
+        "waybar"
         "awww-daemon"
         "wallpaper --restore"
       ];
