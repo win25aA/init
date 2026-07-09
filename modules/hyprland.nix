@@ -67,7 +67,7 @@ env = [
 
       "exec-once" = [
         "waybar"
-        "swww-daemon"
+        "awww-daemon"
         "wallpaper --restore"
       ];
 
