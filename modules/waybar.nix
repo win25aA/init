@@ -88,7 +88,7 @@
       @import "${config.home.homeDirectory}/.config/waybar/matugen-colors.css";
 
       * {
-        font-family: "Roboto", "Symbols Nerd Font", sans-serif;
+        font-family: sans-serif, "Symbols Nerd Font";
         font-size: 12px;
         font-weight: 900;
         border: none;
