@@ -1,6 +1,14 @@
 { config, pkgs, inputs, ... }:
 
 {
+  home.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.symbols-only
+    playerctl
+  ];
+
+  fonts.fontconfig.enable = true;
+
   programs.waybar = {
     enable = true;
     systemd.enable = true;
@@ -33,10 +41,8 @@
         calendar = {
           mode = "month";
           format = {
-            months = "<span color='#f2b3c9'><b>{}</b></span>";
-            days = "<span color='#e8dfe2'>{}</span>";
-            weekdays = "<span color='#d5a8b8'>{}</span>";
-            today = "<span color='#f2b3c9'><b><u>{}</u></b></span>";
+            months = "<b>{}</b>";
+            today = "<b><u>{}</u></b>";
           };
         };
       };
@@ -94,8 +100,10 @@
     };
 
     style = ''
+      @import "${config.home.homeDirectory}/.config/waybar/matugen-colors.css";
+
       * {
-        font-family: "JetBrains Mono Nerd Font";
+        font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", "Symbols Nerd Font", sans-serif;
         font-size: 12px;
         font-weight: bold;
         border: none;
@@ -104,27 +112,27 @@
       }
 
       window#waybar {
-        background: rgba(20, 13, 16, 0.85);
+        background: alpha(@background, 0.85);
         border-radius: 14px;
-        color: #e8dfe2;
+        color: @text;
       }
 
       tooltip {
-        background: #1e1418;
-        border: 1px solid #f2b3c9;
+        background: @background;
+        border: 1px solid @primary;
         border-radius: 10px;
-        color: #e8dfe2;
+        color: @text;
       }
 
       #workspaces {
-        background: #2b2126;
+        background: @surface;
         border-radius: 10px;
         margin: 4px 6px 4px 8px;
         padding: 0 4px;
       }
 
       #workspaces button {
-        color: #b8a8ae;
+        color: @text_muted;
         background: transparent;
         border-radius: 8px;
         margin: 3px 2px;
@@ -133,39 +141,39 @@
       }
 
       #workspaces button.active {
-        color: #2b1219;
-        background: #f2b3c9;
+        color: @on_primary;
+        background: @primary;
       }
 
       #workspaces button:hover {
-        color: #f2b3c9;
-        background: #3a2c33;
+        color: @primary;
+        background: @surface_high;
       }
 
       #workspaces button.urgent {
-        color: #2b1219;
-        background: #ffb4ab;
+        color: @on_primary;
+        background: @error;
       }
 
       #clock {
-        color: #f2b3c9;
+        color: @primary;
         padding: 0 10px;
       }
 
       #mpris {
-        color: #e8dfe2;
-        background: #2b2126;
+        color: @text;
+        background: @surface;
         border-radius: 10px;
         margin: 4px 0;
         padding: 0 14px;
       }
 
       #mpris.paused {
-        color: #b8a8ae;
+        color: @text_muted;
       }
 
       #tray {
-        background: #2b2126;
+        background: @surface;
         border-radius: 10px;
         margin: 4px 6px;
         padding: 0 10px;
@@ -178,37 +186,37 @@
       #pulseaudio,
       #battery,
       #idle_inhibitor {
-        color: #e8dfe2;
+        color: @text;
         padding: 0 8px;
       }
 
       #pulseaudio.muted {
-        color: #b8a8ae;
+        color: @text_muted;
       }
 
       #battery.warning {
-        color: #ffdca8;
+        color: @secondary;
       }
 
       #battery.critical {
-        color: #ffb4ab;
+        color: @error;
       }
 
       #battery.charging {
-        color: #b6e3a8;
+        color: @tertiary;
       }
 
       #custom-power {
-        color: #f2b3c9;
-        background: #2b2126;
+        color: @primary;
+        background: @surface;
         border-radius: 10px;
         margin: 4px 8px 4px 4px;
         padding: 0 10px;
       }
 
       #custom-power:hover {
-        color: #2b1219;
-        background: #f2b3c9;
+        color: @on_primary;
+        background: @primary;
       }
     '';
   };
