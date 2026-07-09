@@ -30,6 +30,7 @@
   xdg.configFile."matugen/rofi-colors.rasi".text = ''
     * {
         background: {{colors.surface.default.hex}};
+        background-trans: rgba({{colors.surface.default.red}}, {{colors.surface.default.green}}, {{colors.surface.default.blue}}, 0.8);
         surface: {{colors.surface_container.default.hex}};
         surface-high: {{colors.surface_container_highest.default.hex}};
         primary: {{colors.primary.default.hex}};

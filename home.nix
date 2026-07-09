@@ -12,6 +12,8 @@
     ./modules/waybar.nix
     ./modules/rofi.nix
     ./modules/wallpapers.nix
+    ./modules/waybar.nix
+    ./modules/rofi.nix
   ];
 
   home.stateVersion = "26.11";
