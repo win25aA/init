@@ -43,13 +43,9 @@ let
     ${pkgs.util-linux}/bin/script -qec "${pkgs.matugen}/bin/matugen image \"$WALL\"" /dev/null >> "$HOME/.cache/wallpaper.log" 2>&1
 
     # перезапускаем waybar, чтобы тема применилась
-    if systemctl --user is-active --quiet waybar.service; then
-      systemctl --user restart waybar.service
-    else
-      pkill waybar 2>/dev/null
-      sleep 0.3
-      hyprctl dispatch exec waybar >/dev/null 2>&1 || waybar & disown
-    fi
+    pkill -x waybar 2>/dev/null
+    sleep 0.3
+    hyprctl dispatch exec waybar >/dev/null 2>&1 || (waybar >/dev/null 2>&1 & disown)
   '';
 in
 {
