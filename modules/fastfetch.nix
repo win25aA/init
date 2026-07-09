@@ -2,6 +2,15 @@
 
 let
   esc = builtins.fromJSON ''"\u001b"'';
+
+  # Логотип хранится прямо в репозитории (как обои) и при сборке
+  # копируется в nix store — не зависит от файлов в ~/Pictures.
+  # builtins.path нужен, чтобы переименовать файл: имена в /nix/store
+  # не могут начинаться с точки (".face").
+  logoFile = builtins.path {
+    path = ../wallpapers/.face;
+    name = "fastfetch-logo.png";
+  };
 in
 {
   programs.fastfetch = {
@@ -10,7 +19,7 @@ in
       "$schema" = "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json";
 
       logo = {
-        source = "/home/winarowk/Pictures/AMOGUS.PNG";
+        source = "${logoFile}";
         type = "kitty";
         height = 15;
         width = 35;
