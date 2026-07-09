@@ -10,6 +10,7 @@
     ./modules/nodejs.nix
     ./modules/btop.nix
     ./modules/waybar.nix
+    ./modules/rofi.nix
     ./modules/wallpapers.nix
   ];
 
