@@ -39,7 +39,8 @@ let
     echo "$WALL" > "$CACHE"
 
     # генерим новую тему matugen из обоев
-    ${pkgs.matugen}/bin/matugen image "$WALL" >> "$HOME/.cache/wallpaper.log" 2>&1
+    # (matugen требует tty, поэтому оборачиваем в псевдо-терминал через script)
+    ${pkgs.util-linux}/bin/script -qec "${pkgs.matugen}/bin/matugen image \"$WALL\"" /dev/null >> "$HOME/.cache/wallpaper.log" 2>&1
 
     # перезапускаем waybar, чтобы тема применилась
     if systemctl --user is-active --quiet waybar.service; then
