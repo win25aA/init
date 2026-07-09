@@ -5,9 +5,9 @@ let
     WALL_DIR="$HOME/Pictures/wallpapers"
     CACHE="$HOME/.cache/current_wallpaper"
 
-    # ждём, пока поднимется демон swww
+    # ждём, пока поднимется демон awww
     for i in $(seq 1 20); do
-      ${pkgs.swww}/bin/swww query >/dev/null 2>&1 && break
+      ${pkgs.awww}/bin/awww query >/dev/null 2>&1 && break
       sleep 0.25
     done
 
@@ -30,7 +30,7 @@ let
 
     [ -z "$WALL" ] && exit 1
 
-    ${pkgs.swww}/bin/swww img "$WALL" \
+    ${pkgs.awww}/bin/awww img "$WALL" \
       --transition-type grow \
       --transition-pos center \
       --transition-duration 1.2 \
@@ -45,7 +45,7 @@ let
 in
 {
   home.packages = [
-    pkgs.swww
+    pkgs.awww
     wallpaper
   ];
 
