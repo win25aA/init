@@ -18,6 +18,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  wlogout
   awww
   android-tools
   matugen
