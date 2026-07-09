@@ -67,6 +67,8 @@ env = [
 
       "exec-once" = [
         "waybar"
+        "swww-daemon"
+        "wallpaper --restore"
       ];
 
       bind =
@@ -101,6 +103,7 @@ env = [
 
           "SUPER CTRL, S, exec, grim -g \"$(slurp)\" - | swappy -f -"
           "SUPER SHIFT, S, exec, grim -g \"$(slurp)\" - | wl-copy"
+          "SUPER SHIFT, W, exec, wallpaper"
 
           "SUPER, D, exec, vesktop"
           "SUPER, D, togglespecialworkspace, communication"
