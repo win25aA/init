@@ -90,7 +90,7 @@
       * {
         font-family: "Roboto", "Symbols Nerd Font", sans-serif;
         font-size: 12px;
-        font-weight: bold;
+        font-weight: 700;
         border: none;
         border-radius: 0;
         min-height: 0;
@@ -168,13 +168,17 @@
         -gtk-icon-effect: dim;
       }
 
-      #pulseaudio,
-      #battery {
+      #pulseaudio {
         color: @text;
-        padding: 0 8px;
+        background: @surface;
+        border-radius: 10px;
+        margin: 4px 6px 4px 0;
+        padding: 0 11px;
       }
 
       #battery {
+        color: @text;
+        padding: 0 8px;
         margin-right: 8px;
       }
 
