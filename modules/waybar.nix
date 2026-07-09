@@ -1,6 +1,14 @@
 { config, pkgs, inputs, ... }:
 
 {
+  home.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.symbols-only
+    playerctl
+  ];
+
+  fonts.fontconfig.enable = true;
+
   programs.waybar = {
     enable = true;
     systemd.enable = true;
@@ -95,7 +103,7 @@
       @import "${config.home.homeDirectory}/.config/waybar/matugen-colors.css";
 
       * {
-        font-family: "JetBrains Mono Nerd Font";
+        font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", "Symbols Nerd Font", sans-serif;
         font-size: 12px;
         font-weight: bold;
         border: none;
