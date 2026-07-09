@@ -11,8 +11,6 @@
       modi = "drun,run";
       show-icons = true;
       drun-display-format = "{name}";
-      display-drun = "󱓞";
-      display-run = "";
     };
     theme = "${config.xdg.configHome}/rofi/theme.rasi";
   };
@@ -26,12 +24,13 @@
     }
 
     window {
-        background-color: @background;
+        transparency: "real";
+        background-color: @background-trans;
         border: 2px;
         border-color: @primary;
         border-radius: 16px;
-        width: 620px;
-        padding: 16px;
+        width: 460px;
+        padding: 14px;
     }
 
     mainbox {
@@ -43,12 +42,7 @@
         background-color: @surface;
         border-radius: 12px;
         padding: 10px 14px;
-        spacing: 10px;
-        children: [ prompt, entry ];
-    }
-
-    prompt {
-        text-color: @primary;
+        children: [ entry ];
     }
 
     entry {
@@ -58,7 +52,7 @@
     }
 
     listview {
-        lines: 8;
+        lines: 6;
         columns: 1;
         spacing: 6px;
         scrollbar: false;
