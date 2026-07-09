@@ -65,8 +65,8 @@
       };
 
       pulseaudio = {
-        format = "{icon}";
-        format-muted = "󰝟";
+        format = "<span size='140%'>{icon}</span> {volume}%";
+        format-muted = "<span size='140%'>󰝟</span> {volume}%";
         format-icons.default = [ "󰕿" "󰖀" "󰕾" ];
         tooltip-format = "{desc}: {volume}%";
         on-click = "pavucontrol";
@@ -107,6 +107,36 @@
         border: 1px solid @primary;
         border-radius: 10px;
         color: @text;
+      }
+
+      menu {
+        background: @background;
+        border: 1px solid alpha(@primary, 0.5);
+        border-radius: 12px;
+        padding: 6px;
+      }
+
+      menu menuitem {
+        background: transparent;
+        color: @text;
+        border-radius: 8px;
+        padding: 6px 12px;
+        transition: all 0.15s ease;
+      }
+
+      menu menuitem:hover {
+        background: @primary;
+        color: @on_primary;
+      }
+
+      menu menuitem:disabled {
+        color: @outline;
+      }
+
+      menu separator {
+        background: alpha(@outline, 0.4);
+        min-height: 1px;
+        margin: 4px 6px;
       }
 
       #workspaces {
