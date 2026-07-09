@@ -11,7 +11,6 @@
     ./modules/btop.nix
     ./modules/waybar.nix
     ./modules/rofi.nix
-    ./modules/wallpapers.nix
     ./modules/waybar.nix
   ];
 

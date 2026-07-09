@@ -18,6 +18,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  awww
   android-tools
   matugen
   appimage-run
