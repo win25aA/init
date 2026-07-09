@@ -2,7 +2,7 @@
 
 let
   wallpaper = pkgs.writeShellScriptBin "wallpaper" ''
-    WALL_DIR="$HOME/Pictures/wallpapers"
+    WALL_DIR="/etc/nixos/wallpapers"
     CACHE="$HOME/.cache/current_wallpaper"
 
     # ждём, пока поднимется демон awww
@@ -48,9 +48,4 @@ in
     pkgs.awww
     wallpaper
   ];
-
-  home.file."Pictures/wallpapers" = {
-    source = ../wallpapers;
-    recursive = true;
-  };
 }
