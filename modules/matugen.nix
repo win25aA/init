@@ -21,6 +21,24 @@
     input_path = "~/.config/matugen/waybar-colors.css"
     output_path = "~/.config/waybar/matugen-colors.css"
 
+    [templates.rofi]
+    input_path = "~/.config/matugen/rofi-colors.rasi"
+    output_path = "~/.config/rofi/matugen-colors.rasi"
+
+  '';
+
+  xdg.configFile."matugen/rofi-colors.rasi".text = ''
+    * {
+        background: {{colors.surface.default.hex}};
+        surface: {{colors.surface_container.default.hex}};
+        surface-high: {{colors.surface_container_highest.default.hex}};
+        primary: {{colors.primary.default.hex}};
+        on-primary: {{colors.on_primary.default.hex}};
+        text: {{colors.on_surface.default.hex}};
+        text-muted: {{colors.on_surface_variant.default.hex}};
+        outline: {{colors.outline.default.hex}};
+        error: {{colors.error.default.hex}};
+    }
   '';
 
   xdg.configFile."matugen/waybar-colors.css".text = ''
