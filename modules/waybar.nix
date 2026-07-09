@@ -2,6 +2,7 @@
 
 {
   home.packages = with pkgs; [
+    roboto
     nerd-fonts.jetbrains-mono
     nerd-fonts.symbols-only
     playerctl
@@ -24,7 +25,7 @@
 
       modules-left = [ "hyprland/workspaces" "clock" ];
       modules-center = [ "mpris" ];
-      modules-right = [ "tray" "pulseaudio" "battery" "idle_inhibitor" "custom/power" ];
+      modules-right = [ "tray" "pulseaudio" "battery" ];
 
       "hyprland/workspaces" = {
         format = "{name}";
@@ -81,29 +82,13 @@
         format-icons = [ "󰁺" "󰁼" "󰁾" "󰂀" "󰁹" ];
         tooltip-format = "{timeTo}";
       };
-
-      idle_inhibitor = {
-        format = "{icon}";
-        format-icons = {
-          activated = "󰅶";
-          deactivated = "󰾪";
-        };
-        tooltip-format-activated = "Idle inhibitor: on";
-        tooltip-format-deactivated = "Idle inhibitor: off";
-      };
-
-      "custom/power" = {
-        format = "󰐥";
-        tooltip = false;
-        on-click = "wlogout";
-      };
     };
 
     style = ''
       @import "${config.home.homeDirectory}/.config/waybar/matugen-colors.css";
 
       * {
-        font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", "Symbols Nerd Font", sans-serif;
+        font-family: "Roboto", "Symbols Nerd Font", sans-serif;
         font-size: 12px;
         font-weight: bold;
         border: none;
@@ -184,10 +169,13 @@
       }
 
       #pulseaudio,
-      #battery,
-      #idle_inhibitor {
+      #battery {
         color: @text;
         padding: 0 8px;
+      }
+
+      #battery {
+        margin-right: 8px;
       }
 
       #pulseaudio.muted {
@@ -204,19 +192,6 @@
 
       #battery.charging {
         color: @tertiary;
-      }
-
-      #custom-power {
-        color: @primary;
-        background: @surface;
-        border-radius: 10px;
-        margin: 4px 8px 4px 4px;
-        padding: 0 10px;
-      }
-
-      #custom-power:hover {
-        color: @on_primary;
-        background: @primary;
       }
     '';
   };
