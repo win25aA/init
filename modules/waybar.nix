@@ -49,8 +49,8 @@
       };
 
       mpris = {
-        format = "{title} - {artist}";
-        format-paused = " {title} - {artist}";
+        format = "{title} ";
+        format-paused = " {title} ";
         title-len = 24;
         artist-len = 18;
         tooltip-format = "{player}: {title} - {artist}";
