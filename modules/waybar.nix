@@ -83,7 +83,7 @@ in
 "image#albumart" = {
   exec = "${albumArtScript}";
   size = 28;
-  interval = 2;
+  signal = 8;
 };
 
       tray = {
@@ -305,4 +305,17 @@ in
       }
     '';
   };
+systemd.user.services.waybar-albumart-watch = {
+  Unit.Description = "Watch track changes and refresh waybar album art";
+  Install.WantedBy = [ "graphical-session.target" ];
+  Service = {
+    ExecStart = pkgs.writeShellScript "waybar-albumart-watch" ''
+      ${pkgs.playerctl}/bin/playerctl --follow metadata --format '{{ mpris:artUrl }}' 2>/dev/null | while read -r _; do
+        pkill -RTMIN+8 waybar || true
+      done
+    '';
+    Restart = "always";
+  };
+};
+
 }
