@@ -37,8 +37,12 @@
       * {
         font-family: sans-serif, "Symbols Nerd Font";
         background-image: none;
+        border-image: none;
         box-shadow: none;
         text-shadow: none;
+        outline: none;
+        outline-style: none;
+        border: none;
       }
 
       window {
@@ -50,21 +54,19 @@
         font-weight: 900;
         color: @text;
         background-color: alpha(@surface, 0.95);
-        border: 2px solid transparent;
         border-radius: 24px;
         margin: 10px;
         transition: all 0.2s ease;
       }
 
       button:focus {
-        border-color: alpha(@primary, 0.6);
+        background-color: alpha(@surface, 0.95);
         color: @primary;
       }
 
       button:hover {
         background-color: @primary;
         color: @on_primary;
-        border-color: transparent;
         margin: 4px;
       }
 

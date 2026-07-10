@@ -16,6 +16,14 @@ let
         ;;
     esac
   '';
+  # слушает смену трека и мгновенно пинает waybar обновить обложку;
+  # между треками просто спит, ничего не опрашивая
+  album-art-listener = pkgs.writeShellScriptBin "waybar-album-art-listener" ''
+    ${pkgs.playerctl}/bin/playerctl --follow metadata --format '{{mpris:artUrl}}' 2>/dev/null | \
+    while read -r _; do
+      pkill -RTMIN+8 -x waybar 2>/dev/null
+    done
+  '';
 in
 {
   home.packages = with pkgs; [
@@ -24,6 +32,7 @@ in
     nerd-fonts.symbols-only
     playerctl
     album-art
+    album-art-listener
   ];
 
   fonts.fontconfig.enable = true;
@@ -69,7 +78,7 @@ in
       "image#albumart" = {
         exec = "waybar-album-art";
         size = 26;
-        interval = 3;
+        signal = 8;
         tooltip = false;
       };
 
