@@ -25,6 +25,25 @@
     input_path = "~/.config/matugen/rofi-colors.rasi"
     output_path = "~/.config/rofi/matugen-colors.rasi"
 
+    [templates.swaync]
+    input_path = "~/.config/matugen/swaync-colors.css"
+    output_path = "~/.config/swaync/matugen-colors.css"
+    post_hook = "swaync-client --reload-css || true"
+
+  '';
+
+  xdg.configFile."matugen/swaync-colors.css".text = ''
+    @define-color background {{colors.surface.default.hex}};
+    @define-color surface {{colors.surface_container.default.hex}};
+    @define-color surface_high {{colors.surface_container_highest.default.hex}};
+    @define-color primary {{colors.primary.default.hex}};
+    @define-color on_primary {{colors.on_primary.default.hex}};
+    @define-color secondary {{colors.secondary.default.hex}};
+    @define-color tertiary {{colors.tertiary.default.hex}};
+    @define-color text {{colors.on_surface.default.hex}};
+    @define-color text_muted {{colors.on_surface_variant.default.hex}};
+    @define-color outline {{colors.outline.default.hex}};
+    @define-color error {{colors.error.default.hex}};
   '';
 
   xdg.configFile."matugen/rofi-colors.rasi".text = ''

@@ -110,6 +110,8 @@ env = [
           "SUPER, C, togglespecialworkspace, music"
           "SUPER, Z, exec, qs -c noctalia-shell ipc call plugin:assistant-panel toggle"
           "SUPER, Z, exec, ${ipc} panel-toggle control-center"
+
+          "SUPER, N, exec, swaync-client -t -sw"
         ];
 
       bindm = [
@@ -125,6 +127,7 @@ env = [
 
       layerrule = [
         "blur on, blur_popups on, ignore_alpha 1.0, match:namespace noctalia-background-.*$"
+        "blur on, ignore_alpha 0.4, match:namespace swaync-.*$"
       ];
 
       source = [
