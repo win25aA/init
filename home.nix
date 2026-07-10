@@ -11,7 +11,7 @@
     ./modules/btop.nix
     ./modules/waybar.nix
     ./modules/rofi.nix
-    ./modules/waybar.nix
+    ./modules/wlogout.nix
   ];
 
   home.stateVersion = "26.11";
