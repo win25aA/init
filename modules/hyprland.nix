@@ -68,6 +68,7 @@ env = [
       "exec-once" = [
         "waybar"
         "awww-daemon"
+        "waybar-album-art-listener"
       ];
 
       bind =

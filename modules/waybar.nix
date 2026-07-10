@@ -1,11 +1,38 @@
 { config, pkgs, inputs, ... }:
 
+let
+  # достаёт обложку текущего трека для waybar (кэширует http-обложки локально)
+  album-art = pkgs.writeShellScriptBin "waybar-album-art" ''
+    url="$(${pkgs.playerctl}/bin/playerctl metadata mpris:artUrl 2>/dev/null)"
+    [ -z "$url" ] && exit 0
+    case "$url" in
+      file://*)
+        echo "''${url#file://}"
+        ;;
+      http*)
+        f="$HOME/.cache/albumart-$(echo "$url" | ${pkgs.coreutils}/bin/md5sum | cut -d' ' -f1).img"
+        [ -f "$f" ] || ${pkgs.curl}/bin/curl -sf --max-time 5 "$url" -o "$f" || exit 0
+        echo "$f"
+        ;;
+    esac
+  '';
+  # слушает смену трека и мгновенно пинает waybar обновить обложку;
+  # между треками просто спит, ничего не опрашивая
+  album-art-listener = pkgs.writeShellScriptBin "waybar-album-art-listener" ''
+    ${pkgs.playerctl}/bin/playerctl --follow metadata --format '{{mpris:artUrl}}' 2>/dev/null | \
+    while read -r _; do
+      pkill -RTMIN+8 -x waybar 2>/dev/null
+    done
+  '';
+in
 {
   home.packages = with pkgs; [
     roboto
     nerd-fonts.jetbrains-mono
     nerd-fonts.symbols-only
     playerctl
+    album-art
+    album-art-listener
   ];
 
   fonts.fontconfig.enable = true;
@@ -24,7 +51,7 @@
       margin-right = 10;
 
       modules-left = [ "hyprland/workspaces" "clock" ];
-      modules-center = [ "mpris" ];
+      modules-center = [ "image#albumart" "mpris" ];
       modules-right = [ "tray" "pulseaudio" "battery" "custom/power" ];
 
       "hyprland/workspaces" = {
@@ -48,9 +75,16 @@
         };
       };
 
+      "image#albumart" = {
+        exec = "waybar-album-art";
+        size = 26;
+        signal = 8;
+        tooltip = false;
+      };
+
       mpris = {
-        format = "🎵 {title} - {artist}";
-        format-paused = "  {title} - {artist}";
+        format = "{title} - {artist}";
+        format-paused = " {title} - {artist}";
         title-len = 24;
         artist-len = 18;
         tooltip-format = "{player}: {title} - {artist}";
@@ -187,12 +221,19 @@
         padding: 0 10px;
       }
 
+      #image {
+        background: @surface;
+        margin: 4px 0;
+        padding: 3px 0 3px 8px;
+        border-radius: 10px 0 0 10px;
+      }
+
       #mpris {
         color: @text;
         background: @surface;
-        border-radius: 10px;
+        border-radius: 0 10px 10px 0;
         margin: 4px 0;
-        padding: 0 14px;
+        padding: 0 14px 0 10px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
