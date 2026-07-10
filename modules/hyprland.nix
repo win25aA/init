@@ -97,7 +97,7 @@ env = [
           "SUPER, W, exec, firefox"
           "SUPER, T, exec, AyuGram"
           "SUPER, S, exec, steam"
-          "SUPER, P, exec, noctalia msg SessionMenu toggle"
+          "SUPER, P, exec, noctalia msg panel-toggle session"
 
           "SUPER CTRL, S, exec, grim -g \"$(slurp)\" - | swappy -f -"
           "SUPER SHIFT, S, exec, grim -g \"$(slurp)\" - | wl-copy"
