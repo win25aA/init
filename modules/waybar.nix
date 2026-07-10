@@ -48,13 +48,6 @@
         };
       };
 
-      "image#albumart" = {
-        exec = "waybar-album-art";
-        size = 26;
-        signal = 8;
-        tooltip = false;
-      };
-
       mpris = {
         format = "{title} - {artist}";
         format-paused = " {title} - {artist}";
