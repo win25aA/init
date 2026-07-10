@@ -66,9 +66,7 @@ env = [
       };
 
       "exec-once" = [
-        "waybar"
-        "awww-daemon"
-        "waybar-album-art-listener"
+        "noctalia"
       ];
 
       bind =
@@ -93,13 +91,13 @@ env = [
           "SUPER, V, togglefloating"
           "SUPER, M, exec, command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit"
 
-          "SUPER, space, exec, rofi -show drun"
+          "SUPER, space, exec, $ipc panel-toggle launcher "
           "SUPER, A, exec, kitty"
           "SUPER, E, exec, thunar"
           "SUPER, W, exec, firefox"
           "SUPER, T, exec, AyuGram"
           "SUPER, S, exec, steam"
-          "SUPER, P, exec, wlogout -b 4 -T 300 -B 300 -L 150 -R 150 -p layer-shell"
+          "SUPER, P, exec, $ipc SessionMenu toggle"
 
           "SUPER CTRL, S, exec, grim -g \"$(slurp)\" - | swappy -f -"
           "SUPER SHIFT, S, exec, grim -g \"$(slurp)\" - | wl-copy"
@@ -108,10 +106,7 @@ env = [
           "SUPER, D, togglespecialworkspace, communication"
           "SUPER, C, exec, spotify"
           "SUPER, C, togglespecialworkspace, music"
-          "SUPER, Z, exec, qs -c noctalia-shell ipc call plugin:assistant-panel toggle"
           "SUPER, Z, exec, ${ipc} panel-toggle control-center"
-
-          "SUPER, N, exec, swaync-client -t -sw"
         ];
 
       bindm = [
