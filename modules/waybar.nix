@@ -1,38 +1,11 @@
 { config, pkgs, inputs, ... }:
 
-let
-  # достаёт обложку текущего трека для waybar (кэширует http-обложки локально)
-  album-art = pkgs.writeShellScriptBin "waybar-album-art" ''
-    url="$(${pkgs.playerctl}/bin/playerctl metadata mpris:artUrl 2>/dev/null)"
-    [ -z "$url" ] && exit 0
-    case "$url" in
-      file://*)
-        echo "''${url#file://}"
-        ;;
-      http*)
-        f="$HOME/.cache/albumart-$(echo "$url" | ${pkgs.coreutils}/bin/md5sum | cut -d' ' -f1).img"
-        [ -f "$f" ] || ${pkgs.curl}/bin/curl -sf --max-time 5 "$url" -o "$f" || exit 0
-        echo "$f"
-        ;;
-    esac
-  '';
-  # слушает смену трека и мгновенно пинает waybar обновить обложку;
-  # между треками просто спит, ничего не опрашивая
-  album-art-listener = pkgs.writeShellScriptBin "waybar-album-art-listener" ''
-    ${pkgs.playerctl}/bin/playerctl --follow metadata --format '{{mpris:artUrl}}' 2>/dev/null | \
-    while read -r _; do
-      pkill -RTMIN+8 -x waybar 2>/dev/null
-    done
-  '';
-in
 {
   home.packages = with pkgs; [
     roboto
     nerd-fonts.jetbrains-mono
     nerd-fonts.symbols-only
     playerctl
-    album-art
-    album-art-listener
   ];
 
   fonts.fontconfig.enable = true;
