@@ -194,7 +194,7 @@
       #mpris {
         color: @text;
         background: @surface;
-        border-radius: 0 10px 10px 0;
+        border-radius: 999px;
         margin: 4px 0;
         padding: 0 14px 0 10px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
