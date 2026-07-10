@@ -1,11 +1,32 @@
 { config, pkgs, inputs, ... }:
 
+let
+  albumArtScript = pkgs.writeShellScript "waybar-albumart" ''
+    CACHE="$HOME/.cache/waybar-albumart.jpg"
+    URL="$(${pkgs.playerctl}/bin/playerctl metadata mpris:artUrl 2>/dev/null)"
+
+    if [ -z "$URL" ]; then
+      echo ""
+      exit 0
+    fi
+
+    if [[ "$URL" == file://* ]]; then
+      echo "''${URL#file://}"
+    else
+      ${pkgs.curl}/bin/curl -sL "$URL" -o "$CACHE" 2>/dev/null
+      echo "$CACHE"
+    fi
+  '';
+in
+
+
 {
   home.packages = with pkgs; [
     roboto
     nerd-fonts.jetbrains-mono
     nerd-fonts.symbols-only
     playerctl
+    curl
   ];
 
   fonts.fontconfig.enable = true;
@@ -58,6 +79,12 @@
         on-scroll-up = "playerctl next";
         on-scroll-down = "playerctl previous";
       };
+
+"image#albumart" = {
+  exec = "${albumArtScript}";
+  size = 28;
+  interval = 2;
+};
 
       tray = {
         icon-size = 16;
