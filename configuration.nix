@@ -27,18 +27,13 @@ environment.systemPackages = with pkgs; [
   ncdu
   asciiquarium
   ayugram-desktop
-  nodejs_22
-  uv
+  mousepad
   hyfetch 
   wireplumber         
   brightnessctl     
   playerctl
   git
-  hyprland
   firefox
-  kitty
-  fish 
-  fastfetch  
   adw-gtk3
   papirus-icon-theme
   amnezia-vpn-bin
@@ -46,8 +41,6 @@ environment.systemPackages = with pkgs; [
   wget
   vesktop
   neovim
-  spotify
-  btop
   grim
   slurp
   wl-clipboard
