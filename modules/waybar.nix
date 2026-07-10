@@ -25,7 +25,7 @@
 
       modules-left = [ "hyprland/workspaces" "clock" ];
       modules-center = [ "mpris" ];
-      modules-right = [ "tray" "pulseaudio" "battery" ];
+      modules-right = [ "tray" "pulseaudio" "battery" "custom/power" ];
 
       "hyprland/workspaces" = {
         format = "{name}";
@@ -81,6 +81,12 @@
         format-plugged = "{capacity}% 󰚥";
         format-icons = [ "󰁺" "󰁼" "󰁾" "󰂀" "󰁹" ];
         tooltip-format = "{timeTo}";
+      };
+
+      "custom/power" = {
+        format = "󰐥";
+        tooltip = false;
+        on-click = "wlogout -b 4 -T 300 -B 300 -L 150 -R 150 -p layer-shell";
       };
     };
 
@@ -187,10 +193,20 @@
         border-radius: 10px;
         margin: 4px 0;
         padding: 0 14px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #mpris:hover {
+        background: @primary;
+        color: @on_primary;
       }
 
       #mpris.paused {
         color: @text_muted;
+      }
+
+      #mpris.paused:hover {
+        color: @on_primary;
       }
 
       #tray {
@@ -210,6 +226,12 @@
         border-radius: 10px;
         margin: 4px 6px 4px 0;
         padding: 0 11px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #pulseaudio:hover {
+        background: @primary;
+        color: @on_primary;
       }
 
       #battery {
@@ -220,6 +242,20 @@
 
       #pulseaudio.muted {
         color: @text_muted;
+      }
+
+      #custom-power {
+        color: @primary;
+        background: @surface;
+        border-radius: 10px;
+        margin: 4px 8px 4px 0;
+        padding: 0 10px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #custom-power:hover {
+        color: @on_primary;
+        background: @primary;
       }
 
       #battery.warning {

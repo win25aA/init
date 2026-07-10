@@ -98,7 +98,7 @@ env = [
           "SUPER, W, exec, firefox"
           "SUPER, T, exec, AyuGram"
           "SUPER, S, exec, steam"
-          "SUPER, P, exec, ${ipc} panel-toggle session"
+          "SUPER, P, exec, wlogout -b 4 -T 300 -B 300 -L 150 -R 150 -p layer-shell"
 
           "SUPER CTRL, S, exec, grim -g \"$(slurp)\" - | swappy -f -"
           "SUPER SHIFT, S, exec, grim -g \"$(slurp)\" - | wl-copy"
