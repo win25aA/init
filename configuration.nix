@@ -18,6 +18,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  pavucontrol
   android-tools
   matugen
   appimage-run

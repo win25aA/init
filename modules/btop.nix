@@ -23,7 +23,7 @@
       graph_symbol_proc = "default";
 
       shown_boxes = "cpu mem net proc";
-      update_ms = 2000;
+      update_ms = 1000;
 
       proc_sorting = "memory";
       proc_reversed = false;
