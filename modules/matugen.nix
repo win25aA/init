@@ -16,9 +16,37 @@
     [templates.fish]
     input_path = "~/.config/matugen/fish-colors.fish"
     output_path = "~/.config/fish/matugen-colors.fish"
+    
+    [templates.spicetify]
+    input_path = "~/.config/matugen/spicetify-colors.nix"
+    output_path = "~/.config/matugen/spicetify.nix"
+ 
+ '';
 
-  '';
 
+xdg.configFile."matugen/spicetify-colors.nix".text = ''
+  {
+    "text" = "colors.on_surface.default.hex_stripped";
+    "subtext" = "colors.on_surface_variant.default.hex_stripped";
+    "main" = "colors.surface.default.hex";
+    "main-elevated" = "colors.surface_container.default.hex_stripped";
+    "highlight" = "colors.surface_container_high.default.hex_stripped";
+    "highlight-elevated" = "colors.surface_container_highest.default.hex_stripped";
+    "sidebar" = "colors.surface_container.default.hex_stripped";
+    "player" = "colors.surface_container.default.hex_stripped";
+    "card" = "colors.surface_container_high.default.hex_stripped";
+    "shadow" = "colors.shadow.default.hex_stripped";
+    "selected-row" = "colors.primary.default.hex_stripped";
+    "button" = "colors.primary.default.hex_stripped";
+    "button-active" = "colors.tertiary.default.hex_stripped";
+    "button-disabled" = "colors.outline.default.hex_stripped";
+    "tab-active" = "colors.primary_container.default.hex_stripped";
+    "notification" = "colors.inverse_surface.default.hex_stripped";
+    "notification-error" = "colors.error.default.hex_stripped";
+    "misc" = "colors.outline_variant.default.hex_stripped";
+  }
+
+'';
   xdg.configFile."matugen/kitty.conf".text = ''
     foreground            {{colors.on_surface.default.hex}}
     selection_foreground  {{colors.surface.default.hex}}

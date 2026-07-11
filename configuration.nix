@@ -65,12 +65,31 @@ boot.loader.grub.useOSProber = true;
   services.xserver.enable = true;
 services.gvfs.enable = true;
 
-programs.spicetify = {
+programs.spicetify =
+  let
+    matugenColors = "/home/winarowk/.config/matugen/spicetify.nix";
+  in
+  {
     enable = true;
     theme = spicePkgs.themes.comfy;
-    colorScheme = "Mono";
-    # Убраны запятые из списка
-enabledExtensions = with spicePkgs.extensions; [ adblock shuffle ];
+    colorScheme = "custom";
+    customColorScheme =
+      if builtins.pathExists matugenColors
+      then import matugenColors
+      else {
+        # запасная схема, пока matugen ещё ни разу не отработал
+        text = "ffffff";
+        subtext = "b3b3b3";
+        main = "121212";
+        sidebar = "121212";
+        player = "181818";
+        card = "282828";
+        shadow = "000000";
+        selected-row = "797979";
+        button = "ffffff";
+        button-active = "ffffff";
+      };
+    enabledExtensions = with spicePkgs.extensions; [ adblock shuffle ];
   };
 
 
