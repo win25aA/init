@@ -94,6 +94,8 @@ env = [
 
           "SUPER, space, exec, noctalia msg panel-toggle launcher "
           "SUPER, space, exec, rofi -show drun"
+"SUPER, mouse:275, exec, playerctl previous"
+"SUPER, mouse:276, exec, playerctl next"
           "SUPER, A, exec, kitty"
           "SUPER, E, exec, thunar"
           "SUPER, W, exec, firefox"
@@ -114,8 +116,6 @@ env = [
 
       bindm = [
         "SUPER, mouse:272, movewindow"
-        "SUPER, mouse:275, exec, playerctl previous"
-        "SUPER, mouse:276, exec, playerctl next"
         "SUPER, mouse:273, resizewindow"
       ];
 
