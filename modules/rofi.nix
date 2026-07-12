@@ -13,6 +13,7 @@ let
       findutils
       procps
       waybar
+      libnotify
     ];
 
     text = ''
@@ -21,13 +22,15 @@ let
       wallpaper_dir="/etc/nixos/wallpapers"
       cache_dir="''${XDG_CACHE_HOME:-$HOME/.cache}/rofi-wallpapers"
       current_link="''${XDG_CACHE_HOME:-$HOME/.cache}/current-wallpaper"
+      state_dir="''${XDG_STATE_HOME:-$HOME/.local/state}"
+      log_file="$state_dir/wallpaper-selector.log"
 
       if [[ ! -d "$wallpaper_dir" ]]; then
         printf 'Wallpaper directory not found: %s\n' "$wallpaper_dir" >&2
         exit 1
       fi
 
-      mkdir -p "$cache_dir"
+      mkdir -p "$cache_dir" "$state_dir"
 
       build_entries() {
         while IFS= read -r -d $'\0' wallpaper; do
@@ -73,11 +76,21 @@ let
         --transition-fps 60
 
       ln -sfn "$wallpaper" "$current_link"
-      matugen image "$wallpaper"
+
+      if ! matugen image "$wallpaper" -m dark >"$log_file" 2>&1; then
+        notify-send -u critical \
+          "Matugen не применился" \
+          "Ошибка записана в $log_file"
+        exit 1
+      fi
 
       pkill -x waybar || true
-      sleep 0.15
+      sleep 0.25
       nohup waybar >"''${XDG_RUNTIME_DIR:-/tmp}/waybar.log" 2>&1 &
+
+      notify-send \
+        "Обои обновлены" \
+        "Matugen применён, Waybar перезапущен"
     '';
   };
 in
