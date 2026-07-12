@@ -66,7 +66,8 @@ env = [
       };
 
       "exec-once" = [
-        "noctalia"
+        "awww-daemon"
+        "waybar"
       ];
 
       bind =
@@ -92,12 +93,13 @@ env = [
           "SUPER, M, exec, command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit"
 
           "SUPER, space, exec, noctalia msg panel-toggle launcher "
+          "SUPER, space, exec, rofi -show drun"
           "SUPER, A, exec, kitty"
           "SUPER, E, exec, thunar"
           "SUPER, W, exec, firefox"
           "SUPER, T, exec, AyuGram"
           "SUPER, S, exec, steam"
-          "SUPER, P, exec, noctalia msg panel-toggle session"
+          "SUPER, P, exec, wlogout"
 
           "SUPER CTRL, S, exec, grim -g \"$(slurp)\" - | swappy -f -"
           "SUPER SHIFT, S, exec, grim -g \"$(slurp)\" - | wl-copy"
