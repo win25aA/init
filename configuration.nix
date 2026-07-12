@@ -134,8 +134,8 @@ programs.hyprland = {
 
 programs.spicetify = {
     enable = true;
-    theme = spicePkgs.themes.text;
-    colorScheme = "Spicetify";
+    theme = spicePkgs.themes.omni;
+    colorScheme = "base";
 enabledExtensions = with spicePkgs.extensions; [ adblock shuffle ];
   };
 
