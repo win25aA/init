@@ -87,7 +87,7 @@
 
       clock = {
         interval = 1;
-        format = "{:%H:%M  <span alpha='45%'>•</span>  %d/%m}";
+        format = "{:%H:%M  •  %d/%m}";
         format-alt = "{:%A, %d %B %Y}";
         tooltip-format = "<tt><small>{calendar}</small></tt>";
         calendar = {
@@ -164,7 +164,7 @@
         border-right: 1px solid alpha(@outline, 0.24);
         border-radius: 9px 0 0 9px;
         font-size: 15px;
-        padding: 0 13px;
+        padding: 0 14px 0 12px;
         transition: all 160ms ease;
       }
 
