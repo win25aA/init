@@ -18,7 +18,8 @@ in
 
 {
 environment.systemPackages = with pkgs; [
-  pavucontrol
+  wlogout
+  awww
   android-tools
   matugen
   appimage-run
@@ -66,12 +67,12 @@ boot.loader.grub.useOSProber = true;
 services.gvfs.enable = true;
 
 programs.spicetify = {
-  enable = true;
-  theme = spicePkgs.themes.comfy;
-  colorScheme = "Mono";
-  enabledExtensions = with spicePkgs.extensions; [ adblock shuffle ];
-};
-
+    enable = true;
+    theme = spicePkgs.themes.comfy;
+    colorScheme = "Mono";
+    # Убраны запятые из списка
+enabledExtensions = with spicePkgs.extensions; [ adblock shuffle ];
+  };
 
 
 
