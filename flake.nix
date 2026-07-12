@@ -11,11 +11,7 @@
      flake = false;
      };
 
-    
-    noctalia = {
-      url = "github:noctalia-dev/noctalia";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
     
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -28,7 +24,7 @@
     };
   }; 
 
-  outputs = inputs@{ self, nixpkgs, noctalia, home-manager, spicetify-nix, ... }: {
+  outputs = inputs@{ self, nixpkgs, home-manager, spicetify-nix, ... }: {
     nixosConfigurations.winarowk = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };

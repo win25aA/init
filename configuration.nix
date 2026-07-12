@@ -42,6 +42,7 @@ environment.systemPackages = with pkgs; [
   vesktop
   neovim
   grim
+  inputs.zen-browser.packages."${pkgs.system}".default
   slurp
   wl-clipboard
   eza
@@ -50,7 +51,6 @@ environment.systemPackages = with pkgs; [
   zip
   unzip
   (import inputs.creamlinux-installer { inherit pkgs; })
-  inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   ] ++ [ simple-sddm-2-theme ];
 
 programs.dconf.enable = true;
