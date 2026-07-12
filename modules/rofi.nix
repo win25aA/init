@@ -84,8 +84,14 @@ let
         exit 1
       fi
 
-      pkill -x waybar || true
-      sleep 0.25
+      # В NixOS процесс может называться .waybar-wrapped, поэтому -x его не находил.
+      pkill -f '[w]aybar' || true
+
+      for _ in $(seq 1 20); do
+        pgrep -f '[w]aybar' >/dev/null || break
+        sleep 0.05
+      done
+
       nohup waybar >"''${XDG_RUNTIME_DIR:-/tmp}/waybar.log" 2>&1 &
 
       notify-send \
