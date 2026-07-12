@@ -18,9 +18,9 @@ in
 
 {
 environment.systemPackages = with pkgs; [
-  wlogout
-  awww
   android-tools
+  awww
+  pavucontrol
   matugen
   appimage-run
   thunar

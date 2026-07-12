@@ -9,6 +9,10 @@
     ./modules/matugen.nix
     ./modules/nodejs.nix
     ./modules/btop.nix
+    ./modules/rofi.nix
+    ./modules/wlogout.nix
+    ./modules/waybar.nix
+    ./modules/swaync.nix
   ];
 
   home.stateVersion = "26.11";
