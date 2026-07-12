@@ -137,11 +137,26 @@
 
       tooltip label { color: @text; }
 
+      /* GTK рисует popup в отдельном прямоугольном окне. Делаем
+         внешний слой полностью прозрачным, чтобы не было квадратных углов. */
+      window.popup,
+      window.popup decoration,
+      window.popup > decoration {
+        background: transparent;
+        background-color: transparent;
+        background-image: none;
+        border: none;
+        box-shadow: none;
+      }
+
+      window.popup menu,
       menu {
         background: alpha(@background, 0.98);
+        background-image: none;
         color: @text;
         border: 1px solid alpha(@outline, 0.35);
-        border-radius: 9px;
+        border-radius: 11px;
+        box-shadow: none;
         padding: 5px;
       }
 
