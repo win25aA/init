@@ -114,6 +114,8 @@ env = [
 
       bindm = [
         "SUPER, mouse:272, movewindow"
+        "SUPER, mouse:275, exec, playerctl previous"
+        "SUPER, mouse:276, exec, playerctl next"
         "SUPER, mouse:273, resizewindow"
       ];
 
