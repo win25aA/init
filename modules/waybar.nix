@@ -111,9 +111,9 @@
       @import "${config.home.homeDirectory}/.config/waybar/matugen-colors.css";
 
       * {
-        font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font", Roboto, sans-serif;
+        font-family: Roboto, "Symbols Nerd Font", sans-serif;
         font-size: 11px;
-        font-weight: 700;
+        font-weight: bold;
         border: none;
         border-radius: 0;
         min-height: 0;
@@ -164,7 +164,7 @@
         border-right: 1px solid alpha(@outline, 0.24);
         border-radius: 9px 0 0 9px;
         font-size: 15px;
-        padding: 0 14px 0 12px;
+        padding: 0 17px 0 9px;
         transition: all 160ms ease;
       }
 
@@ -184,7 +184,7 @@
         background: transparent;
         border-radius: 7px;
         margin: 0;
-        padding: 0 6px;
+        padding: 0 8px 0 4px;
         transition: all 160ms ease;
       }
 
@@ -265,7 +265,7 @@
         border-left: 1px solid alpha(@error, 0.25);
         border-radius: 0 9px 9px 0;
         font-size: 14px;
-        padding: 0 13px;
+        padding: 0 15px 0 11px;
         transition: all 160ms ease;
       }
 
