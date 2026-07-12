@@ -74,13 +74,14 @@ let
       temporary="$output.tmp.$$"
 
       cat > "$temporary" <<EOF
-<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 40 40">
-  <circle cx="20" cy="20" r="15.5" fill="none" stroke="$track" stroke-width="3.5"/>
-  <circle cx="20" cy="20" r="15.5" fill="none" stroke="$accent" stroke-width="3.5"
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <circle cx="16" cy="16" r="13" fill="none" stroke="$track" stroke-width="3"/>
+  <circle cx="16" cy="16" r="13" fill="none" stroke="$accent" stroke-width="3"
           pathLength="100" stroke-dasharray="$percent 100" stroke-linecap="round"
-          transform="rotate(-90 20 20)"/>
-  <text x="20" y="22.7" text-anchor="middle" fill="$text"
-        font-family="Roboto, sans-serif" font-size="8.3" font-weight="700">$percent%</text>
+          transform="rotate(-90 16 16)"/>
+  <text x="16" y="19.3" text-anchor="middle" fill="$text"
+        font-family="Roboto, sans-serif" font-size="10" font-weight="900"
+        letter-spacing="-0.55">$percent%</text>
 </svg>
 EOF
 
