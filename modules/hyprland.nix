@@ -100,7 +100,7 @@ env = [
           "SUPER, T, exec, AyuGram"
           "SUPER SHIFT, W, exec, wallpaper-selector"
           "SUPER, S, exec, steam"
-          "SUPER, P, exec, wlogout"
+          "SUPER, P, exec, wlogout -b 4"
 
           "SUPER CTRL, S, exec, grim -g \"$(slurp)\" - | swappy -f -"
           "SUPER SHIFT, S, exec, grim -g \"$(slurp)\" - | wl-copy"
