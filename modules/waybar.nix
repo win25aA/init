@@ -1,13 +1,102 @@
 { config, pkgs, inputs, ... }:
 
+let
+  resourceRing = pkgs.writeShellApplication {
+    name = "waybar-resource-ring";
+    runtimeInputs = with pkgs; [ coreutils gawk ];
+
+    text = ''
+      set -euo pipefail
+
+      mode="$1"
+      cache_dir="$HOME/.cache/waybar-rings"
+      colors_file="$HOME/.config/waybar/matugen-colors.css"
+      mkdir -p "$cache_dir"
+
+      get_color() {
+        local name="$1"
+        local fallback="$2"
+        local value=""
+
+        if [[ -f "$colors_file" ]]; then
+          value="$(awk -v wanted="$name" \
+            '$1 == "@define-color" && $2 == wanted { gsub(";", "", $3); print $3; exit }' \
+            "$colors_file" 2>/dev/null || true)"
+        fi
+
+        if [[ -n "$value" ]]; then
+          printf '%s' "$value"
+        else
+          printf '%s' "$fallback"
+        fi
+      }
+
+      if [[ "$mode" == "cpu" ]]; then
+        read_cpu() {
+          read -r _ user nice system idle iowait irq softirq steal _ < /proc/stat
+          cpu_total=$((user + nice + system + idle + iowait + irq + softirq + steal))
+          cpu_idle=$((idle + iowait))
+        }
+
+        read_cpu
+        total_before="$cpu_total"
+        idle_before="$cpu_idle"
+        sleep 0.15
+        read_cpu
+        total_after="$cpu_total"
+        idle_after="$cpu_idle"
+
+        total_delta=$((total_after - total_before))
+        idle_delta=$((idle_after - idle_before))
+        percent=0
+        if (( total_delta > 0 )); then
+          percent=$((100 * (total_delta - idle_delta) / total_delta))
+        fi
+
+        label="CPU"
+        accent="$(get_color primary '#d0bcff')"
+        output="$cache_dir/cpu.svg"
+      else
+        total="$(awk '/^MemTotal:/ { print $2 }' /proc/meminfo)"
+        available="$(awk '/^MemAvailable:/ { print $2 }' /proc/meminfo)"
+        percent=$((100 * (total - available) / total))
+
+        label="RAM"
+        accent="$(get_color secondary '#ccc2dc')"
+        output="$cache_dir/memory.svg"
+      fi
+
+      (( percent < 0 )) && percent=0
+      (( percent > 100 )) && percent=100
+
+      track="$(get_color surface_high '#3a3540')"
+      text="$(get_color text '#ffffff')"
+      temporary="$output.tmp.$$"
+
+      cat > "$temporary" <<EOF
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 40 40">
+  <circle cx="20" cy="20" r="15.5" fill="none" stroke="$track" stroke-width="3.5"/>
+  <circle cx="20" cy="20" r="15.5" fill="none" stroke="$accent" stroke-width="3.5"
+          pathLength="100" stroke-dasharray="$percent 100" stroke-linecap="round"
+          transform="rotate(-90 20 20)"/>
+  <text x="20" y="22.7" text-anchor="middle" fill="$text"
+        font-family="Roboto, sans-serif" font-size="8.3" font-weight="700">$percent%</text>
+</svg>
+EOF
+
+      mv -f "$temporary" "$output"
+      printf '%s\n%s: %s%%\n' "$output" "$label" "$percent"
+    '';
+  };
+in
 {
-  home.packages = with pkgs; [
-    roboto
-    nerd-fonts.jetbrains-mono
-    nerd-fonts.symbols-only
-    playerctl
-    pavucontrol
-  ];
+  home.packages = (with pkgs; [
+      roboto
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.symbols-only
+      playerctl
+      pavucontrol
+    ]) ++ [ resourceRing ];
 
   fonts.fontconfig.enable = true;
 
@@ -27,7 +116,12 @@
       margin-left = 7;
       margin-right = 7;
 
-      modules-left = [ "custom/launcher" "hyprland/workspaces" ];
+      modules-left = [
+        "custom/launcher"
+        "hyprland/workspaces"
+        "image#cpu"
+        "image#memory"
+      ];
       modules-center = [ "mpris" ];
       modules-right = [ "tray" "pulseaudio" "clock" "custom/power" ];
 
@@ -53,6 +147,22 @@
         on-scroll-up = "hyprctl dispatch workspace e-1";
         on-scroll-down = "hyprctl dispatch workspace e+1";
         sort-by-number = true;
+      };
+
+      "image#cpu" = {
+        exec = "${resourceRing}/bin/waybar-resource-ring cpu";
+        size = 32;
+        interval = 2;
+        tooltip = true;
+        on-click = "kitty -e btop";
+      };
+
+      "image#memory" = {
+        exec = "${resourceRing}/bin/waybar-resource-ring memory";
+        size = 32;
+        interval = 2;
+        tooltip = true;
+        on-click = "kitty -e btop";
       };
 
       mpris = {
@@ -227,6 +337,15 @@
       #workspaces button.urgent {
         color: @error;
         background: alpha(@error, 0.14);
+      }
+
+      #image.cpu {
+        margin-left: 3px;
+      }
+
+      #image.cpu,
+      #image.memory {
+        padding: 0 1px;
       }
 
       #mpris {
