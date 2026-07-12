@@ -98,6 +98,7 @@ env = [
           "SUPER, E, exec, thunar"
           "SUPER, W, exec, firefox"
           "SUPER, T, exec, AyuGram"
+          "SUPER SHIFT, W, exec, wallpaper-selector"
           "SUPER, S, exec, steam"
           "SUPER, P, exec, wlogout"
 
