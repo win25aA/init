@@ -77,7 +77,7 @@ let
 
       ln -sfn "$wallpaper" "$current_link"
 
-      if ! matugen image "$wallpaper" -m dark >"$log_file" 2>&1; then
+      if ! matugen image "$wallpaper" -m dark --source-color-index 0 >"$log_file" 2>&1; then
         notify-send -u critical \
           "Matugen не применился" \
           "Ошибка записана в $log_file"
