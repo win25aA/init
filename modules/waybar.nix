@@ -41,7 +41,8 @@
         format = "{icon}";
         format-icons = {
           active = "";
-          default = "";
+          default = "";
+          empty = "";
           urgent = "";
         };
         persistent-workspaces = {
@@ -212,6 +213,10 @@
         background: alpha(@primary, 0.10);
         box-shadow: none;
         text-shadow: none;
+      }
+
+      #workspaces button.empty {
+        color: alpha(@text_muted, 0.35);
       }
 
       #workspaces button.active {
