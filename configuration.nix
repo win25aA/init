@@ -66,13 +66,6 @@ boot.loader.grub.useOSProber = true;
   services.xserver.enable = true;
 services.gvfs.enable = true;
 
-programs.spicetify = {
-    enable = true;
-    theme = spicePkgs.themes.comfy;
-    colorScheme = "Mono";
-    # Убраны запятые из списка
-enabledExtensions = with spicePkgs.extensions; [ adblock shuffle ];
-  };
 
 
 
@@ -139,6 +132,12 @@ programs.hyprland = {
 
 
 
+programs.spicetify = {
+    enable = true;
+    theme = spicePkgs.themes.comfy;
+    colorScheme = "Mono";
+enabledExtensions = with spicePkgs.extensions; [ adblock shuffle ];
+  };
 
 
 
