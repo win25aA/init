@@ -103,7 +103,7 @@
       "custom/power" = {
         format = "󰐥";
         tooltip = false;
-        on-click = "wlogout";
+        on-click = "wlogout -b 4";
       };
     };
 
@@ -161,9 +161,11 @@
         background: alpha(@surface_high, 0.78);
         border-right: 1px solid alpha(@outline, 0.24);
         border-radius: 9px 0 0 9px;
+        font-family: "Symbols Nerd Font";
         font-size: 15px;
         font-weight: normal;
-        padding: 0 15px 0 11px;
+        min-width: 38px;
+        padding: 0;
         transition: all 160ms ease;
       }
 
@@ -182,9 +184,11 @@
         color: alpha(@text_muted, 0.72);
         background: transparent;
         border-radius: 7px;
+        font-family: "Symbols Nerd Font";
         font-weight: normal;
+        min-width: 26px;
         margin: 0;
-        padding: 0 7px 0 5px;
+        padding: 0;
         transition: all 160ms ease;
       }
 
@@ -261,9 +265,11 @@
         background: alpha(@error, 0.10);
         border-left: 1px solid alpha(@error, 0.25);
         border-radius: 0 9px 9px 0;
+        font-family: "Symbols Nerd Font";
         font-size: 14px;
         font-weight: normal;
-        padding: 0 14px 0 12px;
+        min-width: 38px;
+        padding: 0;
         transition: all 160ms ease;
       }
 

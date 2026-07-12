@@ -35,43 +35,46 @@
       @import "${config.home.homeDirectory}/.config/waybar/matugen-colors.css";
 
       * {
-        font-family: sans-serif, "Symbols Nerd Font";
+        font-family: "Symbols Nerd Font", Roboto, sans-serif;
         background-image: none;
         border-image: none;
         box-shadow: none;
         text-shadow: none;
         outline: none;
-        outline-style: none;
         border: none;
       }
 
       window {
-        background-color: alpha(@background, 0.55);
+        background-color: alpha(@background, 0.68);
       }
 
       button {
-        font-size: 52px;
-        font-weight: 900;
         color: @text;
-        background-color: alpha(@surface, 0.95);
-        border-radius: 24px;
-        margin: 10px;
-        transition: all 0.2s ease;
+        background-color: alpha(@surface, 0.94);
+        border: 1px solid alpha(@outline, 0.28);
+        border-radius: 16px;
+        margin: 8px;
+        font-size: 46px;
+        font-weight: normal;
+        transition: all 180ms ease;
       }
 
       button:focus {
-        background-color: alpha(@surface, 0.95);
         color: @primary;
+        background-color: alpha(@surface_high, 0.96);
+        border-color: alpha(@primary, 0.46);
       }
 
       button:hover {
-        background-color: @primary;
         color: @on_primary;
-        margin: 4px;
+        background-color: @primary;
+        border-color: @primary;
       }
 
       #shutdown:hover {
+        color: @on_primary;
         background-color: @error;
+        border-color: @error;
       }
     '';
   };
