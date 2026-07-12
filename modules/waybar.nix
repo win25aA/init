@@ -113,7 +113,7 @@
       * {
         font-family: Roboto, "Symbols Nerd Font", sans-serif;
         font-size: 11px;
-        font-weight: bold;
+        font-weight: normal;
         border: none;
         border-radius: 0;
         min-height: 0;
@@ -135,9 +135,7 @@
         padding: 8px 10px;
       }
 
-      tooltip label {
-        color: @text;
-      }
+      tooltip label { color: @text; }
 
       menu {
         background: alpha(@background, 0.98);
@@ -164,7 +162,8 @@
         border-right: 1px solid alpha(@outline, 0.24);
         border-radius: 9px 0 0 9px;
         font-size: 15px;
-        padding: 0 17px 0 9px;
+        font-weight: normal;
+        padding: 0 15px 0 11px;
         transition: all 160ms ease;
       }
 
@@ -183,8 +182,9 @@
         color: alpha(@text_muted, 0.72);
         background: transparent;
         border-radius: 7px;
+        font-weight: normal;
         margin: 0;
-        padding: 0 8px 0 4px;
+        padding: 0 7px 0 5px;
         transition: all 160ms ease;
       }
 
@@ -207,6 +207,7 @@
 
       #mpris {
         color: @text;
+        font-weight: bold;
         background: alpha(@surface_high, 0.62);
         border: 1px solid alpha(@outline, 0.20);
         border-radius: 8px;
@@ -222,9 +223,7 @@
         border-color: alpha(@primary, 0.38);
       }
 
-      #mpris.paused {
-        color: @text_muted;
-      }
+      #mpris.paused { color: @text_muted; }
 
       #tray {
         background: transparent;
@@ -233,6 +232,7 @@
 
       #pulseaudio {
         color: @text;
+        font-weight: bold;
         background: alpha(@surface_high, 0.52);
         border-left: 1px solid alpha(@outline, 0.20);
         border-right: 1px solid alpha(@outline, 0.20);
@@ -245,19 +245,16 @@
         background: alpha(@primary, 0.12);
       }
 
-      #pulseaudio.muted {
-        color: @text_muted;
-      }
+      #pulseaudio.muted { color: @text_muted; }
 
       #clock {
         color: @text;
+        font-weight: bold;
         background: transparent;
         padding: 0 13px;
       }
 
-      #clock:hover {
-        color: @primary;
-      }
+      #clock:hover { color: @primary; }
 
       #custom-power {
         color: @error;
@@ -265,7 +262,8 @@
         border-left: 1px solid alpha(@error, 0.25);
         border-radius: 0 9px 9px 0;
         font-size: 14px;
-        padding: 0 15px 0 11px;
+        font-weight: normal;
+        padding: 0 14px 0 12px;
         transition: all 160ms ease;
       }
 
@@ -274,13 +272,8 @@
         background: @error;
       }
 
-      #tray > .passive {
-        -gtk-icon-effect: dim;
-      }
-
-      #tray > .needs-attention {
-        -gtk-icon-effect: highlight;
-      }
+      #tray > .passive { -gtk-icon-effect: dim; }
+      #tray > .needs-attention { -gtk-icon-effect: highlight; }
     '';
   };
 }
