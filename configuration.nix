@@ -18,6 +18,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  cava
   android-tools
   awww
   pavucontrol
