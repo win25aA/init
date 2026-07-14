@@ -19,9 +19,8 @@ in
 {
 environment.systemPackages = with pkgs; [
   cava
-   inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+  inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   android-tools
-  awww
   pavucontrol
   matugen
   appimage-run
@@ -43,10 +42,7 @@ environment.systemPackages = with pkgs; [
   wget
   vesktop
   neovim
-  grim
   inputs.zen-browser.packages."${pkgs.system}".default
-  slurp
-  wl-clipboard
   eza
   starship
   gzip

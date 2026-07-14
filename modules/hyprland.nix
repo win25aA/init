@@ -98,12 +98,12 @@ env = [
           "SUPER, E, exec, thunar"
           "SUPER, W, exec, firefox"
           "SUPER, T, exec, AyuGram"
-          "SUPER SHIFT, W, exec, wallpaper-selector"
+          "SUPER SHIFT, W, exec, ${ipc} panel-toggle wallpaper"
           "SUPER, S, exec, steam"
-          "SUPER, P, exec, wlogout -b 4"
+          "SUPER, P, exec, ${ipc} panel-toggle session"
 
-          "SUPER CTRL, S, exec, grim -g \"$(slurp)\" - | swappy -f -"
-          "SUPER SHIFT, S, exec, grim -g \"$(slurp)\" - | wl-copy"
+          "SUPER CTRL, S, exec, ${ipc} screenshot-region"
+ 
 
           "SUPER, D, exec, vesktop"
           "SUPER, D, togglespecialworkspace, communication"
