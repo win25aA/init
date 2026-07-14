@@ -41,7 +41,6 @@ environment.systemPackages = with pkgs; [
   osu-lazer-bin 
   wget
   vesktop
-  neovim
   inputs.zen-browser.packages."${pkgs.system}".default
   eza
   starship
