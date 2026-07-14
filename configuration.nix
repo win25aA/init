@@ -19,6 +19,7 @@ in
 {
 environment.systemPackages = with pkgs; [
   cava
+   inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   android-tools
   awww
   pavucontrol

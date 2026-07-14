@@ -89,11 +89,32 @@
         "type": "github"
       }
     },
+    "noctalia": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1784039158,
+        "narHash": "sha256-qWh0984hWNqhPmStTv9teJjOl7TcmLROjmCs/K+js+k=",
+        "owner": "noctalia-dev",
+        "repo": "noctalia",
+        "rev": "77087ad0ccad3909e00e828cadd94aba9e7a02dc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "noctalia-dev",
+        "repo": "noctalia",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "creamlinux-installer": "creamlinux-installer",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
+        "noctalia": "noctalia",
         "spicetify-nix": "spicetify-nix",
         "zen-browser": "zen-browser"
       }
