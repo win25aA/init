@@ -26,6 +26,7 @@ environment.systemPackages = with pkgs; [
     dosfstools
     mtools
     gptfdisk
+    btrfs-progs
   inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   android-tools
   pavucontrol
@@ -78,8 +79,7 @@ security.wrappers.pkexec = {
   source = "${pkgs.polkit.bin}/bin/pkexec";
 };
 
-
-
+  boot.supportedFilesystems = [ "btrfs" ];
  security.polkit.enable = true;
 
 hardware.graphics = {
