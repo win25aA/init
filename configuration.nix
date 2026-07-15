@@ -70,6 +70,15 @@ boot.loader.grub.useOSProber = true;
   services.xserver.enable = true;
 services.gvfs.enable = true;
 
+# Включение корректных прав (setuid) для pkexec
+security.wrappers.pkexec = {
+  setuid = true;
+  owner = "root";
+  group = "root";
+  source = "${pkgs.polkit.bin}/bin/pkexec";
+};
+
+
 
  security.polkit.enable = true;
 
