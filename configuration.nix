@@ -71,7 +71,7 @@ boot.loader.grub.useOSProber = true;
 services.gvfs.enable = true;
 
 
-
+ security.polkit.enable = true;
 
 hardware.graphics = {
   enable = true;
