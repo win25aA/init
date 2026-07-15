@@ -19,6 +19,13 @@ in
 {
 environment.systemPackages = with pkgs; [
   cava
+    gparted
+    exfat
+    exfatprogs
+    ntfs3g
+    dosfstools
+    mtools
+    gptfdisk
   inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   android-tools
   pavucontrol
