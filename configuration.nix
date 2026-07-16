@@ -171,7 +171,6 @@ enabledExtensions = with spicePkgs.extensions; [ adblock shuffle ];
 
 
 
-
   imports = [./hardware-configuration.nix ];
 
 
