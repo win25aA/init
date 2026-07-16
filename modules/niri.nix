@@ -22,6 +22,33 @@ let
       "Mod+${key}".action.focus-workspace = toString n;
       "Mod+Ctrl+${key}".action.move-column-to-workspace = toString n;
     }) (lib.range 1 10));
+
+  # Эмуляция special-воркспейсов из hyprland:
+  # - приложение не запущено: запустить и перейти на его воркспейс
+  # - мы уже на этом воркспейсе: вернуться на предыдущий (тоггл)
+  # - иначе: перейти на воркспейс
+  # Использование: niri-ws-toggle <воркспейс> <regex app-id> <команда запуска...>
+  ws-toggle = pkgs.writeShellApplication {
+    name = "niri-ws-toggle";
+    runtimeInputs = [ pkgs.jq pkgs.niri ];
+    text = ''
+      target="$1"
+      app_re="$2"
+      shift 2
+
+      focused=$(niri msg --json workspaces | jq -r '.[] | select(.is_focused) | .name // empty')
+      running=$(niri msg --json windows | jq --arg re "$app_re" '[.[] | select((.app_id // "") | test($re; "i"))] | length')
+
+      if [ "$running" -eq 0 ]; then
+        niri msg action focus-workspace "$target"
+        niri msg action spawn -- "$@"
+      elif [ "$focused" = "$target" ]; then
+        niri msg action focus-workspace-previous
+      else
+        niri msg action focus-workspace "$target"
+      fi
+    '';
+  };
 in
 {
   programs.niri.settings = {
@@ -163,12 +190,10 @@ in
       "Mod+T".action.spawn = "AyuGram";
       "Mod+S".action.spawn = "steam";
 
-      # Аналог special-воркспейсов: Mod+D/C - перейти,
-      # Mod+Shift+D/C - запустить приложение
-      "Mod+D".action.focus-workspace = "communication";
-      "Mod+Shift+D".action.spawn = "vesktop";
-      "Mod+C".action.focus-workspace = "music";
-      "Mod+Shift+C".action.spawn = "spotify";
+      # Special-воркспейсы (тоггл как в hyprland):
+      # первое нажатие - запуск/переход, второе - возврат назад
+      "Mod+D".action.spawn = [ (lib.getExe ws-toggle) "communication" "^vesktop$" "vesktop" ];
+      "Mod+C".action.spawn = [ (lib.getExe ws-toggle) "music" "^spotify$" "spotify" ];
     };
   };
 }
