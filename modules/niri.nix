@@ -60,7 +60,9 @@ in
     };
 
     outputs."HDMI-A-1" = {
-      mode = { width = 1024; height = 768; refresh = 70.07; };
+      # Режим как был в hyprland. Важно: точное значение 70.069 из
+      # `niri msg outputs` - с 70.07 niri молча берёт preferred-режим.
+      mode = { width = 1024; height = 768; refresh = 70.069; };
       position = { x = 1440; y = 355; };
       scale = 1.0;
     };
