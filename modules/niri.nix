@@ -60,9 +60,9 @@ in
     };
 
     outputs."HDMI-A-1" = {
-      # Нативный режим этого ТВ (16:9). Старый 1024x768@70.07 из hyprland
-      # растягивал 4:3 на широкий экран, а с 70.069 всё равно не совпадал.
-      mode = { width = 1280; height = 720; refresh = 60.0; };
+      # Режим как был в hyprland. Важно: точное значение 70.069 из
+      # `niri msg outputs` - с 70.07 niri молча берёт preferred-режим.
+      mode = { width = 1024; height = 768; refresh = 70.069; };
       position = { x = 1440; y = 355; };
       scale = 1.0;
     };
