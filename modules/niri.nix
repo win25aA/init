@@ -91,6 +91,9 @@ in
     layout = {
       gaps = 10;
 
+      # Одинокая колонка - по центру экрана (иначе прилипает к левому краю)
+      always-center-single-column = true;
+
       # рамки были прозрачными в hyprland - выключаем
       focus-ring.enable = false;
       border.enable = false;
