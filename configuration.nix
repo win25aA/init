@@ -150,6 +150,21 @@ programs.niri.enable = true;
 programs.niri.package = pkgs.niri; # пакет из nixpkgs, а не сборка из niri-flake
 niri-flake.cache.enable = false; # cachix не нужен для пакета из nixpkgs
 
+# ===== Для Vice (запись клипов, modules/vice.nix) =====
+# Бэкенд захвата с setcap-обёрткой - запись без запросов на каждый старт
+programs.gpu-screen-recorder.enable = true;
+
+# Доступ к /dev/input/event* для глобальных хоткеев (F9) через evdev.
+# uaccess выдаёт права юзеру активной сессии; номер < 73 обязателен,
+# иначе правило сработает позже 73-seat-late и тег не применится.
+services.udev.packages = [
+  (pkgs.writeTextFile {
+    name = "vice-udev-rules";
+    destination = "/etc/udev/rules.d/70-vice-input.rules";
+    text = ''KERNEL=="event*", SUBSYSTEM=="input", TAG+="uaccess"'';
+  })
+];
+
 
 
 programs.spicetify = {
