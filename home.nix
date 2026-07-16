@@ -3,6 +3,7 @@
 {
   imports = [
     ./modules/hyprland.nix
+    ./modules/niri.nix
     ./modules/kitty.nix
     ./modules/fish.nix
     ./modules/fastfetch.nix

@@ -28,6 +28,7 @@ environment.systemPackages = with pkgs; [
     gptfdisk
     btrfs-progs
   inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+  xwayland-satellite # X11-приложения (Steam и т.д.) в niri
   android-tools
   pavucontrol
   matugen
@@ -142,6 +143,9 @@ programs.hyprland = {
   xwayland.enable = true; # Нужен, чтобы старые X11-приложения запускались без проблем
 
 };
+
+# niri: скроллируемый тайловый композитор (сессия появится в SDDM)
+programs.niri.enable = true;
 
 
 
