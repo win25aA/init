@@ -28,6 +28,7 @@ environment.systemPackages = with pkgs; [
     gptfdisk
     btrfs-progs
   inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+  xwayland-satellite # X11-приложения (Steam и т.д.) в niri
   android-tools
   pavucontrol
   matugen
@@ -142,6 +143,12 @@ programs.hyprland = {
   xwayland.enable = true; # Нужен, чтобы старые X11-приложения запускались без проблем
 
 };
+
+# niri: скроллируемый тайловый композитор (сессия появится в SDDM)
+# Модуль из niri-flake, сам конфиг - в modules/niri.nix (programs.niri.settings)
+programs.niri.enable = true;
+programs.niri.package = pkgs.niri; # пакет из nixpkgs, а не сборка из niri-flake
+niri-flake.cache.enable = false; # cachix не нужен для пакета из nixpkgs
 
 
 

@@ -26,6 +26,11 @@
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   }; 
 
   outputs = inputs@{ self, nixpkgs, home-manager, spicetify-nix, ... }: {
@@ -37,6 +42,7 @@
         ./configuration.nix
         home-manager.nixosModules.home-manager
         spicetify-nix.nixosModules.default
+        inputs.niri.nixosModules.niri
       ];
     };
   };
