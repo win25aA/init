@@ -191,6 +191,7 @@
         "nixpkgs": "nixpkgs",
         "noctalia": "noctalia",
         "spicetify-nix": "spicetify-nix",
+        "vice-src": "vice-src",
         "zen-browser": "zen-browser"
       }
     },
@@ -227,6 +228,23 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "vice-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781447404,
+        "narHash": "sha256-zZv3DJf0gWFTu/jisVkgi+fMlRAHYo+j2xXH1SIaGqM=",
+        "owner": "eklonofficial",
+        "repo": "Vice",
+        "rev": "aea61cb813537a76559d57aadba29b14d652cf0f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "eklonofficial",
+        "ref": "v1.3.4",
+        "repo": "Vice",
         "type": "github"
       }
     },
