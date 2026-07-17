@@ -31,12 +31,6 @@
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # Исходники Vice (game clip recorder), пакуется в modules/vice.nix
-    vice-src = {
-      url = "github:eklonofficial/Vice/v1.3.4";
-      flake = false;
-    };
   }; 
 
   outputs = inputs@{ self, nixpkgs, home-manager, spicetify-nix, ... }: {
