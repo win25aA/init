@@ -43,6 +43,10 @@ let
         wl-clipboard  # копирование ссылок (wayland)
         pulseaudio    # pactl для аудиодорожек (работает с pipewire)
       ])}"
+      # NVIDIA+Wayland: QtWebEngine не может расшарить dmabuf-текстуры
+      # (чёрное окно + "dma_buf acquisition failure"). Это штатный рычаг
+      # Vice: композитинг UI софтварно, рендер остаётся на GPU.
+      "--set-default VICE_WEBVIEW_SOFTWARE 1"
     ];
 
     postInstall = ''
