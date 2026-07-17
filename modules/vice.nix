@@ -23,6 +23,10 @@ let
 
     # UI на pywebview (Qt/PySide6) - нужно квалифицированное Qt-окружение
     nativeBuildInputs = [ pkgs.qt6.wrapQtAppsHook ];
+    buildInputs = [
+      pkgs.qt6.qtbase     # нужен хуку wrapQtAppsHook (qtPluginPrefix)
+      pkgs.qt6.qtwayland  # платформенный плагин wayland
+    ];
     dontWrapQtApps = true;
     preFixup = ''
       makeWrapperArgs+=("''${qtWrapperArgs[@]}")
