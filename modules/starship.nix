@@ -7,7 +7,7 @@
   home.sessionVariables.STARSHIP_CONFIG = "${config.xdg.configHome}/starship/starship.toml";
 
   # Шаблон для matugen: {{colors.*}} подставляются при смене обоев.
-  # Стиль: минимализм без фоновых блоков — только цветной текст и иконки.
+  # Стиль: отдельные закруглённые "пилюли" (капсулы) с воздухом между ними.
   xdg.configFile."matugen/starship.toml".text = ''
     "$schema" = 'https://starship.rs/config-schema.json'
 
@@ -15,49 +15,63 @@
     palette = "matugen"
 
     format = """
-    [╭─](fg:outline) $os$directory$git_branch$git_status$nix_shell$nodejs$python$rust$golang$c$lua$java$cmd_duration
-    [╰─](fg:outline)$character"""
+    $os$directory$git_branch$git_status$nix_shell$nodejs$python$rust$golang$c$lua$java$cmd_duration
+    $character"""
+
+    right_format = """$time"""
 
     [palettes.matugen]
     primary = "{{colors.primary.default.hex}}"
-    secondary = "{{colors.secondary.default.hex}}"
+    on_primary = "{{colors.on_primary.default.hex}}"
+    sec_c = "{{colors.secondary_container.default.hex}}"
+    on_sec_c = "{{colors.on_secondary_container.default.hex}}"
+    ter_c = "{{colors.tertiary_container.default.hex}}"
+    on_ter_c = "{{colors.on_tertiary_container.default.hex}}"
+    container = "{{colors.surface_container_high.default.hex}}"
+    on_surface = "{{colors.on_surface.default.hex}}"
+    surf_var = "{{colors.surface_variant.default.hex}}"
+    on_surf_var = "{{colors.on_surface_variant.default.hex}}"
     tertiary = "{{colors.tertiary.default.hex}}"
     error = "{{colors.error.default.hex}}"
-    outline = "{{colors.outline.default.hex}}"
-    on_surface_variant = "{{colors.on_surface_variant.default.hex}}"
 
+    # ── пилюля: NixOS ──────────────────────────────────────────────
     [os]
     disabled = false
-    style = "bold fg:primary"
-    format = '[$symbol]($style) '
+    format = '[](fg:primary)[$symbol](bg:primary fg:on_primary)[](fg:primary) '
 
     [os.symbols]
-    NixOS = "󱄅"
-    Arch = "󰣇"
-    Ubuntu = "󰕈"
-    Debian = "󰣚"
-    Fedora = "󰣛"
-    Linux = "󰌽"
-    Macos = "󰀵"
-    Windows = "󰍲"
+    NixOS = "󱄅 "
+    Arch = "󰣇 "
+    Ubuntu = "󰕈 "
+    Debian = "󰣚 "
+    Fedora = "󰣛 "
+    Linux = "󰌽 "
+    Macos = "󰀵 "
+    Windows = "󰍲 "
 
+    # ── пилюля: директория ─────────────────────────────────────────
     [directory]
-    style = "bold fg:primary"
-    read_only_style = "fg:error"
-    format = '[$path]($style)[ $read_only]($read_only_style)  '
+    format = '[](fg:sec_c)[󰉋 $path](bg:sec_c fg:on_sec_c)[$read_only](bg:sec_c fg:error)[](fg:sec_c) '
     truncation_length = 4
     truncate_to_repo = true
     truncation_symbol = "…/"
-    read_only = "󰌾"
+    read_only = " 󰌾"
 
+    [directory.substitutions]
+    "Documents" = "󰈙"
+    "Downloads" = ""
+    "Music" = "󰝚"
+    "Pictures" = ""
+    "Videos" = ""
+
+    # ── пилюля: git (ветка + статус в одной капсуле) ───────────────
     [git_branch]
     symbol = ""
-    style = "bold fg:tertiary"
-    format = '[$symbol $branch]($style) '
+    format = '[](fg:ter_c)[$symbol $branch](bg:ter_c fg:on_ter_c)'
 
     [git_status]
-    style = "fg:error"
-    format = '([$all_status$ahead_behind]($style) )'
+    style = "bg:ter_c fg:on_ter_c"
+    format = '([ $all_status$ahead_behind]($style))[](fg:ter_c) '
     conflicted = "󰞇 "
     ahead = "⇡''${count} "
     behind = "⇣''${count} "
@@ -69,50 +83,49 @@
     renamed = "»''${count} "
     deleted = "✘''${count} "
 
+    # ── пилюли: окружение / языки ──────────────────────────────────
     [nix_shell]
     symbol = "󱄅"
-    style = "fg:secondary"
-    format = '[$symbol $state]($style) '
+    format = '[](fg:container)[$symbol $state](bg:container fg:on_surface)[](fg:container) '
 
     [nodejs]
     symbol = ""
-    style = "fg:secondary"
-    format = '[$symbol( $version)]($style) '
+    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
 
     [python]
     symbol = ""
-    style = "fg:secondary"
-    format = '[$symbol( $version)( $virtualenv)]($style) '
+    format = '[](fg:container)[$symbol( $version)( $virtualenv)](bg:container fg:on_surface)[](fg:container) '
 
     [rust]
     symbol = "󱘗"
-    style = "fg:secondary"
-    format = '[$symbol( $version)]($style) '
+    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
 
     [golang]
     symbol = ""
-    style = "fg:secondary"
-    format = '[$symbol( $version)]($style) '
+    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
 
     [c]
     symbol = ""
-    style = "fg:secondary"
-    format = '[$symbol( $version)]($style) '
+    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
 
     [lua]
     symbol = ""
-    style = "fg:secondary"
-    format = '[$symbol( $version)]($style) '
+    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
 
     [java]
     symbol = ""
-    style = "fg:secondary"
-    format = '[$symbol( $version)]($style) '
+    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
 
+    # ── пилюля: время выполнения ───────────────────────────────────
     [cmd_duration]
     min_time = 2000
-    style = "fg:on_surface_variant"
-    format = '[󱎫 $duration]($style) '
+    format = '[](fg:surf_var)[󱎫 $duration](bg:surf_var fg:on_surf_var)[](fg:surf_var) '
+
+    # ── пилюля справа: часы ────────────────────────────────────────
+    [time]
+    disabled = false
+    time_format = "%H:%M"
+    format = '[](fg:surf_var)[ $time](bg:surf_var fg:on_surf_var)[](fg:surf_var)'
 
     [character]
     success_symbol = '[❯](bold fg:primary)'
