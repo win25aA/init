@@ -37,7 +37,7 @@
     # ── пилюля: NixOS ──────────────────────────────────────────────
     [os]
     disabled = false
-    format = '[](fg:primary)[$symbol](bg:primary fg:on_primary)[](fg:primary) '
+    format = '[](fg:primary)[$symbol](bg:primary fg:on_primary)[](fg:primary) '
 
     [os.symbols]
     NixOS = "󱄅 "
@@ -51,7 +51,7 @@
 
     # ── пилюля: директория ─────────────────────────────────────────
     [directory]
-    format = '[](fg:sec_c)[󰉋 $path](bg:sec_c fg:on_sec_c)[$read_only](bg:sec_c fg:error)[](fg:sec_c) '
+    format = '[](fg:sec_c)[󰉋 $path](bg:sec_c fg:on_sec_c)[$read_only](bg:sec_c fg:error)[](fg:sec_c) '
     truncation_length = 4
     truncate_to_repo = true
     truncation_symbol = "…/"
@@ -67,11 +67,11 @@
     # ── пилюля: git (ветка + статус в одной капсуле) ───────────────
     [git_branch]
     symbol = ""
-    format = '[](fg:ter_c)[$symbol $branch](bg:ter_c fg:on_ter_c)'
+    format = '[](fg:ter_c)[$symbol $branch](bg:ter_c fg:on_ter_c)'
 
     [git_status]
     style = "bg:ter_c fg:on_ter_c"
-    format = '([ $all_status$ahead_behind]($style))[](fg:ter_c) '
+    format = '([ $all_status$ahead_behind]($style))[](fg:ter_c) '
     conflicted = "󰞇 "
     ahead = "⇡''${count} "
     behind = "⇣''${count} "
@@ -86,46 +86,46 @@
     # ── пилюли: окружение / языки ──────────────────────────────────
     [nix_shell]
     symbol = "󱄅"
-    format = '[](fg:container)[$symbol $state](bg:container fg:on_surface)[](fg:container) '
+    format = '[](fg:container)[$symbol $state](bg:container fg:on_surface)[](fg:container) '
 
     [nodejs]
     symbol = ""
-    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
+    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
 
     [python]
     symbol = ""
-    format = '[](fg:container)[$symbol( $version)( $virtualenv)](bg:container fg:on_surface)[](fg:container) '
+    format = '[](fg:container)[$symbol( $version)( $virtualenv)](bg:container fg:on_surface)[](fg:container) '
 
     [rust]
     symbol = "󱘗"
-    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
+    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
 
     [golang]
     symbol = ""
-    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
+    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
 
     [c]
     symbol = ""
-    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
+    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
 
     [lua]
     symbol = ""
-    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
+    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
 
     [java]
     symbol = ""
-    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
+    format = '[](fg:container)[$symbol( $version)](bg:container fg:on_surface)[](fg:container) '
 
     # ── пилюля: время выполнения ───────────────────────────────────
     [cmd_duration]
     min_time = 2000
-    format = '[](fg:surf_var)[󱎫 $duration](bg:surf_var fg:on_surf_var)[](fg:surf_var) '
+    format = '[](fg:surf_var)[󱎫 $duration](bg:surf_var fg:on_surf_var)[](fg:surf_var) '
 
     # ── пилюля справа: часы ────────────────────────────────────────
     [time]
     disabled = false
     time_format = "%H:%M"
-    format = '[](fg:surf_var)[ $time](bg:surf_var fg:on_surf_var)[](fg:surf_var)'
+    format = '[](fg:surf_var)[ $time](bg:surf_var fg:on_surf_var)[](fg:surf_var)'
 
     [character]
     success_symbol = '[❯](bold fg:primary)'
