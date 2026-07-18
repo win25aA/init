@@ -17,6 +17,10 @@
     input_path = "~/.config/matugen/fish-colors.fish"
     output_path = "~/.config/fish/matugen-colors.fish"
 
+    [templates.starship]
+    input_path = "~/.config/matugen/starship.toml"
+    output_path = "~/.config/starship/starship.toml"
+
   '';
 
 

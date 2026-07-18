@@ -6,6 +6,7 @@
     ./modules/niri.nix
     ./modules/kitty.nix
     ./modules/fish.nix
+    ./modules/starship.nix
     ./modules/fastfetch.nix
     ./modules/matugen.nix
     ./modules/nodejs.nix
