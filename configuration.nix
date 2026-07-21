@@ -245,10 +245,6 @@ services.displayManager.sddm = {
   programs.firefox.enable = true;
   nixpkgs.config.allowUnfree = true;
 
-  # Шрифты для Source-игр (GMod и т.п.): движок просит Helvetica/Arial/Verdana,
-  # а дефолтный fontconfig подсовывает TeX Gyre Heros, в котором нет кириллицы ->
-  # русские надписи в меню просто пропадают. Ставим шрифты с кириллицей и
-  # принудительно резолвим Helvetica в Arial.
   # Дефолтный набор шрифтов NixOS тянет gyre-fonts (TeX Gyre Heros) — он без
   # кириллицы, и движок Source в GMod упорно рисует им русский текст (пусто).
   # Отключаем дефолты и собираем тот же набор вручную, но БЕЗ gyre-fonts:
@@ -262,27 +258,6 @@ services.displayManager.sddm = {
     noto-fonts-color-emoji
     corefonts        # настоящие Arial/Verdana/Times с кириллицей
   ];
-  fonts.fontconfig.localConf = ''
-    <?xml version="1.0"?>
-    <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-    <fontconfig>
-      <!-- Полностью убираем TeX Gyre Heros из выдачи fontconfig:
-           он без кириллицы и перехватывает запросы Helvetica у Source-игр -->
-      <selectfont>
-        <rejectfont>
-          <pattern>
-            <patelt name="family"><string>TeX Gyre Heros</string></patelt>
-          </pattern>
-        </rejectfont>
-      </selectfont>
-      <match target="pattern">
-        <test name="family"><string>Helvetica</string></test>
-        <edit name="family" mode="prepend" binding="strong">
-          <string>Arial</string>
-        </edit>
-      </match>
-    </fontconfig>
-  '';
 
   system.stateVersion = "26.05"; 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];  
