@@ -249,9 +249,18 @@ services.displayManager.sddm = {
   # а дефолтный fontconfig подсовывает TeX Gyre Heros, в котором нет кириллицы ->
   # русские надписи в меню просто пропадают. Ставим шрифты с кириллицей и
   # принудительно резолвим Helvetica в Arial.
+  # Дефолтный набор шрифтов NixOS тянет gyre-fonts (TeX Gyre Heros) — он без
+  # кириллицы, и движок Source в GMod упорно рисует им русский текст (пусто).
+  # Отключаем дефолты и собираем тот же набор вручную, но БЕЗ gyre-fonts:
+  # нет файла шрифта — игра физически не сможет его выбрать.
+  fonts.enableDefaultPackages = false;
   fonts.packages = with pkgs; [
+    dejavu_fonts
+    freefont_ttf
+    liberation_ttf   # свободная метрическая замена Arial/Helvetica, с кириллицей
+    unifont
+    noto-fonts-color-emoji
     corefonts        # настоящие Arial/Verdana/Times с кириллицей
-    liberation_ttf   # свободная метрическая замена Arial/Helvetica, тоже с кириллицей
   ];
   fonts.fontconfig.localConf = ''
     <?xml version="1.0"?>
