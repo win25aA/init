@@ -245,18 +245,15 @@ services.displayManager.sddm = {
   programs.firefox.enable = true;
   nixpkgs.config.allowUnfree = true;
 
-  # Дефолтный набор шрифтов NixOS тянет gyre-fonts (TeX Gyre Heros) — он без
-  # кириллицы, и движок Source в GMod упорно рисует им русский текст (пусто).
-  # Отключаем дефолты и собираем тот же набор вручную, но БЕЗ gyre-fonts:
-  # нет файла шрифта — игра физически не сможет его выбрать.
+  # gyre-fonts выключен намеренно: без кириллицы, ломает русский текст в GMod
   fonts.enableDefaultPackages = false;
   fonts.packages = with pkgs; [
     dejavu_fonts
     freefont_ttf
-    liberation_ttf   # свободная метрическая замена Arial/Helvetica, с кириллицей
+    liberation_ttf
     unifont
     noto-fonts-color-emoji
-    corefonts        # настоящие Arial/Verdana/Times с кириллицей
+    corefonts
   ];
 
   system.stateVersion = "26.05"; 
