@@ -257,6 +257,15 @@ services.displayManager.sddm = {
     <?xml version="1.0"?>
     <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
     <fontconfig>
+      <!-- Полностью убираем TeX Gyre Heros из выдачи fontconfig:
+           он без кириллицы и перехватывает запросы Helvetica у Source-игр -->
+      <selectfont>
+        <rejectfont>
+          <pattern>
+            <patelt name="family"><string>TeX Gyre Heros</string></patelt>
+          </pattern>
+        </rejectfont>
+      </selectfont>
       <match target="pattern">
         <test name="family"><string>Helvetica</string></test>
         <edit name="family" mode="prepend" binding="strong">
