@@ -46,7 +46,6 @@ environment.systemPackages = with pkgs; [
   firefox
   adw-gtk3
   papirus-icon-theme
-  amnezia-vpn-bin
   osu-lazer-bin 
   wget
   vesktop
