@@ -4,8 +4,10 @@
   xdg.configFile."matugen/config.toml".text = ''
     [config]
     image_mode = "dark"
-    # Всегда брать самый доминантный цвет картинки, без интерактивного
-    # выбора (иначе matugen v4 падает в хуке noctalia, где нет терминала).
+    # Брать самый доминантный цвет без интерактивного выбора.
+    # В matugen 4.1.0 ключ в конфиге ещё не поддержан (только CLI-флаг
+    # --source-color-index, он передаётся в хуке noctalia), но оставляем
+    # на будущее — после обновления matugen флаг станет не нужен.
     source_color_index = 0
 
     [templates.btop]
