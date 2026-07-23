@@ -18,6 +18,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  prismlauncher
   file-roller
   micro
   cava
