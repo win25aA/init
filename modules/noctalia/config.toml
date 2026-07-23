@@ -5,4 +5,6 @@
 [hooks]
 # При смене обоев в GUI прогоняем свой matugen со своими шаблонами
 # (~/.config/matugen/config.toml: kitty, btop, fish).
-wallpaper_changed = "matugen image \"$NOCTALIA_WALLPAPER_PATH\""
+# --source-color-index 0 = брать самый доминантный цвет без интерактивного
+# выбора (в matugen 4.1.0 этот параметр работает только как CLI-флаг).
+wallpaper_changed = "matugen image \"$NOCTALIA_WALLPAPER_PATH\" --source-color-index 0"
