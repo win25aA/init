@@ -4,7 +4,7 @@ config_version = 2
 center = [ "group:g2" ]
 end = [ "group:g1", "tray", "volume", "control-center", "session" ]
 font_weight = 700
-start = [ "workspaces", "clock" ]
+start = [ "workspaces", "clock", "recorder" ]
 
     [[bar.default.capsule_group]]
     enabled = true
@@ -163,11 +163,20 @@ widget_order = [
 [osd.kinds]
 media = false
 
-[plugins]
-enabled = [ "radimous/prismlauncher-instances" ]
+[plugin_settings."noctalia/screen_recorder"]
+audio_source = "both"
 
-[shell.screen_corners]
-size = 30
+[plugin_settings."noctalia/wallhaven"]
+download_dir = "/etc/nixos/wallpapers/"
+
+[plugins]
+enabled = [ "radimous/prismlauncher-instances", "noctalia/wallhaven", "noctalia/screen_recorder" ]
+
+[shell]
+lang = "ru"
+
+    [shell.screen_corners]
+    size = 30
 
 [theme]
 community_palette = "Cyberpunk"
@@ -206,6 +215,9 @@ display = "text"
 
 [widget.ram]
 display = "text"
+
+[widget.recorder]
+type = "noctalia/screen_recorder:recorder"
 
 [widget.tray]
 color = "primary"

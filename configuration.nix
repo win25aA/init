@@ -18,6 +18,7 @@ in
 
 {
 environment.systemPackages = with pkgs; [
+  gpu-screen-recorder
   prismlauncher
   file-roller
   micro
