@@ -1,0 +1,3 @@
+# Этот файл пишет сама noctalia при изменениях в GUI. Руками не править.
+# Если на машине уже есть настройки, перед первой сборкой перенеси их:
+#   mv ~/.local/state/noctalia/settings.toml /etc/nixos/modules/noctalia/settings.toml

@@ -8,6 +8,7 @@
     ./modules/fish.nix
     ./modules/fastfetch.nix
     ./modules/matugen.nix
+    ./modules/noctalia.nix
     ./modules/nodejs.nix
     ./modules/btop.nix
   ];
