@@ -1,3 +1,211 @@
-# Этот файл пишет сама noctalia при изменениях в GUI. Руками не править.
-# Если на машине уже есть настройки, перед первой сборкой перенеси их:
-#   mv ~/.local/state/noctalia/settings.toml /etc/nixos/modules/noctalia/settings.toml
+config_version = 2
+
+[bar.default]
+center = [ "group:g2" ]
+end = [ "group:g1", "tray", "volume", "control-center", "session" ]
+font_weight = 700
+start = [ "workspaces", "clock" ]
+
+    [[bar.default.capsule_group]]
+    enabled = true
+    fill = "surface_variant"
+    id = "g2"
+    members = [ "media", "audio_visualizer" ]
+    opacity = 1.0
+    padding = 6.0
+
+    [[bar.default.capsule_group]]
+    enabled = true
+    fill = "surface_variant"
+    id = "g1"
+    members = [ "cpu", "ram" ]
+    opacity = 1.0
+    padding = 6.0
+
+[control_center]
+hidden_tabs = [ "audio", "monitor", "power", "network", "bluetooth" ]
+
+    [[control_center.shortcuts]]
+    type = "nightlight"
+
+    [[control_center.shortcuts]]
+    type = "clipboard"
+
+    [[control_center.shortcuts]]
+    type = "notification"
+
+[desktop_widgets]
+schema_version = 2
+widget_order = [ "desktop-widget-0000000000000001" ]
+
+    [desktop_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget.desktop-widget-0000000000000001]
+    box_height = 160.0
+    box_width = 256.0
+    cx = 144.0
+    cy = 118.0
+    output = "DVI-D-1"
+    rotation = -0.0
+    type = "weather"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000001.settings]
+        background = false
+        shadow = false
+
+[location]
+address = "vysokaya gora tatarstan"
+latitude = 55.912199999999999
+longitude = 49.312800000000003
+
+[lockscreen_widgets]
+enabled = false
+schema_version = 2
+widget_order = [
+    "lockscreen-login-box@winit",
+    "lockscreen-login-box@WAYLAND-1",
+    "lockscreen-login-box@HDMI-A-1",
+    "lockscreen-login-box@DVI-D-1"
+]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@DVI-D-1"]
+    box_height = 70.0
+    box_width = 400.0
+    cx = 720.0
+    cy = 781.0
+    output = "DVI-D-1"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@DVI-D-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_password_hint = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
+    box_height = 70.0
+    box_width = 400.0
+    cx = 512.0
+    cy = 649.0
+    output = "HDMI-A-1"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_password_hint = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@WAYLAND-1"]
+    box_height = 70.0
+    box_width = 400.0
+    cx = 231.0
+    cy = 131.0
+    output = "WAYLAND-1"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@WAYLAND-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_password_hint = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@winit"]
+    box_height = 70.0
+    box_width = 400.0
+    cx = 248.0
+    cy = 231.0
+    output = "winit"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@winit".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_password_hint = true
+
+[osd.kinds]
+media = false
+
+[plugins]
+enabled = [ "radimous/prismlauncher-instances" ]
+
+[shell.screen_corners]
+size = 30
+
+[theme]
+community_palette = "Cyberpunk"
+source = "wallpaper"
+
+    [theme.templates]
+    builtin_ids = []
+    enable_builtin_templates = false
+    enable_community_templates = false
+
+[wallpaper]
+directory = "/etc/nixos/wallpapers"
+
+    [wallpaper.default]
+    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
+
+    [wallpaper.last]
+    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
+
+    [wallpaper.monitors.DVI-D-1]
+    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
+
+    [wallpaper.monitors.HDMI-A-1]
+    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
+
+[widget.audio_visualizer]
+enabled = false
+
+[widget.control-center]
+capsule = true
+custom_image = "/nix/store/ayhwjin8d0rwx7qai2f9dl7gb9yif8fb-noctalia-5.0.0/share/noctalia/assets/images/distros/nixos.svg"
+custom_image_colorize = true
+
+[widget.cpu]
+display = "text"
+
+[widget.ram]
+display = "text"
+
+[widget.tray]
+color = "primary"
