@@ -1,3 +1,8 @@
 # Ручной конфиг noctalia (hot-reload). Полный список настроек:
 # https://github.com/noctalia-dev/noctalia/blob/main/example.toml
 # Настройки из GUI живут рядом, в settings.toml, и имеют приоритет.
+
+[hooks]
+# При смене обоев в GUI прогоняем свой matugen со своими шаблонами
+# (~/.config/matugen/config.toml: kitty, btop, fish).
+wallpaper_changed = "matugen image \"$NOCTALIA_WALLPAPER_PATH\""
