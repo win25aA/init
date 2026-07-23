@@ -4,6 +4,9 @@
   xdg.configFile."matugen/config.toml".text = ''
     [config]
     image_mode = "dark"
+    # Всегда брать самый доминантный цвет картинки, без интерактивного
+    # выбора (иначе matugen v4 падает в хуке noctalia, где нет терминала).
+    source_color_index = 0
 
     [templates.btop]
     input_path = "~/.config/matugen/btop-colors.theme"
