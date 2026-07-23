@@ -104,7 +104,7 @@ env = [
           "SUPER SHIFT, W, exec, ${ipc} panel-toggle wallpaper"
           "SUPER, S, exec, steam"
           "SUPER, P, exec, ${ipc} panel-toggle session"
-
+          "SUPER SHIFT, S, exec ${ipc} screenshot-fullscreen"
           "SUPER CTRL, S, exec, ${ipc} screenshot-region"
  
 
