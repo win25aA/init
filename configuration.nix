@@ -2,9 +2,49 @@
 { config, pkgs, inputs, ... }:
 
 let
-  # Получаем пакеты spicetify из inputs
-  spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+  # Spotify без рекламы: LD_PRELOAD-библиотека spotify-adblock (abba23)
+  # Не патчит бинарник, поэтому не ломается при обновлениях Spotify
+  spotify-adblock = pkgs.rustPlatform.buildRustPackage {
+    pname = "spotify-adblock";
+    version = "unstable-2026-06-07";
+    src = pkgs.fetchFromGitHub {
+      owner = "abba23";
+      repo = "spotify-adblock";
+      rev = "9aeadd3cfd4d50212059720c09f662f149942fec";
+      hash = "sha256-3X7vScKmnb65wJ4xWAT2AeyAMPTGzKZCFA549zm9gLc=";
+    };
+    cargoHash = "sha256-gxGetdqaoJa/ZF1VnW6UXJyJfLBGZxZnyKpT/Qk/8Og=";
 
+    patchPhase = ''
+      substituteInPlace src/config.rs \
+        --replace-fail 'const GLOBAL_CONFIG_DIR: &str = "/etc";' \
+                  "const GLOBAL_CONFIG_DIR: &str = \"$out/etc\";"
+    '';
+
+    buildPhase = "make";
+
+    installPhase = ''
+      mkdir -p $out/etc/spotify-adblock
+      install -D --mode=644 config.toml $out/etc/spotify-adblock
+      mkdir -p $out/lib
+      install -D --mode=644 --strip target/release/libspotifyadblock.so $out/lib
+    '';
+  };
+
+  # Обычный Spotify из nixpkgs, обёрнутый с libspotifyadblock.so
+  spotify-adblocked = pkgs.spotify.overrideAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.zip pkgs.unzip ];
+    postInstall = (old.postInstall or "") + ''
+      ln -s ${spotify-adblock}/lib/libspotifyadblock.so $libdir
+      wrapProgram $out/bin/spotify \
+        --set LD_PRELOAD "${spotify-adblock}/lib/libspotifyadblock.so"
+
+      # Прячем пустой плейсхолдер рекламного баннера в интерфейсе
+      ${pkgs.unzip}/bin/unzip -p $out/share/spotify/Apps/xpui.spa xpui-snapshot.js | sed 's/adsEnabled:!0/adsEnabled:false/' > $out/share/spotify/Apps/xpui-snapshot.js
+      ${pkgs.zip}/bin/zip --junk-paths --update $out/share/spotify/Apps/xpui.spa $out/share/spotify/Apps/xpui-snapshot.js
+      rm $out/share/spotify/Apps/xpui-snapshot.js
+    '';
+  });
 
   
   simple-sddm-2-theme = pkgs.runCommand "simple-sddm-2-theme" {} ''
@@ -60,7 +100,7 @@ environment.systemPackages = with pkgs; [
   zip
   unzip
   (import inputs.creamlinux-installer { inherit pkgs; })
-  ] ++ [ simple-sddm-2-theme ];
+  ] ++ [ simple-sddm-2-theme spotify-adblocked ];
 
 programs.dconf.enable = true;
 programs.amnezia-vpn.enable = true;
@@ -155,12 +195,6 @@ niri-flake.cache.enable = false; # cachix не нужен для пакета и
 
 
 
-programs.spicetify = {
-    enable = true;
-    theme = spicePkgs.themes.comfy;
-    colorScheme = "Mono";
-enabledExtensions = with spicePkgs.extensions; [ adblock shuffle ];
-  };
 
 
 
