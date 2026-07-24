@@ -2,8 +2,6 @@
 { config, pkgs, inputs, ... }:
 
 let
-  # Spotify без рекламы: LD_PRELOAD-библиотека spotify-adblock (abba23)
-  # Не патчит бинарник, поэтому не ломается при обновлениях Spotify
   spotify-adblock = pkgs.rustPlatform.buildRustPackage {
     pname = "spotify-adblock";
     version = "unstable-2026-06-07";
@@ -31,7 +29,6 @@ let
     '';
   };
 
-  # Обычный Spotify из nixpkgs, обёрнутый с libspotifyadblock.so
   spotify-adblocked = pkgs.spotify.overrideAttrs (old: {
     buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.zip pkgs.unzip ];
     postInstall = (old.postInstall or "") + ''
@@ -39,7 +36,6 @@ let
       wrapProgram $out/bin/spotify \
         --set LD_PRELOAD "${spotify-adblock}/lib/libspotifyadblock.so"
 
-      # Прячем пустой плейсхолдер рекламного баннера в интерфейсе
       ${pkgs.unzip}/bin/unzip -p $out/share/spotify/Apps/xpui.spa xpui-snapshot.js | sed 's/adsEnabled:!0/adsEnabled:false/' > $out/share/spotify/Apps/xpui-snapshot.js
       ${pkgs.zip}/bin/zip --junk-paths --update $out/share/spotify/Apps/xpui.spa $out/share/spotify/Apps/xpui-snapshot.js
       rm $out/share/spotify/Apps/xpui-snapshot.js
@@ -187,8 +183,7 @@ programs.hyprland = {
 
 };
 
-# niri: скроллируемый тайловый композитор (сессия появится в SDDM)
-# Модуль из niri-flake, сам конфиг - в modules/niri.nix (programs.niri.settings)
+
 programs.niri.enable = true;
 programs.niri.package = pkgs.niri; # пакет из nixpkgs, а не сборка из niri-flake
 niri-flake.cache.enable = false; # cachix не нужен для пакета из nixpkgs
