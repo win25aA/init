@@ -22,18 +22,13 @@
       inputs.nixpkgs.follows = "nixpkgs"; 
     };
 
-    spicetify-nix = {
-      url = "github:Gerg-L/spicetify-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     niri = {
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   }; 
 
-  outputs = inputs@{ self, nixpkgs, home-manager, spicetify-nix, ... }: {
+  outputs = inputs@{ self, nixpkgs, home-manager, ... }: {
     nixosConfigurations.winarowk = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
@@ -41,7 +36,6 @@
         ./hardware-configuration.nix
         ./configuration.nix
         home-manager.nixosModules.home-manager
-        spicetify-nix.nixosModules.default
         inputs.niri.nixosModules.niri
       ];
     };
