@@ -1,10 +1,8 @@
 { config, pkgs, inputs, ... }:
 
 {
-  home.packages = with pkgs; [
-    nodejs_22
-    uv
-  ];
+  # Сами пакеты (nodejs_22, uv) — в environment.systemPackages
+  # в configuration.nix, здесь только окружение для npm.
 
   # npm по умолчанию пытается писать глобальные пакеты в системную папку,
   # которая в NixOS read-only. Перенаправляем в домашнюю директорию.

@@ -52,49 +52,71 @@ in
 
 
 {
+# ===== Все установленные пакеты =====
+# (программы с настройками включаются отдельно: firefox, steam, fish,
+#  kitty, btop, fastfetch, hyprland, niri — ищи по programs.*)
 environment.systemPackages = with pkgs; [
+  # --- Интернет и общение ---
+  inputs.zen-browser.packages."${pkgs.system}".default
+  vesktop            # Discord-клиент
+  ayugram-desktop    # Telegram-клиент
+
+  # --- Игры ---
+  prismlauncher      # Minecraft
+  osu-lazer-bin
+  (import inputs.creamlinux-installer { inherit pkgs; })
   gpu-screen-recorder
-  prismlauncher
-  file-roller
-  micro
+
+  # --- Музыка и звук ---
+  spotify-adblocked  # Spotify без рекламы (сборка выше в let)
+  pavucontrol
+  wireplumber
+  playerctl
   cava
-    gparted
-    exfat
-    exfatprogs
-    ntfs3g
-    dosfstools
-    mtools
-    gptfdisk
-    btrfs-progs
+
+  # --- Файлы и диски ---
+  thunar
+  file-roller
+  gparted
+  ncdu
+  exfat
+  exfatprogs
+  ntfs3g
+  dosfstools
+  mtools
+  gptfdisk
+  btrfs-progs
+
+  # --- Рабочий стол (Wayland) ---
   inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   xwayland-satellite # X11-приложения (Steam и т.д.) в niri
-  android-tools
-  pavucontrol
   matugen
-  appimage-run
-  thunar
-  ncdu
-  asciiquarium
-  ayugram-desktop
-  mousepad
-  hyfetch 
-  wireplumber         
-  brightnessctl     
-  playerctl
-  git
+  brightnessctl
   adw-gtk3
   papirus-icon-theme
-  osu-lazer-bin 
-  wget
-  vesktop
-  inputs.zen-browser.packages."${pkgs.system}".default
+  simple-sddm-2-theme # тема SDDM (сборка выше в let)
+
+  # --- Разработка ---
+  git
+  nodejs_22
+  uv
+  android-tools
+
+  # --- Редакторы ---
+  micro
+  mousepad
+
+  # --- Терминал и CLI ---
   eza
   starship
+  hyfetch
+  asciiquarium
+  wget
   gzip
   zip
   unzip
-  (import inputs.creamlinux-installer { inherit pkgs; })
-  ] ++ [ simple-sddm-2-theme spotify-adblocked ];
+  appimage-run
+];
 
 programs.dconf.enable = true;
 programs.amnezia-vpn.enable = true;
@@ -246,6 +268,17 @@ services.displayManager.sddm = {
 
   # gyre-fonts выключен намеренно: без кириллицы, ломает русский текст в GMod
   fonts.enableDefaultPackages = false;
+
+  # Явные дефолты, чтобы fontconfig не подставлял случайный шрифт
+  # (например Noto Sans CJK) вместо sans-serif/Helvetica/Arial.
+  # У DejaVu и Liberation полная кириллица — GMod не страдает.
+  fonts.fontconfig.defaultFonts = {
+    sansSerif = [ "DejaVu Sans" "Liberation Sans" ];
+    serif     = [ "DejaVu Serif" "Liberation Serif" ];
+    monospace = [ "DejaVu Sans Mono" "Liberation Mono" ];
+    emoji     = [ "Noto Color Emoji" ];
+  };
+
   fonts.packages = with pkgs; [
     dejavu_fonts
     freefont_ttf
