@@ -125,7 +125,6 @@ in
     gzip
     zip
     unzip
-    paru
     appimage-run
   ];
 
