@@ -53,8 +53,6 @@ in
 
 {
 # ===== Все установленные пакеты =====
-# (программы с настройками включаются отдельно: firefox, steam, fish,
-#  kitty, btop, fastfetch, hyprland, niri — ищи по programs.*)
 environment.systemPackages = with pkgs; [
   # --- Интернет и общение ---
   inputs.zen-browser.packages."${pkgs.system}".default
@@ -68,7 +66,7 @@ environment.systemPackages = with pkgs; [
   gpu-screen-recorder
 
   # --- Музыка и звук ---
-  spotify-adblocked  # Spotify без рекламы (сборка выше в let)
+  spotify-adblocked 
   pavucontrol
   wireplumber
   playerctl
@@ -89,12 +87,12 @@ environment.systemPackages = with pkgs; [
 
   # --- Рабочий стол (Wayland) ---
   inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
-  xwayland-satellite # X11-приложения (Steam и т.д.) в niri
+  xwayland-satellite 
   matugen
   brightnessctl
   adw-gtk3
   papirus-icon-theme
-  simple-sddm-2-theme # тема SDDM (сборка выше в let)
+  simple-sddm-2-theme
 
   # --- Разработка ---
   git
@@ -144,12 +142,11 @@ security.wrappers.pkexec = {
 
 hardware.graphics = {
   enable = true;
-  enable32Bit = true; # Нужно для Steam и старых игр
+  enable32Bit = true; 
 };
 
 environment.sessionVariables.NIXOS_OZONE_WL = "1";
 boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
-# Указываем системе использовать драйвер Nvidia
 services.xserver.videoDrivers = [ "nvidia" ];
 
 hardware.nvidia = {
@@ -197,14 +194,14 @@ qt = {
 
 programs.hyprland = {
   enable = true;
-  xwayland.enable = true; # Нужен, чтобы старые X11-приложения запускались без проблем
+  xwayland.enable = true; 
 
 };
 
 
 programs.niri.enable = true;
-programs.niri.package = pkgs.niri; # пакет из nixpkgs, а не сборка из niri-flake
-niri-flake.cache.enable = false; # cachix не нужен для пакета из nixpkgs
+programs.niri.package = pkgs.niri; 
+niri-flake.cache.enable = false; 
 
   networking.hostName = "winarowk"; 
 
