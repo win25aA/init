@@ -47,9 +47,7 @@ let
     cp -r ${./simple-sddm-2}/* $out/share/sddm/themes/simple-sddm-2/
   '';
 
-  # noctalia с доступом к NVML (иначе нагрузка NVIDIA в баре - прочерк:
-  # libnvidia-ml.so.1 на NixOS лежит в /run/opengl-driver/lib,
-  # и без подсказки noctalia её не находит)
+  # noctalia с путём к NVML - иначе нагрузка GPU в баре не видна
   noctalia-nvml = pkgs.symlinkJoin {
     name = "noctalia-nvml";
     paths = [ inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default ];
@@ -102,7 +100,7 @@ in
     gptfdisk
     btrfs-progs
     # --- Рабочий стол (Wayland) ---
-    noctalia-nvml # noctalia (обёртка выше в let)
+    noctalia-nvml
     xwayland-satellite
     matugen
     brightnessctl
@@ -122,6 +120,7 @@ in
     starship
     hyfetch
     asciiquarium
+    nvtopPackages.nvidia # процессы по нагрузке GPU (btop так не умеет)
     wget
     gzip
     zip
