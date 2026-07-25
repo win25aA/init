@@ -53,7 +53,7 @@ in
   # ======================================================================
   environment.systemPackages = with pkgs; [
     # --- Интернет и общение ---
-    inputs.zen-browser.packages."${pkgs.system}".default
+    inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
     vesktop          
     ayugram-desktop 
     # --- Игры ---
@@ -257,6 +257,9 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = { inherit inputs; };
+    # Если home-manager должен создать файл, а на его месте уже лежит
+    # чужой - не падать, а переименовать старый в *.hm-backup
+    backupFileExtension = "hm-backup";
 
     users.winarowk = { pkgs, ... }: {
       imports = [ ./home.nix ];
@@ -280,7 +283,7 @@ in
 
       qt = {
         enable = true;
-        platformTheme.name = "gtk";
+        platformTheme.name = "gtk3";
       };
     };
   };
