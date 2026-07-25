@@ -2,6 +2,8 @@
 { config, pkgs, inputs, ... }:
 
 let
+  # Spotify без рекламы: LD_PRELOAD-библиотека spotify-adblock (abba23)
+  # Не патчит бинарник, поэтому не ломается при обновлениях Spotify
   spotify-adblock = pkgs.rustPlatform.buildRustPackage {
     pname = "spotify-adblock";
     version = "unstable-2026-06-07";
@@ -29,6 +31,7 @@ let
     '';
   };
 
+  # Обычный Spotify из nixpkgs, обёрнутый с libspotifyadblock.so
   spotify-adblocked = pkgs.spotify.overrideAttrs (old: {
     buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.zip pkgs.unzip ];
     postInstall = (old.postInstall or "") + ''
@@ -36,181 +39,184 @@ let
       wrapProgram $out/bin/spotify \
         --set LD_PRELOAD "${spotify-adblock}/lib/libspotifyadblock.so"
 
+      # Прячем пустой плейсхолдер рекламного баннера в интерфейсе
       ${pkgs.unzip}/bin/unzip -p $out/share/spotify/Apps/xpui.spa xpui-snapshot.js | sed 's/adsEnabled:!0/adsEnabled:false/' > $out/share/spotify/Apps/xpui-snapshot.js
       ${pkgs.zip}/bin/zip --junk-paths --update $out/share/spotify/Apps/xpui.spa $out/share/spotify/Apps/xpui-snapshot.js
       rm $out/share/spotify/Apps/xpui-snapshot.js
     '';
   });
 
-  
   simple-sddm-2-theme = pkgs.runCommand "simple-sddm-2-theme" {} ''
     mkdir -p $out/share/sddm/themes/simple-sddm-2
     cp -r ${./simple-sddm-2}/* $out/share/sddm/themes/simple-sddm-2/
-
   '';
 in
-
-
 {
-# ===== Все установленные пакеты =====
-environment.systemPackages = with pkgs; [
-  # --- Интернет и общение ---
-  inputs.zen-browser.packages."${pkgs.system}".default
-  vesktop            # Discord-клиент
-  ayugram-desktop    # Telegram-клиент
+  # ======================================================================
+  # ПАКЕТЫ
+  # ======================================================================
+  environment.systemPackages = with pkgs; [
+    # --- Интернет и общение ---
+    inputs.zen-browser.packages."${pkgs.system}".default
+    vesktop            # Discord-клиент
+    ayugram-desktop    # Telegram-клиент
 
-  # --- Игры ---
-  prismlauncher      # Minecraft
-  osu-lazer-bin
-  (import inputs.creamlinux-installer { inherit pkgs; })
-  gpu-screen-recorder
+    # --- Игры ---
+    prismlauncher      # Minecraft
+    osu-lazer-bin
+    (import inputs.creamlinux-installer { inherit pkgs; })
+    gpu-screen-recorder
 
-  # --- Музыка и звук ---
-  spotify-adblocked 
-  pavucontrol
-  wireplumber
-  playerctl
-  cava
+    # --- Музыка и звук ---
+    spotify-adblocked
+    pavucontrol
+    wireplumber
+    playerctl
+    cava
 
-  # --- Файлы и диски ---
-  thunar
-  file-roller
-  gparted
-  ncdu
-  exfat
-  exfatprogs
-  ntfs3g
-  dosfstools
-  mtools
-  gptfdisk
-  btrfs-progs
+    # --- Файлы и диски ---
+    thunar
+    file-roller
+    gparted
+    ncdu
+    exfat
+    exfatprogs
+    ntfs3g
+    dosfstools
+    mtools
+    gptfdisk
+    btrfs-progs
 
-  # --- Рабочий стол (Wayland) ---
-  inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
-  xwayland-satellite 
-  matugen
-  brightnessctl
-  adw-gtk3
-  papirus-icon-theme
-  simple-sddm-2-theme
+    # --- Рабочий стол (Wayland) ---
+    inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+    xwayland-satellite
+    matugen
+    brightnessctl
+    adw-gtk3
+    papirus-icon-theme
+    simple-sddm-2-theme
 
-  # --- Разработка ---
-  git
-  nodejs_22
-  uv
-  android-tools
+    # --- Разработка ---
+    git
+    nodejs_22
+    uv
+    android-tools
 
-  # --- Редакторы ---
-  micro
-  mousepad
+    # --- Редакторы ---
+    micro
+    mousepad
 
-  # --- Терминал и CLI ---
-  eza
-  starship
-  hyfetch
-  asciiquarium
-  wget
-  gzip
-  zip
-  unzip
-  appimage-run
-];
+    # --- Терминал и CLI ---
+    eza
+    starship
+    hyfetch
+    asciiquarium
+    wget
+    gzip
+    zip
+    unzip
+    appimage-run
+  ];
 
-programs.dconf.enable = true;
-programs.amnezia-vpn.enable = true;
-programs.steam.enable = true;
-services.flatpak.enable = true;
-services.usbmuxd.enable = true;
-programs.nix-ld.enable = true;
-boot.loader.grub.device = "/dev/disk/by-id/ata-Apacer_AS340_480GB_AFLJ1451210075";
-boot.loader.grub.enable = true;
-boot.loader.grub.theme = ./grub-theme;
-boot.loader.grub.useOSProber = true;
+  # ======================================================================
+  # ПРОГРАММЫ (programs.*)
+  # ======================================================================
+  programs.firefox.enable = true;
+  programs.steam.enable = true;
+  programs.amnezia-vpn.enable = true;
+  programs.dconf.enable = true;
+  programs.nix-ld.enable = true;
+
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
+
+  # niri: скроллируемый тайловый композитор (сессия появится в SDDM)
+  # Модуль из niri-flake, сам конфиг - в modules/niri.nix (programs.niri.settings)
+  programs.niri.enable = true;
+  programs.niri.package = pkgs.niri;
+  niri-flake.cache.enable = false;
+
+  # ======================================================================
+  # СЕРВИСЫ (services.*)
+  # ======================================================================
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+    theme = "simple-sddm-2";
+    extraPackages = with pkgs.kdePackages; [
+      qtmultimedia
+      qtsvg
+      qtvirtualkeyboard
+    ];
+  };
+
   services.xserver.enable = true;
-services.gvfs.enable = true;
+  services.xserver.xkb = {
+    layout = "us,ru";
+    options = "grp:alt_shift_toggle";
+    variant = "";
+  };
 
-# Включение корректных прав (setuid) для pkexec
-security.wrappers.pkexec = {
-  setuid = true;
-  owner = "root";
-  group = "root";
-  source = "${pkgs.polkit.bin}/bin/pkexec";
-};
+  # Звук: pipewire вместо pulseaudio
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+  services.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+
+  services.flatpak.enable = true;
+  services.usbmuxd.enable = true;
+  services.gvfs.enable = true;
+  services.printing.enable = true;
+
+  # ======================================================================
+  # ЗАГРУЗКА
+  # ======================================================================
+  # GRUB на by-id: имена вида /dev/sdc могут меняться местами между
+  # загрузками, стабильный идентификатор диска — надёжнее
+  boot.loader.grub.device = "/dev/disk/by-id/ata-Apacer_AS340_480GB_AFLJ1451210075";
+  boot.loader.grub.enable = true;
+  boot.loader.grub.theme = ./grub-theme;
+  boot.loader.grub.useOSProber = true;
 
   boot.supportedFilesystems = [ "btrfs" ];
- security.polkit.enable = true;
 
-hardware.graphics = {
-  enable = true;
-  enable32Bit = true; 
-};
+  # ======================================================================
+  # ВИДЕОКАРТА (NVIDIA)
+  # ======================================================================
+  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
-environment.sessionVariables.NIXOS_OZONE_WL = "1";
-boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
-services.xserver.videoDrivers = [ "nvidia" ];
-
-hardware.nvidia = {
-open = false;  
-modesetting.enable = true;
-  powerManagement.enable = false;
-  powerManagement.finegrained = false;
-  
-  nvidiaSettings = true;
-  package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
-};
-
-
-home-manager = {
-  useGlobalPkgs = true;
-  useUserPackages = true;
-  extraSpecialArgs = { inherit inputs; };
-
-users.winarowk = { pkgs, ... }: {
-  imports = [ ./home.nix ]; 
-
-home.stateVersion = "26.11";
-
-gtk = {
-  enable = true;
-  
-  theme = {
-   name = "adw-gtk3-dark";
-   package = pkgs.adw-gtk3;
-    };
-
-    iconTheme = {
-      name = "Papirus";
-      package = pkgs.papirus-icon-theme;
-    };
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
   };
 
-qt = {
-        enable = true;
-        platformTheme.name = "gtk";
-      };
-    };
+  hardware.nvidia = {
+    open = false;
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
   };
 
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-programs.hyprland = {
-  enable = true;
-  xwayland.enable = true; 
-
-};
-
-
-programs.niri.enable = true;
-programs.niri.package = pkgs.niri; 
-niri-flake.cache.enable = false; 
-
-  networking.hostName = "winarowk"; 
-
+  # ======================================================================
+  # СЕТЬ, ЛОКАЛЬ, ВРЕМЯ
+  # ======================================================================
+  networking.hostName = "winarowk";
   networking.networkmanager.enable = true;
 
   time.timeZone = "Europe/Moscow";
 
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "ru_RU.UTF-8";
     LC_IDENTIFICATION = "ru_RU.UTF-8";
@@ -223,46 +229,69 @@ niri-flake.cache.enable = false;
     LC_TIME = "ru_RU.UTF-8";
   };
 
-fileSystems."/mnt/games" = {
-  device = "/dev/disk/by-uuid/3f80c736-41e1-4e16-a46e-716f4650aa8b";
-  fsType = "ext4";
-  options = [ "users" "nofail" "x-systemd.automount" "exec" ];
-};
-
-
-services.displayManager.sddm = {
-  enable = true;
-  wayland.enable = true;
-  theme = "simple-sddm-2";
-  extraPackages = with pkgs.kdePackages; [
-    qtmultimedia
-    qtsvg
-    qtvirtualkeyboard
-  ];
-};
-
-  services.xserver.xkb = {
-    layout = "us,ru";
-    options = "grp:alt_shift_toggle";    
-    variant = "";
+  # ======================================================================
+  # ДИСКИ
+  # ======================================================================
+  fileSystems."/mnt/games" = {
+    device = "/dev/disk/by-uuid/3f80c736-41e1-4e16-a46e-716f4650aa8b";
+    fsType = "ext4";
+    options = [ "users" "nofail" "x-systemd.automount" "exec" ];
   };
-  services.printing.enable = true;
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
+
+  # ======================================================================
+  # БЕЗОПАСНОСТЬ
+  # ======================================================================
+  security.polkit.enable = true;
+
+  # Включение корректных прав (setuid) для pkexec
+  security.wrappers.pkexec = {
+    setuid = true;
+    owner = "root";
+    group = "root";
+    source = "${pkgs.polkit.bin}/bin/pkexec";
   };
+
+  # ======================================================================
+  # ПОЛЬЗОВАТЕЛЬ И HOME MANAGER
+  # ======================================================================
   users.users."winarowk" = {
     isNormalUser = true;
     description = "winarowk";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
   };
-  programs.firefox.enable = true;
-  nixpkgs.config.allowUnfree = true;
 
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    extraSpecialArgs = { inherit inputs; };
+
+    users.winarowk = { pkgs, ... }: {
+      imports = [ ./home.nix ];
+
+      home.stateVersion = "26.11";
+
+      gtk = {
+        enable = true;
+        theme = {
+          name = "adw-gtk3-dark";
+          package = pkgs.adw-gtk3;
+        };
+        iconTheme = {
+          name = "Papirus";
+          package = pkgs.papirus-icon-theme;
+        };
+      };
+
+      qt = {
+        enable = true;
+        platformTheme.name = "gtk";
+      };
+    };
+  };
+
+  # ======================================================================
+  # ШРИФТЫ
+  # ======================================================================
   # gyre-fonts выключен намеренно: без кириллицы, ломает русский текст в GMod
   fonts.enableDefaultPackages = false;
 
@@ -287,9 +316,11 @@ services.displayManager.sddm = {
     corefonts
   ];
 
-
-  system.stateVersion = "26.05"; 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];  
+  # ======================================================================
+  # NIX И СИСТЕМА
+  # ======================================================================
+  nixpkgs.config.allowUnfree = true;
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Автоочистка: старые поколения удаляются раз в неделю,
   # одинаковые файлы в /nix/store дедуплицируются
@@ -299,4 +330,6 @@ services.displayManager.sddm = {
     options = "--delete-older-than 14d";
   };
   nix.settings.auto-optimise-store = true;
+
+  system.stateVersion = "26.05";
 }
