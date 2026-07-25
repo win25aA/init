@@ -27,7 +27,10 @@
       shell fish
 
       # ===== Клавиши =====
+      # Копипаст без шифта: ctrl+c копирует выделенное (или прерывает
+      # программу, если ничего не выделено), ctrl+v вставляет
       map ctrl+c    copy_or_interrupt
+      map ctrl+v    paste_from_clipboard
 
       # Поиск по скроллбеку в отдельном сплите
       map ctrl+f   launch --location=hsplit --allow-remote-control kitty +kitten search.py @active-kitty-window-id
