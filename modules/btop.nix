@@ -3,7 +3,7 @@
 {
   programs.btop = {
     enable = true;
-    # Сборка с NVML: без неё btop на NixOS не видит нагрузку NVIDIA
+    # Сборка с NVML для мониторинга GPU
     package = pkgs.btop.override { cudaSupport = true; };
     settings = {
       # ===== Тема и вид =====
