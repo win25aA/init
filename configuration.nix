@@ -102,8 +102,6 @@ programs.steam.enable = true;
 services.flatpak.enable = true;
 services.usbmuxd.enable = true;
 programs.nix-ld.enable = true;
-# GRUB на by-id: имена вида /dev/sdc могут меняться местами между
-# загрузками, стабильный идентификатор диска — надёжнее
 boot.loader.grub.device = "/dev/disk/by-id/ata-Apacer_AS340_480GB_AFLJ1451210075";
 boot.loader.grub.enable = true;
 boot.loader.grub.theme = ./grub-theme;
