@@ -67,6 +67,14 @@ in
     wireplumber
     playerctl
     cava
+
+    # --- Просмотр медиа ---
+    mpv                # видео и аудио
+    loupe              # картинки
+    amberol            # простой плеер для локальной музыки
+    tumbler            # превью файлов в thunar
+    ffmpegthumbnailer  # превью видео в thunar
+
     # --- Файлы и диски ---
     thunar
     file-roller
