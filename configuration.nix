@@ -82,7 +82,7 @@ in
     # --- Просмотр медиа ---
     mpv                
     loupe              
-    amberol            
+    kew
     tumbler            
     ffmpegthumbnailer  
 
@@ -144,6 +144,19 @@ in
   programs.niri.enable = true;
   programs.niri.package = pkgs.niri;
   niri-flake.cache.enable = false;
+
+  # ======================================================================
+  # ВИРТУАЛИЗАЦИЯ
+  # ======================================================================
+  programs.virt-manager.enable = true;
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      swtpm.enable = true;
+      ovmf.enable = true;
+    };
+  };
+  virtualisation.spiceUSBRedirection.enable = true;
 
   # ======================================================================
   # СЕРВИСЫ (services.*)
@@ -262,7 +275,7 @@ in
   users.users."winarowk" = {
     isNormalUser = true;
     description = "winarowk";
-    extraGroups = [ "networkmanager" "wheel" "adbusers" ];
+    extraGroups = [ "networkmanager" "wheel" "adbusers" "libvirtd" ];
   };
 
   home-manager = {
