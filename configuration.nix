@@ -82,7 +82,7 @@ in
     # --- Просмотр медиа ---
     mpv                
     loupe              
-    cmus
+    kew
     tumbler            
     ffmpegthumbnailer  
 
