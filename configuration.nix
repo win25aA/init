@@ -82,7 +82,7 @@ in
     # --- Просмотр медиа ---
     mpv                
     loupe              
-    kew
+    musikcube
     tumbler            
     ffmpegthumbnailer  
 
