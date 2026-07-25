@@ -76,19 +76,42 @@
         end
       '';
 
-      # nback: откатить конфиг к последней УСПЕШНОЙ сборке.
+      # nback: откатить конфиг к успешной сборке.
       # Как откат через GRUB, только для текста конфига: nrs коммитит
       # только собравшийся конфиг, так что коммиты "auto: successful
-      # rebuild" - гарантированно рабочие точки.
+      # rebuild" - гарантированно собирающиеся точки.
+      #   nback        - к последней успешной сборке
+      #   nback 3      - на 3 успешные сборки назад (если последняя
+      #                  собиралась, но по факту что-то сломано)
+      #   nback list   - показать последние 15 успешных сборок
       nback = ''
         set -l config_dir /etc/nixos
         cd $config_dir
 
-        set -l good (git log --grep="auto: successful rebuild" -n 1 --format=%H)
+        set -l n 1
+        if test (count $argv) -ge 1
+            if test "$argv[1]" = list
+                echo "Последние успешные сборки (nback 1 - верхняя):"
+                git log --grep="auto: successful rebuild" -n 15 \
+                    --format="%h  %ad" --date=format:"%d.%m.%Y %H:%M" | cat -n
+                return 0
+            end
+            set n $argv[1]
+        end
+
+        set -l good (git log --grep="auto: successful rebuild" -n $n --format=%H | tail -n 1)
         if test -z "$good"
             set_color red
-            echo "Не нашла коммит успешной сборки в истории."
+            echo "Не нашла столько успешных сборок в истории."
             set_color normal
+            return 1
+        end
+
+        echo "Цель отката:"
+        git log -1 --format="  %h  %ad  %s" --date=format:"%d.%m.%Y %H:%M" $good
+        read -P "Откатываем? [y/N] " ans
+        if test "$ans" != y; and test "$ans" != Y
+            echo "Отменено."
             return 1
         end
 
@@ -100,10 +123,8 @@
 
         git reset --hard $good
         set_color green
-        echo "Конфиг откачен к последней успешной сборке:"
+        echo "Конфиг откачен. Теперь пересборка: nrs"
         set_color normal
-        git log -1 --oneline
-        echo "Теперь пересборка: nrs"
       '';
     };
 
