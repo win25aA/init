@@ -70,14 +70,12 @@ in
       # ===== Автозапуск =====
       "exec-once" = [
         "noctalia"
-        # AmneziaVPN в трей: в самом приложении должно быть включено
-        # «Запускать свёрнутым» (Настройки -> Приложение), иначе откроется окно
         "AmneziaVPN"
       ];
 
       # ===== Бинды =====
       bind =
-        # --- Воркспейсы: SUPER+1..0 - фокус, SUPER+CTRL+1..0 - перенос окна ---
+        # --- Воркспейсы ---
         (map (n: "SUPER, ${toString n}, workspace, ${toString n}") (
           [ 1 2 3 4 5 6 7 8 9 ]
         ))
@@ -101,7 +99,7 @@ in
           "SUPER, V, togglefloating"
           "SUPER, M, exec, command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit"
 
-          # --- Noctalia (панели, скриншоты) ---
+          # --- Noctalia ---
           "SUPER, space, exec, noctalia msg panel-toggle launcher "
           "SUPER SHIFT, W, exec, ${ipc} panel-toggle wallpaper"
           "SUPER, P, exec, ${ipc} panel-toggle session"
@@ -120,7 +118,7 @@ in
           "SUPER, T, exec, AyuGram"
           "SUPER, S, exec, steam"
 
-          # --- Special-воркспейсы (запуск + тоггл) ---
+          # --- Special-воркспейсы ---
           "SUPER, D, exec, vesktop"
           "SUPER, D, togglespecialworkspace, communication"
           "SUPER, C, exec, spotify"
@@ -140,7 +138,7 @@ in
         "match:class ^(vesktop)$, workspace special:communication"
       ];
 
-      # ===== Правила слоёв (блюр для noctalia и уведомлений) =====
+      # ===== лейер рулы =====
       layerrule = [
         "blur on, blur_popups on, ignore_alpha 1.0, match:namespace noctalia-background-.*$"
         "blur on, ignore_alpha 0.4, match:namespace swaync-.*$"

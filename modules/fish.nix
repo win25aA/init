@@ -9,7 +9,7 @@
       ls = "eza --icons --group-directories-first -1";
     };
 
-    # ===== Аббревиатуры (разворачиваются при нажатии пробела) =====
+    # ===== Аббы =====
     shellAbbrs = {
       # --- git ---
       lg = "lazygit";
@@ -36,9 +36,8 @@
       lla = "ls -la";
     };
 
-    # ===== Функции =====
+    # ===== Функ =====
     functions = {
-      # Приветствие: fastfetch при открытии терминала
       fish_greeting = ''
         set_color normal
         fastfetch --key-padding-left 5
@@ -49,7 +48,6 @@
         onEvent = "fish_prompt";
       };
 
-      # nrs: пересобрать систему и запушить конфиг в GitHub при успехе
       nrs = ''
         set -l config_dir /etc/nixos
 
@@ -58,26 +56,26 @@
         if test $status -eq 0
             echo ""
             set_color green
-            echo "Сборка прошла успешно, пушу конфиг в GitHub..."
+            echo "все норм гит пуш."
             set_color normal
 
             cd $config_dir
             git add -A
             if git diff --cached --quiet
-                echo "Изменений нет, пушить нечего."
+                echo "Изменений нет все норм."
             else
                 git commit -m "auto: successful rebuild "(date "+%Y-%m-%d %H:%M")
                 git push
             end
         else
             set_color red
-            echo "Сборка упала — пуш отменён, чинить конфиг."
+            echo "хуйня конфиг переделывай."
             set_color normal
         end
       '';
     };
 
-    # ===== Инициализация шелла =====
+    # ===== Инит шелла =====
     interactiveShellInit = ''
       starship init fish | source
 
