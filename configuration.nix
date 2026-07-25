@@ -67,6 +67,7 @@ in
     inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
     vesktop          
     ayugram-desktop 
+    qbittorrent
     # --- Игры ---
     prismlauncher   
     osu-lazer-bin    
@@ -85,7 +86,7 @@ in
     musikcube
     tumbler            
     ffmpegthumbnailer  
-
+    amberol
     # --- Файлы и диски ---
     thunar
     file-roller
