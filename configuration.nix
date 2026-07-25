@@ -2,8 +2,6 @@
 { config, pkgs, inputs, ... }:
 
 let
-  # Spotify без рекламы: LD_PRELOAD-библиотека spotify-adblock (abba23)
-  # Не патчит бинарник, поэтому не ломается при обновлениях Spotify
   spotify-adblock = pkgs.rustPlatform.buildRustPackage {
     pname = "spotify-adblock";
     version = "unstable-2026-06-07";
@@ -31,7 +29,6 @@ let
     '';
   };
 
-  # Обычный Spotify из nixpkgs, обёрнутый с libspotifyadblock.so
   spotify-adblocked = pkgs.spotify.overrideAttrs (old: {
     buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.zip pkgs.unzip ];
     postInstall = (old.postInstall or "") + ''
@@ -39,7 +36,6 @@ let
       wrapProgram $out/bin/spotify \
         --set LD_PRELOAD "${spotify-adblock}/lib/libspotifyadblock.so"
 
-      # Прячем пустой плейсхолдер рекламного баннера в интерфейсе
       ${pkgs.unzip}/bin/unzip -p $out/share/spotify/Apps/xpui.spa xpui-snapshot.js | sed 's/adsEnabled:!0/adsEnabled:false/' > $out/share/spotify/Apps/xpui-snapshot.js
       ${pkgs.zip}/bin/zip --junk-paths --update $out/share/spotify/Apps/xpui.spa $out/share/spotify/Apps/xpui-snapshot.js
       rm $out/share/spotify/Apps/xpui-snapshot.js
@@ -58,22 +54,19 @@ in
   environment.systemPackages = with pkgs; [
     # --- Интернет и общение ---
     inputs.zen-browser.packages."${pkgs.system}".default
-    vesktop            # Discord-клиент
-    ayugram-desktop    # Telegram-клиент
-
+    vesktop          
+    ayugram-desktop 
     # --- Игры ---
-    prismlauncher      # Minecraft
-    osu-lazer-bin
-    (import inputs.creamlinux-installer { inherit pkgs; })
+    prismlauncher   
+    osu-lazer-bin    
     gpu-screen-recorder
-
+    (import inputs.creamlinux-installer { inherit pkgs; })
     # --- Музыка и звук ---
     spotify-adblocked
     pavucontrol
     wireplumber
     playerctl
     cava
-
     # --- Файлы и диски ---
     thunar
     file-roller
@@ -86,7 +79,6 @@ in
     mtools
     gptfdisk
     btrfs-progs
-
     # --- Рабочий стол (Wayland) ---
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
     xwayland-satellite
@@ -95,17 +87,14 @@ in
     adw-gtk3
     papirus-icon-theme
     simple-sddm-2-theme
-
     # --- Разработка ---
     git
     nodejs_22
     uv
     android-tools
-
     # --- Редакторы ---
     micro
     mousepad
-
     # --- Терминал и CLI ---
     eza
     starship
@@ -132,8 +121,6 @@ in
     xwayland.enable = true;
   };
 
-  # niri: скроллируемый тайловый композитор (сессия появится в SDDM)
-  # Модуль из niri-flake, сам конфиг - в modules/niri.nix (programs.niri.settings)
   programs.niri.enable = true;
   programs.niri.package = pkgs.niri;
   niri-flake.cache.enable = false;
@@ -159,7 +146,7 @@ in
     variant = "";
   };
 
-  # Звук: pipewire вместо pulseaudio
+  # pipewire
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -177,8 +164,6 @@ in
   # ======================================================================
   # ЗАГРУЗКА
   # ======================================================================
-  # GRUB на by-id: имена вида /dev/sdc могут меняться местами между
-  # загрузками, стабильный идентификатор диска — надёжнее
   boot.loader.grub.device = "/dev/disk/by-id/ata-Apacer_AS340_480GB_AFLJ1451210075";
   boot.loader.grub.enable = true;
   boot.loader.grub.theme = ./grub-theme;
@@ -292,12 +277,8 @@ in
   # ======================================================================
   # ШРИФТЫ
   # ======================================================================
-  # gyre-fonts выключен намеренно: без кириллицы, ломает русский текст в GMod
   fonts.enableDefaultPackages = false;
 
-  # Явные дефолты, чтобы fontconfig не подставлял случайный шрифт
-  # (например Noto Sans CJK) вместо sans-serif/Helvetica/Arial.
-  # У DejaVu и Liberation полная кириллица — GMod не страдает.
   fonts.fontconfig.defaultFonts = {
     sansSerif = [ "DejaVu Sans" "Liberation Sans" ];
     serif     = [ "DejaVu Serif" "Liberation Serif" ];
@@ -322,8 +303,7 @@ in
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # Автоочистка: старые поколения удаляются раз в неделю,
-  # одинаковые файлы в /nix/store дедуплицируются
+  # Автоочистка, оптимизация
   nix.gc = {
     automatic = true;
     dates = "weekly";
