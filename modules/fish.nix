@@ -56,13 +56,13 @@
         if test $status -eq 0
             echo ""
             set_color green
-            echo "все норм гит пуш."
+            echo "конфиг собрался, гит пуш."
             set_color normal
 
             cd $config_dir
             git add -A
             if git diff --cached --quiet
-                echo "Изменений нет все норм."
+                echo "Изменений нет."
             else
                 git commit -m "auto: successful rebuild "(date "+%Y-%m-%d %H:%M")
                 git push
