@@ -67,6 +67,14 @@ in
     wireplumber
     playerctl
     cava
+
+    # --- Просмотр медиа ---
+    mpv                # видео и аудио
+    loupe              # картинки
+    amberol            # простой плеер для локальной музыки
+    tumbler            # превью файлов в thunar
+    ffmpegthumbnailer  # превью видео в thunar
+
     # --- Файлы и диски ---
     thunar
     file-roller
@@ -265,6 +273,9 @@ in
           name = "Papirus";
           package = pkgs.papirus-icon-theme;
         };
+        # Динамические цвета из matugen (файлы генерируются при смене обоев)
+        gtk3.extraCss = ''@import url("matugen-colors.css");'';
+        gtk4.extraCss = ''@import url("matugen-colors.css");'';
       };
 
       qt = {
