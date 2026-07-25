@@ -62,10 +62,7 @@
 
             cd $config_dir
             git add -A
-            # Метка "auto: successful rebuild" ставится ВСЕГДА, даже если
-            # изменений нет (например, после мержа ветки изменения уже
-            # закоммичены). Иначе nback не узнает, что это состояние
-            # рабочее, и откатит дальше, чем надо.
+            # Метка нужна nback: он откатывает к последнему "auto: successful rebuild"
             if git diff --cached --quiet
                 if git log -1 --format=%s | string match -q "auto: successful rebuild*"
                     echo "Изменений нет, метка уже стоит."
@@ -75,8 +72,6 @@
                 end
             else
                 git commit -m "auto: successful rebuild "(date "+%Y-%m-%d %H:%M")
-                # force-with-lease нужен, чтобы пуш работал после nback
-                # (безопасный вариант force: не затрёт чужие коммиты)
                 git push --force-with-lease
             end
         else
@@ -86,14 +81,8 @@
         end
       '';
 
-      # nback: откатить конфиг к успешной сборке.
-      # Как откат через GRUB, только для текста конфига: nrs коммитит
-      # только собравшийся конфиг, так что коммиты "auto: successful
-      # rebuild" - гарантированно собирающиеся точки.
-      #   nback        - к последней успешной сборке
-      #   nback 3      - на 3 успешные сборки назад (если последняя
-      #                  собиралась, но по факту что-то сломано)
-      #   nback list   - показать последние 15 успешных сборок
+      # nback: откат конфига к успешной сборке
+      # nback | nback 3 | nback list
       nback = ''
         set -l config_dir /etc/nixos
         cd $config_dir
@@ -125,7 +114,7 @@
             return 1
         end
 
-        # Незакоммиченные правки не удаляем, а прячем в stash
+        # Правки не удаляем, а прячем в stash
         if not git diff --quiet; or not git diff --cached --quiet; or test (git ls-files --others --exclude-standard | count) -gt 0
             git stash push --include-untracked -m "nback: правки перед откатом"
             echo "Твои незакоммиченные правки спрятаны в stash (вернуть: git stash pop)"
