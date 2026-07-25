@@ -46,6 +46,20 @@ let
     mkdir -p $out/share/sddm/themes/simple-sddm-2
     cp -r ${./simple-sddm-2}/* $out/share/sddm/themes/simple-sddm-2/
   '';
+
+  # noctalia с доступом к NVML (иначе нагрузка NVIDIA в баре - прочерк:
+  # libnvidia-ml.so.1 на NixOS лежит в /run/opengl-driver/lib,
+  # и без подсказки noctalia её не находит)
+  noctalia-nvml = pkgs.symlinkJoin {
+    name = "noctalia-nvml";
+    paths = [ inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      for bin in $out/bin/*; do
+        wrapProgram "$bin" --suffix LD_LIBRARY_PATH : /run/opengl-driver/lib
+      done
+    '';
+  };
 in
 {
   # ======================================================================
@@ -88,7 +102,7 @@ in
     gptfdisk
     btrfs-progs
     # --- Рабочий стол (Wayland) ---
-    inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+    noctalia-nvml # noctalia (обёртка выше в let)
     xwayland-satellite
     matugen
     brightnessctl
