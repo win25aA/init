@@ -12,8 +12,6 @@
       cursor_shape beam
       cursor_trail 1
 
-      window_margin_width 21.75
-
       confirm_os_window_close 0
 
       shell fish

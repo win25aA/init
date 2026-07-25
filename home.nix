@@ -15,8 +15,5 @@
 
   home.stateVersion = "26.11";
 
-  home.packages = with pkgs; [
-  ];
-
   programs.home-manager.enable = true;
 }
