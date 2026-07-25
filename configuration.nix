@@ -51,7 +51,6 @@ let
 in
 
 
-
 {
 environment.systemPackages = with pkgs; [
   gpu-screen-recorder
@@ -83,7 +82,6 @@ environment.systemPackages = with pkgs; [
   brightnessctl     
   playerctl
   git
-  firefox
   adw-gtk3
   papirus-icon-theme
   osu-lazer-bin 
@@ -104,7 +102,9 @@ programs.steam.enable = true;
 services.flatpak.enable = true;
 services.usbmuxd.enable = true;
 programs.nix-ld.enable = true;
-boot.loader.grub.device = "/dev/sdc";
+# GRUB на by-id: имена вида /dev/sdc могут меняться местами между
+# загрузками, стабильный идентификатор диска — надёжнее
+boot.loader.grub.device = "/dev/disk/by-id/ata-Apacer_AS340_480GB_AFLJ1451210075";
 boot.loader.grub.enable = true;
 boot.loader.grub.theme = ./grub-theme;
 boot.loader.grub.useOSProber = true;
@@ -175,8 +175,6 @@ qt = {
   };
 
 
-
-
 programs.hyprland = {
   enable = true;
   xwayland.enable = true; # Нужен, чтобы старые X11-приложения запускались без проблем
@@ -187,31 +185,6 @@ programs.hyprland = {
 programs.niri.enable = true;
 programs.niri.package = pkgs.niri; # пакет из nixpkgs, а не сборка из niri-flake
 niri-flake.cache.enable = false; # cachix не нужен для пакета из nixpkgs
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  imports = [./hardware-configuration.nix ];
-
 
   networking.hostName = "winarowk"; 
 
@@ -256,7 +229,6 @@ services.displayManager.sddm = {
     options = "grp:alt_shift_toggle";    
     variant = "";
   };
-  services.spice-vdagentd.enable = true;
   services.printing.enable = true;
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -270,8 +242,6 @@ services.displayManager.sddm = {
     isNormalUser = true;
     description = "winarowk";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-    packages = with pkgs; [
-    ];
   };
   programs.firefox.enable = true;
   nixpkgs.config.allowUnfree = true;
@@ -299,4 +269,13 @@ fonts.fontconfig.defaultFonts = {
 
   system.stateVersion = "26.05"; 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];  
+
+  # Автоочистка: старые поколения удаляются раз в неделю,
+  # одинаковые файлы в /nix/store дедуплицируются
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
+  nix.settings.auto-optimise-store = true;
 }
