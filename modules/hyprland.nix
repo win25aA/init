@@ -12,33 +12,35 @@ in
     configType = "hyprlang";
 
     settings = {
+      # ===== Мониторы =====
       monitor = [
         "DVI-D-1,1440x900@74.98,0x0,1"
         "HDMI-A-1,1024x768@70.07,1440x355,1"
         ",preferred,auto,1"
       ];
 
+      # ===== Переменные окружения (NVIDIA) =====
+      env = [
+        "LIBVA_DRIVER_NAME,nvidia"
+        "GBM_BACKEND,nvidia-drm"
+        "__GLX_VENDOR_LIBRARY_NAME,nvidia"
+        "NVD_BACKEND,direct"
+        "WLR_NO_HARDWARE_CURSORS,1"
+        "XDG_SESSION_TYPE,wayland"
+      ];
 
-
-env = [
-  "LIBVA_DRIVER_NAME,nvidia"
-  "GBM_BACKEND,nvidia-drm"
-  "__GLX_VENDOR_LIBRARY_NAME,nvidia"
-  "NVD_BACKEND,direct"
-  "WLR_NO_HARDWARE_CURSORS,1"
-  "XDG_SESSION_TYPE,wayland"
-]; 
-
-
+      # ===== Воркспейсы: 1-5 на DVI-D-1, 6-10 на HDMI-A-1 =====
       workspace =
         (map (n: "${toString n}, monitor:DVI-D-1") [ 1 2 3 4 5 ])
         ++ (map (n: "${toString n}, monitor:HDMI-A-1") [ 6 7 8 9 10 ]);
 
+      # ===== Ввод =====
       input = {
         kb_layout = "us,ru";
         kb_options = "grp:alt_shift_toggle";
       };
 
+      # ===== Внешний вид =====
       general = {
         "col.active_border" = "rgba(00000000)";
         "col.inactive_border" = "rgba(00000000)";
@@ -65,14 +67,17 @@ env = [
         };
       };
 
+      # ===== Автозапуск =====
       "exec-once" = [
-         "noctalia"
-         # AmneziaVPN в трей: в самом приложении должно быть включено
-         # «Запускать свёрнутым» (Настройки -> Приложение), иначе откроется окно
-         "AmneziaVPN"
+        "noctalia"
+        # AmneziaVPN в трей: в самом приложении должно быть включено
+        # «Запускать свёрнутым» (Настройки -> Приложение), иначе откроется окно
+        "AmneziaVPN"
       ];
 
+      # ===== Бинды =====
       bind =
+        # --- Воркспейсы: SUPER+1..0 - фокус, SUPER+CTRL+1..0 - перенос окна ---
         (map (n: "SUPER, ${toString n}, workspace, ${toString n}") (
           [ 1 2 3 4 5 6 7 8 9 ]
         ))
@@ -82,6 +87,7 @@ env = [
         ))
         ++ [ "SUPER CTRL, 0, movetoworkspace, 10" ]
         ++ [
+          # --- Навигация ---
           "SUPER, mouse_up, workspace, e+1"
           "SUPER, mouse_down, workspace, e-1"
           "SUPER, left, movefocus, l"
@@ -89,48 +95,58 @@ env = [
           "SUPER, up, movefocus, u"
           "SUPER, down, movefocus, d"
 
+          # --- Управление окнами ---
           "SUPER, F, fullscreen, 0"
           "SUPER, Q, killactive"
           "SUPER, V, togglefloating"
           "SUPER, M, exec, command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit"
 
+          # --- Noctalia (панели, скриншоты) ---
           "SUPER, space, exec, noctalia msg panel-toggle launcher "
-"SUPER, mouse:275, exec, playerctl previous"
-"SUPER, mouse:276, exec, playerctl next"
+          "SUPER SHIFT, W, exec, ${ipc} panel-toggle wallpaper"
+          "SUPER, P, exec, ${ipc} panel-toggle session"
+          "SUPER, Z, exec, ${ipc} panel-toggle control-center"
+          "SUPER SHIFT, S, exec, ${ipc} screenshot-fullscreen"
+          "SUPER CTRL, S, exec, ${ipc} screenshot-region"
+
+          # --- Музыка: боковые кнопки мыши ---
+          "SUPER, mouse:275, exec, playerctl previous"
+          "SUPER, mouse:276, exec, playerctl next"
+
+          # --- Приложения ---
           "SUPER, A, exec, kitty"
           "SUPER, E, exec, thunar"
           "SUPER, W, exec, firefox"
           "SUPER, T, exec, AyuGram"
-          "SUPER SHIFT, W, exec, ${ipc} panel-toggle wallpaper"
           "SUPER, S, exec, steam"
-          "SUPER, P, exec, ${ipc} panel-toggle session"
-          "SUPER SHIFT, S, exec, ${ipc} screenshot-fullscreen"
-          "SUPER CTRL, S, exec, ${ipc} screenshot-region"
- 
 
+          # --- Special-воркспейсы (запуск + тоггл) ---
           "SUPER, D, exec, vesktop"
           "SUPER, D, togglespecialworkspace, communication"
           "SUPER, C, exec, spotify"
           "SUPER, C, togglespecialworkspace, music"
-          "SUPER, Z, exec, ${ipc} panel-toggle control-center"
         ];
 
+      # ===== Мышь: перетаскивание и ресайз =====
       bindm = [
         "SUPER, mouse:272, movewindow"
         "SUPER, mouse:273, resizewindow"
       ];
 
+      # ===== Правила окон =====
       windowrule = [
         "match:class ^(vesktop)$, workspace 4"
         "match:class ^(Spotify)$, workspace special:music"
         "match:class ^(vesktop)$, workspace special:communication"
       ];
 
+      # ===== Правила слоёв (блюр для noctalia и уведомлений) =====
       layerrule = [
         "blur on, blur_popups on, ignore_alpha 1.0, match:namespace noctalia-background-.*$"
         "blur on, ignore_alpha 0.4, match:namespace swaync-.*$"
       ];
 
+      # ===== Динамический конфиг от noctalia =====
       source = [
         "~/.config/hypr/noctalia.conf"
       ];

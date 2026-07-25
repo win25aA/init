@@ -4,11 +4,14 @@
   programs.fish = {
     enable = true;
 
+    # ===== Алиасы =====
     shellAliases = {
       ls = "eza --icons --group-directories-first -1";
     };
 
+    # ===== Аббревиатуры (разворачиваются при нажатии пробела) =====
     shellAbbrs = {
+      # --- git ---
       lg = "lazygit";
       gd = "git diff";
       ga = "git add .";
@@ -26,13 +29,16 @@
       gco = "git checkout";
       gsh = "git show";
 
+      # --- ls ---
       l = "ls";
       ll = "ls -l";
       la = "ls -a";
       lla = "ls -la";
     };
 
+    # ===== Функции =====
     functions = {
+      # Приветствие: fastfetch при открытии терминала
       fish_greeting = ''
         set_color normal
         fastfetch --key-padding-left 5
@@ -43,6 +49,7 @@
         onEvent = "fish_prompt";
       };
 
+      # nrs: пересобрать систему и запушить конфиг в GitHub при успехе
       nrs = ''
         set -l config_dir /etc/nixos
 
@@ -70,6 +77,7 @@
       '';
     };
 
+    # ===== Инициализация шелла =====
     interactiveShellInit = ''
       starship init fish | source
 
