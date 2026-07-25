@@ -23,6 +23,18 @@
     input_path = "~/.config/matugen/fish-colors.fish"
     output_path = "~/.config/fish/matugen-colors.fish"
 
+    [templates.gtk3]
+    input_path = "~/.config/matugen/gtk-colors.css"
+    output_path = "~/.config/gtk-3.0/matugen-colors.css"
+
+    [templates.gtk4]
+    input_path = "~/.config/matugen/gtk-colors.css"
+    output_path = "~/.config/gtk-4.0/matugen-colors.css"
+
+    [templates.mpv]
+    input_path = "~/.config/matugen/mpv-colors.conf"
+    output_path = "~/.config/mpv/matugen-colors.conf"
+
   '';
 
 
@@ -111,5 +123,70 @@
     set -U fish_color_comment {{colors.surface_variant.default.hex_stripped}}
     set -U fish_color_selection --background={{colors.surface_container_highest.default.hex_stripped}}
     set -U fish_color_search_match --background={{colors.surface_container_highest.default.hex_stripped}}
+  '';
+
+  # ===== Шаблон: GTK3/GTK4 (libadwaita named colors) =====
+  # Перекрашивает loupe, amberol и другие GTK-приложения (adw-gtk3
+  # понимает те же цвета, так что thunar/mousepad тоже подтянутся).
+  # Подключается через gtk3/gtk4.extraCss в configuration.nix.
+  xdg.configFile."matugen/gtk-colors.css".text = ''
+    @define-color accent_color {{colors.primary.default.hex}};
+    @define-color accent_bg_color {{colors.primary.default.hex}};
+    @define-color accent_fg_color {{colors.on_primary.default.hex}};
+
+    @define-color destructive_color {{colors.error.default.hex}};
+    @define-color destructive_bg_color {{colors.error_container.default.hex}};
+    @define-color destructive_fg_color {{colors.on_error_container.default.hex}};
+
+    @define-color success_color {{colors.tertiary.default.hex}};
+    @define-color success_bg_color {{colors.tertiary_container.default.hex}};
+    @define-color success_fg_color {{colors.on_tertiary_container.default.hex}};
+
+    @define-color warning_color {{colors.secondary.default.hex}};
+    @define-color warning_bg_color {{colors.secondary_container.default.hex}};
+    @define-color warning_fg_color {{colors.on_secondary_container.default.hex}};
+
+    @define-color error_color {{colors.error.default.hex}};
+    @define-color error_bg_color {{colors.error_container.default.hex}};
+    @define-color error_fg_color {{colors.on_error_container.default.hex}};
+
+    @define-color window_bg_color {{colors.surface.default.hex}};
+    @define-color window_fg_color {{colors.on_surface.default.hex}};
+
+    @define-color view_bg_color {{colors.surface.default.hex}};
+    @define-color view_fg_color {{colors.on_surface.default.hex}};
+
+    @define-color headerbar_bg_color {{colors.surface_container.default.hex}};
+    @define-color headerbar_fg_color {{colors.on_surface.default.hex}};
+    @define-color headerbar_border_color {{colors.outline_variant.default.hex}};
+    @define-color headerbar_backdrop_color @window_bg_color;
+
+    @define-color card_bg_color {{colors.surface_container.default.hex}};
+    @define-color card_fg_color {{colors.on_surface.default.hex}};
+
+    @define-color dialog_bg_color {{colors.surface_container_high.default.hex}};
+    @define-color dialog_fg_color {{colors.on_surface.default.hex}};
+
+    @define-color popover_bg_color {{colors.surface_container.default.hex}};
+    @define-color popover_fg_color {{colors.on_surface.default.hex}};
+
+    @define-color sidebar_bg_color {{colors.surface_container.default.hex}};
+    @define-color sidebar_fg_color {{colors.on_surface.default.hex}};
+    @define-color sidebar_backdrop_color @window_bg_color;
+
+    @define-color thumbnail_bg_color {{colors.surface_container.default.hex}};
+    @define-color thumbnail_fg_color {{colors.on_surface.default.hex}};
+  '';
+
+  # ===== Шаблон: mpv (цвета OSD - экранных надписей) =====
+  xdg.configFile."matugen/mpv-colors.conf".text = ''
+    osd-color = "{{colors.primary.default.hex}}"
+    osd-border-color = "{{colors.surface.default.hex}}"
+  '';
+
+  # mpv сам не умеет тянуть цвета извне, поэтому основной конфиг
+  # просто подключает сгенерированный matugen файл
+  xdg.configFile."mpv/mpv.conf".text = ''
+    include=~~/matugen-colors.conf
   '';
 }
