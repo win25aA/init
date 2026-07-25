@@ -291,13 +291,6 @@ services.displayManager.sddm = {
   ];
 
 
-fonts.fontconfig.defaultFonts = {
-  sansSerif = [ "DejaVu Sans" "Liberation Sans" ];
-  serif     = [ "DejaVu Serif" "Liberation Serif" ];
-  monospace = [ "DejaVu Sans Mono" "Liberation Mono" ];
-  emoji     = [ "Noto Color Emoji" ];
-};
-
   system.stateVersion = "26.05"; 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];  
 
