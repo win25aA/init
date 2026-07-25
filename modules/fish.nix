@@ -61,8 +61,17 @@
 
             cd $config_dir
             git add -A
+            # Метка "auto: successful rebuild" ставится ВСЕГДА, даже если
+            # изменений нет (например, после мержа ветки изменения уже
+            # закоммичены). Иначе nback не узнает, что это состояние
+            # рабочее, и откатит дальше, чем надо.
             if git diff --cached --quiet
-                echo "Изменений нет."
+                if git log -1 --format=%s | string match -q "auto: successful rebuild*"
+                    echo "Изменений нет, метка уже стоит."
+                else
+                    git commit --allow-empty -m "auto: successful rebuild "(date "+%Y-%m-%d %H:%M")
+                    git push --force-with-lease
+                end
             else
                 git commit -m "auto: successful rebuild "(date "+%Y-%m-%d %H:%M")
                 # force-with-lease нужен, чтобы пуш работал после nback
