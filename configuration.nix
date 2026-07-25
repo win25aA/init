@@ -47,7 +47,6 @@ let
     cp -r ${./simple-sddm-2}/* $out/share/sddm/themes/simple-sddm-2/
   '';
 
-  # noctalia с путём к NVML - иначе нагрузка GPU в баре не видна
   noctalia-nvml = pkgs.symlinkJoin {
     name = "noctalia-nvml";
     paths = [ inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default ];
@@ -81,11 +80,11 @@ in
     cava
 
     # --- Просмотр медиа ---
-    mpv                # видео и аудио
-    loupe              # картинки
-    amberol            # простой плеер для локальной музыки
-    tumbler            # превью файлов в thunar
-    ffmpegthumbnailer  # превью видео в thunar
+    mpv                
+    loupe              
+    amberol            
+    tumbler            
+    ffmpegthumbnailer  
 
     # --- Файлы и диски ---
     thunar
@@ -120,7 +119,7 @@ in
     starship
     hyfetch
     asciiquarium
-    nvtopPackages.nvidia # процессы по нагрузке GPU (btop так не умеет)
+    nvtopPackages.nvidia
     wget
     gzip
     zip
@@ -270,8 +269,6 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = { inherit inputs; };
-    # Если home-manager должен создать файл, а на его месте уже лежит
-    # чужой - не падать, а переименовать старый в *.hm-backup
     backupFileExtension = "hm-backup";
 
     users.winarowk = { pkgs, ... }: {

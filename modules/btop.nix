@@ -3,7 +3,6 @@
 {
   programs.btop = {
     enable = true;
-    # Сборка с NVML для мониторинга GPU
     package = pkgs.btop.override { cudaSupport = true; };
     settings = {
       # ===== Тема и вид =====
