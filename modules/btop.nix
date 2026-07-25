@@ -4,17 +4,23 @@
   programs.btop = {
     enable = true;
     settings = {
+      # ===== Тема и вид =====
       color_theme = "matugen";
       theme_background = false;
       truecolor = true;
       force_tty = false;
-      disable_presets = "Off";
-      presets = "cpu:1:default,proc:0:default cpu:0:default,mem:0:default,net:0:default cpu:0:block,net:0:tty";
-      vim_keys = false;
-      disable_mouse = false;
       rounded_corners = true;
       terminal_sync = true;
+      vim_keys = false;
+      disable_mouse = false;
 
+      # ===== Раскладка: какие блоки показывать =====
+      shown_boxes = "cpu mem net proc";
+      disable_presets = "Off";
+      presets = "cpu:1:default,proc:0:default cpu:0:default,mem:0:default,net:0:default cpu:0:block,net:0:tty";
+      update_ms = 1000;
+
+      # ===== Графики =====
       graph_symbol = "braille";
       graph_symbol_cpu = "default";
       graph_symbol_gpu = "default";
@@ -22,9 +28,7 @@
       graph_symbol_net = "default";
       graph_symbol_proc = "default";
 
-      shown_boxes = "cpu mem net proc";
-      update_ms = 1000;
-
+      # ===== Процессы =====
       proc_sorting = "memory";
       proc_reversed = false;
       proc_tree = false;
@@ -40,9 +44,9 @@
       proc_aggregate = false;
       keep_dead_proc_usage = false;
 
+      # ===== CPU =====
       cpu_graph_upper = "Auto";
       cpu_graph_lower = "Auto";
-      show_gpu_info = "Auto";
       cpu_invert_lower = true;
       cpu_single_graph = false;
       cpu_bottom = false;
@@ -53,14 +57,11 @@
       show_coretemp = true;
       cpu_core_map = "";
       temp_scale = "celsius";
-      base_10_sizes = false;
       show_cpu_freq = true;
       freq_mode = "first";
-      clock_format = "%X";
-      background_update = true;
       custom_cpu_name = "";
 
-      disks_filter = "";
+      # ===== Память и диски =====
       mem_graphs = true;
       mem_below_net = false;
       zfs_arc_cached = true;
@@ -75,7 +76,10 @@
       io_mode = false;
       io_graph_combined = false;
       io_graph_speeds = "";
+      disks_filter = "";
+      base_10_sizes = false;
 
+      # ===== Сеть =====
       swap_upload_download = false;
       net_download = 100;
       net_upload = 100;
@@ -84,24 +88,29 @@
       net_iface = "";
       base_10_bitrate = "Auto";
 
+      # ===== Батарея =====
       show_battery = true;
       selected_battery = "Auto";
       show_battery_watts = true;
 
-      log_level = "WARNING";
-      save_config_on_exit = true;
-
+      # ===== GPU =====
+      show_gpu_info = "Auto";
       nvml_measure_pcie_speeds = true;
       rsmi_measure_pcie_speeds = true;
       gpu_mirror_graph = true;
       shown_gpus = "nvidia amd intel";
-
       custom_gpu_name0 = "";
       custom_gpu_name1 = "";
       custom_gpu_name2 = "";
       custom_gpu_name3 = "";
       custom_gpu_name4 = "";
       custom_gpu_name5 = "";
+
+      # ===== Прочее =====
+      clock_format = "%X";
+      background_update = true;
+      log_level = "WARNING";
+      save_config_on_exit = true;
     };
   };
 }
