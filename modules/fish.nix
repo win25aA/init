@@ -65,13 +65,45 @@
                 echo "Изменений нет."
             else
                 git commit -m "auto: successful rebuild "(date "+%Y-%m-%d %H:%M")
-                git push
+                # force-with-lease нужен, чтобы пуш работал после nback
+                # (безопасный вариант force: не затрёт чужие коммиты)
+                git push --force-with-lease
             end
         else
             set_color red
             echo "хуйня конфиг переделывай."
             set_color normal
         end
+      '';
+
+      # nback: откатить конфиг к последней УСПЕШНОЙ сборке.
+      # Как откат через GRUB, только для текста конфига: nrs коммитит
+      # только собравшийся конфиг, так что коммиты "auto: successful
+      # rebuild" - гарантированно рабочие точки.
+      nback = ''
+        set -l config_dir /etc/nixos
+        cd $config_dir
+
+        set -l good (git log --grep="auto: successful rebuild" -n 1 --format=%H)
+        if test -z "$good"
+            set_color red
+            echo "Не нашла коммит успешной сборки в истории."
+            set_color normal
+            return 1
+        end
+
+        # Незакоммиченные правки не удаляем, а прячем в stash
+        if not git diff --quiet; or not git diff --cached --quiet; or test (git ls-files --others --exclude-standard | count) -gt 0
+            git stash push --include-untracked -m "nback: правки перед откатом"
+            echo "Твои незакоммиченные правки спрятаны в stash (вернуть: git stash pop)"
+        end
+
+        git reset --hard $good
+        set_color green
+        echo "Конфиг откачен к последней успешной сборке:"
+        set_color normal
+        git log -1 --oneline
+        echo "Теперь пересборка: nrs"
       '';
     };
 
