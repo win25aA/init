@@ -3,6 +3,8 @@
 {
   programs.btop = {
     enable = true;
+    # Сборка с NVML: без неё btop на NixOS не видит нагрузку NVIDIA
+    package = pkgs.btop.override { cudaSupport = true; };
     settings = {
       # ===== Тема и вид =====
       color_theme = "matugen";
@@ -15,7 +17,7 @@
       disable_mouse = false;
 
       # ===== Раскладка: какие блоки показывать =====
-      shown_boxes = "cpu mem net proc";
+      shown_boxes = "cpu mem net proc gpu0";
       disable_presets = "Off";
       presets = "cpu:1:default,proc:0:default cpu:0:default,mem:0:default,net:0:default cpu:0:block,net:0:tty";
       update_ms = 1000;
