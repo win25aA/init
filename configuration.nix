@@ -79,7 +79,6 @@ in
     wireplumber
     playerctl
     cava
-
     # --- Просмотр медиа ---
     mpv                
     loupe              
@@ -99,7 +98,7 @@ in
     mtools
     gptfdisk
     btrfs-progs
-    # --- Рабочий стол (Wayland) ---
+    # --- Рабочий стол ---
     noctalia-nvml
     xwayland-satellite
     matugen
@@ -130,14 +129,14 @@ in
   ];
 
   # ======================================================================
-  # ПРОГРАММЫ (programs.*)
+  # ПРОГРАММЫ
   # ======================================================================
   programs.firefox.enable = true;
   programs.steam.enable = true;
   programs.amnezia-vpn.enable = true;
   programs.dconf.enable = true;
   programs.nix-ld.enable = true;
-
+  programs.ns-usbloader.enable = true;
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -158,7 +157,7 @@ in
   virtualisation.spiceUSBRedirection.enable = true;
 
   # ======================================================================
-  # СЕРВИСЫ (services.*)
+  # СЕРВИСЫ
   # ======================================================================
   services.displayManager.sddm = {
     enable = true;
@@ -204,7 +203,7 @@ in
   boot.supportedFilesystems = [ "btrfs" ];
 
   # ======================================================================
-  # ВИДЕОКАРТА (NVIDIA)
+  # ВИДЕОКАРТА
   # ======================================================================
   boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
   services.xserver.videoDrivers = [ "nvidia" ];
