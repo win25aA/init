@@ -1,8 +1,8 @@
-config_version = 2
+config_version = 8
 
 [bar.default]
 center = [ "group:g2" ]
-end = [ "group:g1", "tray", "volume", "control-center", "session" ]
+end = [ "group:g1", "tray", "volume", "group:g3" ]
 font_weight = 700
 start = [ "workspaces", "clock" ]
 
@@ -19,6 +19,14 @@ start = [ "workspaces", "clock" ]
     fill = "surface_variant"
     id = "g1"
     members = [ "cpu", "ram" ]
+    opacity = 1.0
+    padding = 6.0
+
+    [[bar.default.capsule_group]]
+    enabled = true
+    fill = "surface_variant"
+    id = "g3"
+    members = [ "control-center", "session" ]
     opacity = 1.0
     padding = 6.0
 
@@ -95,7 +103,6 @@ widget_order = [
         show_caps_lock = true
         show_keyboard_layout = true
         show_login_button = true
-        show_password_hint = true
 
     [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
     box_height = 70.0
@@ -116,7 +123,6 @@ widget_order = [
         show_caps_lock = true
         show_keyboard_layout = true
         show_login_button = true
-        show_password_hint = true
 
     [lockscreen_widgets.widget."lockscreen-login-box@WAYLAND-1"]
     box_height = 70.0
@@ -137,7 +143,6 @@ widget_order = [
         show_caps_lock = true
         show_keyboard_layout = true
         show_login_button = true
-        show_password_hint = true
 
     [lockscreen_widgets.widget."lockscreen-login-box@winit"]
     box_height = 70.0
@@ -158,7 +163,6 @@ widget_order = [
         show_caps_lock = true
         show_keyboard_layout = true
         show_login_button = true
-        show_password_hint = true
 
 [osd.kinds]
 media = false
@@ -208,7 +212,6 @@ enabled = false
 
 [widget.control-center]
 capsule = true
-custom_image = "/nix/store/ayhwjin8d0rwx7qai2f9dl7gb9yif8fb-noctalia-5.0.0/share/noctalia/assets/images/distros/nixos.svg"
 custom_image_colorize = true
 
 [widget.cpu]
