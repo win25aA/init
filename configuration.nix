@@ -142,10 +142,6 @@ in
     xwayland.enable = true;
   };
 
-  programs.niri.enable = true;
-  programs.niri.package = pkgs.niri;
-  niri-flake.cache.enable = false;
-
   # ======================================================================
   # ВИРТУАЛКА
   # ======================================================================
