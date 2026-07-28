@@ -22,6 +22,8 @@
       inputs.nixpkgs.follows = "nixpkgs"; 
     };
 
+   hyprland.url = "github:hyprwm/Hyprland?ref=v0.55.4&submodules=1";
+
     niri = {
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
