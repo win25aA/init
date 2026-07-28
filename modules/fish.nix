@@ -5,12 +5,10 @@
   programs.fish = {
     enable = true;
 
-    # ===== Алиасы =====
     shellAliases = {
       ls = "eza --icons --group-directories-first -1";
     };
 
-    # ===== Аббы =====
     shellAbbrs = {
       # --- git ---
       lg = "lazygit";
@@ -37,7 +35,6 @@
       lla = "ls -la";
     };
 
-    # ===== Функ =====
     functions = {
       fish_greeting = ''
         set_color normal
@@ -113,8 +110,7 @@
             echo "Отменено."
             return 1
         end
-
-        # Правки не удаляем, а прячем в stash
+      
         if not git diff --quiet; or not git diff --cached --quiet; or test (git ls-files --others --exclude-standard | count) -gt 0
             git stash push --include-untracked -m "nback: правки перед откатом"
             echo "Твои незакоммиченные правки спрятаны в stash (вернуть: git stash pop)"
@@ -127,7 +123,6 @@
       '';
     };
 
-    # ===== Инит шелла =====
     interactiveShellInit = ''
       starship init fish | source
 

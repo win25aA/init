@@ -1,7 +1,6 @@
 { config, pkgs, inputs, ... }:
 
 {
-  # ===== Главный конфиг matugen: какие шаблоны генерировать =====
   xdg.configFile."matugen/config.toml".text = ''
     [config]
     image_mode = "dark"
@@ -38,7 +37,6 @@
   '';
 
 
-  # ===== Шаблон: цвета терминала kitty =====
   xdg.configFile."matugen/kitty.conf".text = ''
     foreground            {{colors.on_surface.default.hex}}
     selection_foreground  {{colors.surface.default.hex}}
@@ -65,7 +63,6 @@
     color15 {{colors.on_surface.default.hex}}
   '';
 
-  # ===== Шаблон: тема btop =====
   xdg.configFile."matugen/btop-colors.theme".text = ''
     theme[main_bg]="{{colors.surface.default.hex}}"
     theme[main_fg]="{{colors.on_surface.default.hex}}"
@@ -111,7 +108,6 @@
     theme[process_end]="{{colors.error.default.hex}}"
   '';
 
-  # ===== Шаблон: подсветка синтаксиса fish =====
   xdg.configFile."matugen/fish-colors.fish".text = ''
     set -U fish_color_normal {{colors.on_surface.default.hex_stripped}}
     set -U fish_color_command {{colors.tertiary.default.hex_stripped}}
@@ -125,10 +121,6 @@
     set -U fish_color_search_match --background={{colors.surface_container_highest.default.hex_stripped}}
   '';
 
-  # ===== Шаблон: GTK3/GTK4 (libadwaita named colors) =====
-  # Перекрашивает loupe, amberol и другие GTK-приложения (adw-gtk3
-  # понимает те же цвета, так что thunar/mousepad тоже подтянутся).
-  # Подключается через gtk3/gtk4.extraCss в configuration.nix.
   xdg.configFile."matugen/gtk-colors.css".text = ''
     @define-color accent_color {{colors.primary.default.hex}};
     @define-color accent_bg_color {{colors.primary.default.hex}};
@@ -178,14 +170,12 @@
     @define-color thumbnail_fg_color {{colors.on_surface.default.hex}};
   '';
 
-  # ===== Шаблон: mpv (цвета OSD - экранных надписей) =====
+
   xdg.configFile."matugen/mpv-colors.conf".text = ''
     osd-color = "{{colors.primary.default.hex}}"
     osd-border-color = "{{colors.surface.default.hex}}"
   '';
 
-  # mpv сам не умеет тянуть цвета извне, поэтому основной конфиг
-  # просто подключает сгенерированный matugen файл
   xdg.configFile."mpv/mpv.conf".text = ''
     include=~~/matugen-colors.conf
   '';

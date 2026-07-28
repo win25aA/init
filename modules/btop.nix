@@ -5,7 +5,7 @@
     enable = true;
     package = pkgs.btop.override { cudaSupport = true; };
     settings = {
-      # ===== Тема и вид =====
+      
       color_theme = "matugen";
       theme_background = false;
       truecolor = true;
@@ -15,13 +15,13 @@
       vim_keys = false;
       disable_mouse = false;
 
-      # ===== Раскладка: какие блоки показывать =====
+ 
       shown_boxes = "cpu mem net proc gpu0";
       disable_presets = "Off";
       presets = "cpu:1:default,proc:0:default cpu:0:default,mem:0:default,net:0:default cpu:0:block,net:0:tty";
       update_ms = 1000;
 
-      # ===== Графики =====
+  
       graph_symbol = "braille";
       graph_symbol_cpu = "default";
       graph_symbol_gpu = "default";
@@ -45,7 +45,7 @@
       proc_aggregate = false;
       keep_dead_proc_usage = false;
 
-      # ===== CPU =====
+ 
       cpu_graph_upper = "Auto";
       cpu_graph_lower = "Auto";
       cpu_invert_lower = true;
@@ -62,7 +62,7 @@
       freq_mode = "first";
       custom_cpu_name = "";
 
-      # ===== Память и диски =====
+     
       mem_graphs = true;
       mem_below_net = false;
       zfs_arc_cached = true;
@@ -80,7 +80,7 @@
       disks_filter = "";
       base_10_sizes = false;
 
-      # ===== Сеть =====
+   
       swap_upload_download = false;
       net_download = 100;
       net_upload = 100;
@@ -89,12 +89,12 @@
       net_iface = "";
       base_10_bitrate = "Auto";
 
-      # ===== Батарея =====
+      
       show_battery = true;
       selected_battery = "Auto";
       show_battery_watts = true;
 
-      # ===== GPU =====
+     
       show_gpu_info = "Auto";
       nvml_measure_pcie_speeds = true;
       rsmi_measure_pcie_speeds = true;
@@ -107,7 +107,7 @@
       custom_gpu_name4 = "";
       custom_gpu_name5 = "";
 
-      # ===== Прочее =====
+    
       clock_format = "%X";
       background_update = true;
       log_level = "WARNING";

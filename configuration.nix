@@ -59,34 +59,27 @@ let
   };
 in
 {
-  # ======================================================================
-  # ПАКЕТЫ
-  # ======================================================================
+  # pkgs
   environment.systemPackages = with pkgs; [
-    # --- Интернет и общение ---
     inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
     vesktop          
     ayugram-desktop 
     qbittorrent
-    # --- Игры ---
     prismlauncher   
     osu-lazer-bin    
     gpu-screen-recorder
     (import inputs.creamlinux-installer { inherit pkgs; })
-    # --- Музыка и звук ---
     spotify-adblocked
     pavucontrol
     wireplumber
     playerctl
     cava
-    # --- Просмотр медиа ---
     mpv                
     loupe              
     musikcube
     tumbler            
     ffmpegthumbnailer  
     amberol
-    # --- Файлы и диски ---
     thunar
     file-roller
     gparted
@@ -98,7 +91,6 @@ in
     mtools
     gptfdisk
     btrfs-progs
-    # --- Рабочий стол ---
     noctalia-nvml
     xwayland-satellite
     matugen
@@ -106,15 +98,12 @@ in
     adw-gtk3
     papirus-icon-theme
     simple-sddm-2-theme
-    # --- Разработка ---
     git
     nodejs_22
     uv
     android-tools
-    # --- Редакторы ---
     micro
     mousepad
-    # --- Терминал и CLI ---
     eza
     starship
     hyfetch
@@ -128,9 +117,7 @@ in
     opencode
   ];
 
-  # ======================================================================
-  # ПРОГРАММЫ
-  # ======================================================================
+  # programs.
   programs.firefox.enable = true;
   programs.steam.enable = true;
   programs.amnezia-vpn.enable = true;
@@ -142,9 +129,6 @@ in
     xwayland.enable = true;
   };
 
-  # ======================================================================
-  # ВИРТУАЛКА
-  # ======================================================================
   programs.virt-manager.enable = true;
   virtualisation.libvirtd = {
     enable = true;
@@ -152,9 +136,8 @@ in
   };
   virtualisation.spiceUSBRedirection.enable = true;
 
-  # ======================================================================
-  # СЕРВИСЫ
-  # ======================================================================
+  # сервисы
+
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
@@ -173,7 +156,6 @@ in
     variant = "";
   };
 
-  # pipewire
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -188,9 +170,8 @@ in
   services.gvfs.enable = true;
   services.printing.enable = true;
 
-  # ======================================================================
-  # ЗАГРУЗКА
-  # ======================================================================
+  # GRUB
+
   boot.loader.grub.device = "/dev/disk/by-id/ata-Apacer_AS340_480GB_AFLJ1451210075";
   boot.loader.grub.enable = true;
   boot.loader.grub.theme = ./grub-theme;
@@ -198,9 +179,8 @@ in
 
   boot.supportedFilesystems = [ "btrfs" ];
 
-  # ======================================================================
-  # ВИДЕОКАРТА
-  # ======================================================================
+  # nvidia
+
   boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
   services.xserver.videoDrivers = [ "nvidia" ];
 
@@ -220,9 +200,7 @@ in
 
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-  # ======================================================================
-  # СЕТЬ, ЛОКАЛЬ, ВРЕМЯ
-  # ======================================================================
+  # локали и инет
   networking.hostName = "winarowk";
   networking.networkmanager.enable = true;
 
@@ -241,21 +219,17 @@ in
     LC_TIME = "ru_RU.UTF-8";
   };
 
-  # ======================================================================
   # ДИСКИ
-  # ======================================================================
   fileSystems."/mnt/games" = {
     device = "/dev/disk/by-uuid/3f80c736-41e1-4e16-a46e-716f4650aa8b";
     fsType = "ext4";
     options = [ "users" "nofail" "x-systemd.automount" "exec" ];
   };
 
-  # ======================================================================
-  # БЕЗОПАСНОСТЬ
-  # ======================================================================
   security.polkit.enable = true;
 
-  # Включение корректных прав (setuid) для pkexec
+  # Pkexec
+  
   security.wrappers.pkexec = {
     setuid = true;
     owner = "root";
@@ -263,9 +237,8 @@ in
     source = "${pkgs.polkit.bin}/bin/pkexec";
   };
 
-  # ======================================================================
-  # ПОЛЬЗОВАТЕЛЬ И HOME MANAGER
-  # ======================================================================
+  # юзеры и home manager
+
   users.users."winarowk" = {
     isNormalUser = true;
     description = "winarowk";
@@ -293,7 +266,7 @@ in
           name = "Papirus";
           package = pkgs.papirus-icon-theme;
         };
-        # Динамические цвета из matugen (файлы генерируются при смене обоев)
+
         gtk3.extraCss = ''@import url("matugen-colors.css");'';
         gtk4.extraCss = ''@import url("matugen-colors.css");'';
       };
@@ -305,9 +278,8 @@ in
     };
   };
 
-  # ======================================================================
   # ШРИФТЫ
-  # ======================================================================
+  
   fonts.enableDefaultPackages = false;
 
   fonts.fontconfig.defaultFonts = {
@@ -328,9 +300,8 @@ in
     corefonts
   ];
 
-  # ======================================================================
-  # NIX И СИСТЕМА
-  # ======================================================================
+  # система никса
+
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
