@@ -115,9 +115,11 @@ in
     unzip
     appimage-run
     opencode
+    libimobiledevice
+    ifuse
   ];
 
-  # хуйня
+  # хуйня которую надо удалить для анстейбла, еще в hyprland nix flake nix
 nix.settings = {
   substituters = [ "https://hyprland.cachix.org" ];
   trusted-public-keys = [
@@ -134,8 +136,9 @@ nix.settings = {
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
-      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-  portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    # удалить для анстейбла
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
   };
 
   programs.virt-manager.enable = true;
@@ -178,7 +181,7 @@ nix.settings = {
   services.usbmuxd.enable = true;
   services.gvfs.enable = true;
   services.printing.enable = true;
-
+  
   # GRUB
 
   boot.loader.grub.device = "/dev/disk/by-id/ata-Apacer_AS340_480GB_AFLJ1451210075";

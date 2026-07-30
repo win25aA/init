@@ -8,6 +8,7 @@ in
     enable = true;
     systemd.enable = true;
     xwayland.enable = true;
+    # ниже удалить для анстейбла
     package = null;
     portalPackage = null;
 

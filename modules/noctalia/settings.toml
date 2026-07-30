@@ -15,7 +15,7 @@ start = [ "workspaces", "clock" ]
     padding = 6.0
 
     [[bar.default.capsule_group]]
-    enabled = true
+    enabled = false
     fill = "surface_variant"
     id = "g1"
     members = [ "cpu", "ram" ]
