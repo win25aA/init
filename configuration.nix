@@ -128,7 +128,12 @@ nix.settings = {
 };
   # programs.
   programs.firefox.enable = true;
-  programs.steam.enable = true;
+programs.steam = {
+  enable = true;
+  extraCompatPackages = with pkgs; [
+    proton-ge-bin
+  ];
+};
   programs.amnezia-vpn.enable = true;
   programs.dconf.enable = true;
   programs.nix-ld.enable = true;
