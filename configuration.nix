@@ -184,7 +184,7 @@ programs.steam = {
 
 
   services.zapret = {
-    enable = true;
+    enable = false;
 params = [
   "--dpi-desync=fake,multidisorder"
   "--dpi-desync-split-pos=1,midsld"
