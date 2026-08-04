@@ -188,13 +188,17 @@ programs.steam = {
   services.printing.enable = true;
   #запрет
 services.zapret = {
-  enable = false;
-params = [ "--dpi-desync=multidisorder" "--dpi-desync-split-pos=1,midsld,host+1" ];
-  httpSupport = true;
-  udpSupport = false;          # пока выключи, чтобы не ломать QUIC
-  configureFirewall = true;
-};
-    
+      enable = true;
+      params = [
+        "--dpi-desync=fake,multisplit"
+        "--dpi-desync-split-pos=midsld"
+        "--dpi-desync-autottl=2"
+        "--dpi-desync-fooling=badseq"
+      ];
+      httpSupport = true;
+      udpSupport = false;
+      configureFirewall = true;
+    };    
     networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
     services.resolved = {
       enable = true;
