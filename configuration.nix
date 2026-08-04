@@ -185,20 +185,7 @@ programs.steam = {
   services.flatpak.enable = true;
   services.usbmuxd.enable = true;
   services.gvfs.enable = true;
-  services.printing.enable = true;
-  #запрет
-services.zapret = {
-      enable = true;
-      params = [
-        "--dpi-desync=fake,multisplit"
-        "--dpi-desync-split-pos=midsld"
-        "--dpi-desync-autottl=2"
-        "--dpi-desync-fooling=badseq"
-      ];
-      httpSupport = true;
-      udpSupport = false;
-      configureFirewall = true;
-    };    
+  services.printing.enable = true; 
     networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
     services.resolved = {
       enable = true;
