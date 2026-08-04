@@ -186,8 +186,9 @@ programs.steam = {
   services.zapret = {
     enable = true;
 params = [ "--dpi-desync=multidisorder" "--dpi-desync-split-pos=1,midsld,host+1" ];
-    httpSupport = true;
-    udpSupport = false;
+     httpSupport = true;
+    udpSupport = true;
+    udpPorts = [ "443" "50000:50100" ];
     configureFirewall = true;
   };
   services.flatpak.enable = true;
