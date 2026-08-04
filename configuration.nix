@@ -182,6 +182,19 @@ programs.steam = {
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
 
+
+  services.zapret = {
+    enable = true;
+    params = [
+      "--dpi-desync=fake,multisplit"
+      "--dpi-desync-split-pos=midsld"
+      "--dpi-desync-autottl=2"
+      "--dpi-desync-fooling=badseq"
+    ];
+    httpSupport = true;
+    udpSupport = false;
+    configureFirewall = true;
+  };
   services.flatpak.enable = true;
   services.usbmuxd.enable = true;
   services.gvfs.enable = true;
