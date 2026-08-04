@@ -190,9 +190,10 @@ programs.steam = {
   services.zapret = {
       enable = true;
       params = [
-  "--dpi-desync=fake,disorder2"
-  "--dpi-desync-ttl=1"
-  "--dpi-desync-fooling=badsum"
+  "--dpi-desync=fake"
+  "--dpi-desync-any-protocol"
+  "--dpi-desync-repeats=8"
+  "--dpi-desync-autottl=3"
       ];
       httpSupport = true;
       udpSupport = true;
