@@ -186,7 +186,26 @@ programs.steam = {
   services.usbmuxd.enable = true;
   services.gvfs.enable = true;
   services.printing.enable = true;
-  
+  #запрет
+  services.zapret = {
+      enable = true;
+      params = [
+        "--dpi-desync=fake,split2"
+        "--dpi-desync-autottl=2"
+        "--dpi-desync-fooling=md5sig"
+        "--dpi-desync-repeats=6"
+      ];
+      httpSupport = true;
+      udpSupport = true;
+      udpPorts = [ "443" "50000:50100" ];
+      configureFirewall = true;
+    };
+    
+    networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
+    services.resolved = {
+      enable = true;
+      dnsovertls = "true";
+    };  
   # GRUB
 
   boot.loader.grub.device = "/dev/disk/by-id/ata-Apacer_AS340_480GB_AFLJ1451210075";
