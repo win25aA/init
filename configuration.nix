@@ -189,10 +189,7 @@ programs.steam = {
   #запрет
 services.zapret = {
   enable = true;
-  params = [
-    "--dpi-desync=multisplit"
-    "--dpi-desync-split-pos=method+2,midsld"
-  ];
+  params = [  "--dpi-desync=multidisorder" "--dpi-desync-split-pos=1,midsld,host+1"  ];
   httpSupport = true;
   udpSupport = false;          # пока выключи, чтобы не ломать QUIC
   configureFirewall = true;
