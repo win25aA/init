@@ -193,10 +193,6 @@ services.zapret = {
   httpSupport = true;
   udpSupport = false;          # пока выключи, чтобы не ломать QUIC
   configureFirewall = true;
-  whitelist = [
-    "youtube.com" "googlevideo.com" "ytimg.com" "ggpht.com" "youtu.be"
-    "discord.com" "discordapp.com" "discord.gg" "discordapp.net"
-  ];
 };
     
     networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
