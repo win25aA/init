@@ -190,6 +190,13 @@ params = [ "--dpi-desync=multidisorder" "--dpi-desync-split-pos=1,midsld,host+1"
     udpSupport = true;
     udpPorts = [ "443" "50000:50100" ];
     configureFirewall = true;
+    whitelist = [
+        "youtube.com" "googlevideo.com" "ytimg.com" "ggpht.com" "youtu.be"
+        "discord.com" "discordapp.com" "discord.gg" "discordapp.net"
+        "instagram.com" "cdninstagram.com" "fbcdn.net"
+        "rutracker.org"
+      ];
+   
   };
   services.flatpak.enable = true;
   services.usbmuxd.enable = true;
