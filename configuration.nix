@@ -90,6 +90,7 @@ in
     exfatprogs
     ntfs3g
     dosfstools
+    opencode-desktop
     mtools
     gptfdisk
     btrfs-progs
