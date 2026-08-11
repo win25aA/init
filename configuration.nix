@@ -77,6 +77,7 @@ in
     mpv                
     loupe              
     musikcube
+    peazip
     tumbler            
     ffmpegthumbnailer  
     amberol
