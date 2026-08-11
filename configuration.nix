@@ -80,6 +80,7 @@ in
     tumbler            
     ffmpegthumbnailer  
     amberol
+    mtr
     thunar
     file-roller
     gparted
