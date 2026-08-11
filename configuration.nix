@@ -116,7 +116,6 @@ in
     zip
     unzip
     appimage-run
-    opencode
     libimobiledevice
     ifuse
   ];
