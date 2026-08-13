@@ -331,6 +331,7 @@ params = [ "--dpi-desync=multidisorder" "--dpi-desync-split-pos=1,midsld,host+1"
   fonts.packages = with pkgs; [
     dejavu_fonts
     freefont_ttf
+    nerd-fonts.jetbrains-mono
     liberation_ttf
     unifont
     noto-fonts-cjk-sans
