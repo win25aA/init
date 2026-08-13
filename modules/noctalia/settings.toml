@@ -174,7 +174,7 @@ audio_source = "both"
 download_dir = "/etc/nixos/wallpapers/"
 
 [plugins]
-enabled = [ "radimous/prismlauncher-instances", "noctalia/wallhaven", "noctalia/screen_recorder" ]
+enabled = [ "radimous/prismlauncher-instances", "noctalia/wallhaven" ]
 
 [shell]
 avatar_path = "/etc/nixos/wallpapers/.face"
