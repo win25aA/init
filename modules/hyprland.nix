@@ -18,7 +18,6 @@ in
       monitor = [
         "DVI-D-1,1440x900@74.98,0x0,1"
         "HDMI-A-1,1024x768@70.07,1440x355,1"
-        ",preferred,auto,1"
       ];
 
       env = [
