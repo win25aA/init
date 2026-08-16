@@ -187,7 +187,11 @@ programs.steam = {
 
   services.zapret = {
     enable = true;
-params = [ "--dpi-desync=multidisorder" "--dpi-desync-split-pos=1,midsld,host+1" ];
+   params = [
+    "--dpi-desync=fakedsplit"
+    "--dpi-desync-fooling=ts"
+    "--dpi-desync-split-pos=1"
+  ];
      httpSupport = true;
     udpSupport = true;
     udpPorts = [ "443" "50000:50100" ];
