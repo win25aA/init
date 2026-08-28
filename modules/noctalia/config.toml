@@ -7,4 +7,4 @@
 # (~/.config/matugen/config.toml: kitty, btop, fish).
 # --source-color-index 0 = брать самый доминантный цвет без интерактивного
 # выбора (в matugen 4.1.0 этот параметр работает только как CLI-флаг).
-wallpaper_changed = "matugen image \"$NOCTALIA_WALLPAPER_PATH\" --source-color-index 0"
+wallpaper_changed = "matugen image \"$NOCTALIA_WALLPAPER_PATH\" --type scheme-content --source-color-index 0"
