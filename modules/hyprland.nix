@@ -144,4 +144,9 @@ in
       ];
     };
   };
+  home.activation.ensureNoctaliaConf = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+    mkdir -p "$HOME/.config/hypr"
+    [ -f "$HOME/.config/hypr/noctalia.conf" ] || touch "$HOME/.config/hypr/noctalia.conf"
+  '';
 }
+
