@@ -62,7 +62,10 @@ in
   # pkgs
   environment.systemPackages = with pkgs; [
     inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
-    vesktop          
+    vesktop     
+    wine64
+    protontricks
+    winetricks     
     ayugram-desktop 
     qbittorrent
     prismlauncher   
