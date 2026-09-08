@@ -355,6 +355,12 @@ programs.steam = {
     corefonts
   ];
 
+  # bluetooth
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true; 
+  
+
+ 
   # система никса
 
   nixpkgs.config.allowUnfree = true;
