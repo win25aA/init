@@ -63,6 +63,7 @@ in
   environment.systemPackages = with pkgs; [
     inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
     vesktop     
+    bottles
     wine64
     protontricks
     winetricks     
