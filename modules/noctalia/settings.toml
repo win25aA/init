@@ -1,4 +1,4 @@
-config_version = 13
+config_version = 14
 
 [bar.default]
 center = [ "group:g2" ]
@@ -203,6 +203,9 @@ audio_source = "both"
 [plugin_settings."noctalia/wallhaven"]
 download_dir = "/etc/nixos/wallpapers/"
 
+[plugin_settings."whyoolw/dropwall"]
+copy_to_wallpaper_dir = true
+
 [plugins]
 enabled = [ "radimous/prismlauncher-instances", "noctalia/wallhaven" ]
 
@@ -226,16 +229,16 @@ source = "wallpaper"
 directory = "/etc/nixos/wallpapers"
 
     [wallpaper.default]
-    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
 
     [wallpaper.last]
-    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
 
     [wallpaper.monitors.DVI-D-1]
-    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
 
 [widget.audio_visualizer]
 enabled = false
