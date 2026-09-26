@@ -621,7 +621,45 @@
         "niri": "niri",
         "nixpkgs": "nixpkgs_2",
         "noctalia": "noctalia",
+        "spotx-nix": "spotx-nix",
         "zen-browser": "zen-browser"
+      }
+    },
+    "spotx-bash": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1789668608,
+        "narHash": "sha256-Rmde6/GxX23kxIwopmk2uUjrvq3sqQZ977BH9hMBnl8=",
+        "owner": "SpotX-Official",
+        "repo": "SpotX-Bash",
+        "rev": "a59489160f5d30eb2aeba4b1da155465d1306cdf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpotX-Official",
+        "repo": "SpotX-Bash",
+        "type": "github"
+      }
+    },
+    "spotx-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "spotx-bash": "spotx-bash"
+      },
+      "locked": {
+        "lastModified": 1790398768,
+        "narHash": "sha256-0cP+zx5VRZGXfpdydeO4ytnGcyahK/yL+Ma22SzvP/w=",
+        "owner": "SpotX-Official",
+        "repo": "SpotX-Nix",
+        "rev": "1594c5f00bd8a831d513767f53715a70e79d7b75",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpotX-Official",
+        "repo": "SpotX-Nix",
+        "type": "github"
       }
     },
     "systems": {

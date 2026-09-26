@@ -2,45 +2,6 @@
 { config, pkgs, inputs, ... }:
 
 let
-  spotify-adblock = pkgs.rustPlatform.buildRustPackage {
-    pname = "spotify-adblock";
-    version = "unstable-2026-06-07";
-    src = pkgs.fetchFromGitHub {
-      owner = "abba23";
-      repo = "spotify-adblock";
-      rev = "9aeadd3cfd4d50212059720c09f662f149942fec";
-      hash = "sha256-3X7vScKmnb65wJ4xWAT2AeyAMPTGzKZCFA549zm9gLc=";
-    };
-    cargoHash = "sha256-gxGetdqaoJa/ZF1VnW6UXJyJfLBGZxZnyKpT/Qk/8Og=";
-
-    patchPhase = ''
-      substituteInPlace src/config.rs \
-        --replace-fail 'const GLOBAL_CONFIG_DIR: &str = "/etc";' \
-                  "const GLOBAL_CONFIG_DIR: &str = \"$out/etc\";"
-    '';
-
-    buildPhase = "make";
-
-    installPhase = ''
-      mkdir -p $out/etc/spotify-adblock
-      install -D --mode=644 config.toml $out/etc/spotify-adblock
-      mkdir -p $out/lib
-      install -D --mode=644 --strip target/release/libspotifyadblock.so $out/lib
-    '';
-  };
-
-  spotify-adblocked = pkgs.spotify.overrideAttrs (old: {
-    buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.zip pkgs.unzip ];
-    postInstall = (old.postInstall or "") + ''
-      ln -s ${spotify-adblock}/lib/libspotifyadblock.so $libdir
-      wrapProgram $out/bin/spotify \
-        --set LD_PRELOAD "${spotify-adblock}/lib/libspotifyadblock.so"
-
-      ${pkgs.unzip}/bin/unzip -p $out/share/spotify/Apps/xpui.spa xpui-snapshot.js | sed 's/adsEnabled:!0/adsEnabled:false/' > $out/share/spotify/Apps/xpui-snapshot.js
-      ${pkgs.zip}/bin/zip --junk-paths --update $out/share/spotify/Apps/xpui.spa $out/share/spotify/Apps/xpui-snapshot.js
-      rm $out/share/spotify/Apps/xpui-snapshot.js
-    '';
-  });
 
   simple-sddm-2-theme = pkgs.runCommand "simple-sddm-2-theme" {} ''
     mkdir -p $out/share/sddm/themes/simple-sddm-2
@@ -73,7 +34,7 @@ in
     osu-lazer-bin    
     gpu-screen-recorder
     (import inputs.creamlinux-installer { inherit pkgs; })
-    spotify-adblocked
+    pkgs.spotify-spotx
     pavucontrol
     wireplumber
     playerctl
@@ -365,6 +326,7 @@ programs.steam = {
   # система никса
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [ inputs.spotx-nix.overlays.default ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Автоочистка, оптимизация
