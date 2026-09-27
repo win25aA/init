@@ -229,16 +229,16 @@ source = "wallpaper"
 directory = "/etc/nixos/wallpapers"
 
     [wallpaper.default]
-    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
     [wallpaper.last]
-    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
     [wallpaper.monitors.DVI-D-1]
-    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
 [widget.audio_visualizer]
 enabled = false
