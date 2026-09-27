@@ -18,32 +18,6 @@ let
       done
     '';
   };
-systemd.user.services.steam-presence = {
-  description = "Steam Rich Presence for Discord";
-  wantedBy = [ "default.target" ];
-  environment = {
-    DISCORD_APPLICATION_ID = "1553875271621414932";
-    STEAM_API_KEY = "F8C0B8E870B2810999E2CC4FAFB93A30";
-    STEAM_USER_ID = "76561198982714043";
-    RETRY_COUNT = "3";
-  };
-  serviceConfig = {
-    ExecStart = "${steam-presence}/bin/steam-presence-on-discord";
-    Restart = "always";
-    RestartSec = 10;
-  };
-};
-  steam-presence = pkgs.rustPlatform.buildRustPackage {
-    pname = "steam-presence-rust";
-    version = "unstable";
-    src = pkgs.fetchFromGitHub {
-      owner = "justradical";
-      repo = "steam-presence-rust";
-      rev = "main";
-      hash = pkgs.lib.fakeHash;
-    };
-    cargoHash = pkgs.lib.fakeHash;
-  };
 in
 {
   # pkgs
@@ -147,7 +121,6 @@ programs.steam = {
   virtualisation.spiceUSBRedirection.enable = true;
 
   # сервисы
-
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
