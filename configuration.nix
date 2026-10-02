@@ -25,7 +25,6 @@ in
     inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
     vesktop     
     bottles
-    nuclear
     wine64
     protontricks
     winetricks     
