@@ -117,7 +117,7 @@ in
           # Special-воркспейсы
           "SUPER, D, exec, vesktop"
           "SUPER, D, togglespecialworkspace, communication"
-          "SUPER, C, exec, spotify"
+          "SUPER, C, exec, flatpak run com.nuclearplayer.Nuclear"
           "SUPER, C, togglespecialworkspace, music"
         ];
     
