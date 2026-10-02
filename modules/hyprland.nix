@@ -68,6 +68,7 @@ in
       "exec-once" = [
         "noctalia"
         "AmneziaVPN"
+        "[workspace special:music silent] flatpak run com.nuclearplayer.Nuclear"
       ];
 
       # Бинды 
@@ -117,7 +118,6 @@ in
           # Special-воркспейсы
           "SUPER, D, exec, vesktop"
           "SUPER, D, togglespecialworkspace, communication"
-          "SUPER, C, exec, flatpak run com.nuclearplayer.Nuclear"
           "SUPER, C, togglespecialworkspace, music"
         ];
     
@@ -129,7 +129,7 @@ in
       # Правила окон 
       windowrule = [
         "match:class ^(vesktop)$, workspace 4"
-        "match:class ^(Spotify)$, workspace special:music"
+        "match:class ^(com\\.nuclearplayer\\.Nuclear)$, workspace special:music"
         "match:class ^(vesktop)$, workspace special:communication"
       ];
 
