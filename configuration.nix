@@ -18,6 +18,15 @@ let
       done
     '';
   };
+
+  soundcloud-desktop = pkgs.appimageTools.wrapType2 {
+    pname = "soundcloud-desktop";
+    version = "8.4.13";
+    src = pkgs.fetchurl {
+      url = "https://github.com/zxcloli666/SoundCloud-Desktop-EN/releases/download/8.4.13/soundcloud-desktop_8.4.13_amd64.AppImage";
+      hash = "sha256-yM5BD/VYkhEHBD3tkvC7xbrsUup+olaD5Q8tuOjcKEc=";
+    };
+  };
 in
 {
   # pkgs
@@ -84,7 +93,7 @@ in
     appimage-run
     libimobiledevice
     ifuse
-  ];
+  ] ++ [ soundcloud-desktop ];
 
   # хуйня которую надо удалить для анстейбла, еще в hyprland nix flake nix
 nix.settings = {
