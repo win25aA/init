@@ -25,6 +25,7 @@ in
     inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
     vesktop     
     bottles
+    nuclear
     wine64
     protontricks
     winetricks     
@@ -326,6 +327,7 @@ programs.steam = {
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [ inputs.spotx-nix.overlays.default ];
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Автоочистка, оптимизация
