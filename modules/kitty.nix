@@ -11,7 +11,7 @@
 
       cursor_shape beam
       cursor_trail 1
-
+      remember_window_size no
       confirm_os_window_close 0
       hide_window_decorations yes
       window_border_width 0
