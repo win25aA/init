@@ -35,6 +35,7 @@ in
     vesktop     
     bottles
     wine64
+    gpu-screen-recorder-gtk
     protontricks
     winetricks     
     ayugram-desktop 
