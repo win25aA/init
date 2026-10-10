@@ -15,7 +15,19 @@ let
     value = "move container to workspace number ${toString n}; workspace number ${toString n}";
   }) digits);
 in
+
 {
+  home.pointerCursor = {
+    enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Ice";
+    size = 24;
+
+    gtk.enable = true;
+    x11.enable = true;
+    sway.enable = true;
+  };
+  
   wayland.windowManager.sway = {
     enable = true;
     package = null;
@@ -110,6 +122,8 @@ in
           "--to-code ${mod}+c" = "exec spotify";
         };
     };
+
+
 
     extraConfig = ''
       corner_radius 10
