@@ -123,6 +123,20 @@ programs.steam = {
     portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
   };
 
+programs.sway = {
+  enable = true;
+  package = pkgs.swayfx;
+  wrapperFeatures.gtk = true;
+  extraOptions = [ "--unsupported-gpu" ];
+  extraSessionCommands = ''
+    export WLR_NO_HARDWARE_CURSORS=1
+    export LIBVA_DRIVER_NAME=nvidia
+    export GBM_BACKEND=nvidia-drm
+    export __GLX_VENDOR_LIBRARY_NAME=nvidia
+    export NVD_BACKEND=direct
+  '';
+};
+
   programs.virt-manager.enable = true;
   virtualisation.libvirtd = {
     enable = true;
