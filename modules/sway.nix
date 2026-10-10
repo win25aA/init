@@ -63,10 +63,12 @@ in
       };
 
       startup = [
-        { command = "noctalia"; }
-        { command = "AmneziaVPN"; }
-      ];
-
+      {
+        command = "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE";
+      }
+      { command = "noctalia"; }
+      { command = "AmneziaVPN"; }
+];
       keybindings =
         bindWorkspaces
         // bindMove

@@ -134,6 +134,9 @@ programs.sway = {
     export GBM_BACKEND=nvidia-drm
     export __GLX_VENDOR_LIBRARY_NAME=nvidia
     export NVD_BACKEND=direct
+    export XDG_CURRENT_DESKTOP=sway
+    export XDG_SESSION_DESKTOP=sway
+    export XDG_SESSION_TYPE=wayland
   '';
 };
 
@@ -343,8 +346,26 @@ programs.sway = {
   # bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true; 
-  
+  # чиню sway
+xdg.portal = {
+  enable = true;
+  extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
+  config.sway = {
+    default = [ "gtk" ];
+    "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
+    "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
+  };
+
+  wlr = {
+    enable = true;
+    settings.screencast = {
+      max_fps = 60;
+      chooser_type = "dmenu";
+      chooser_cmd = "${pkgs.wmenu}/bin/wmenu -p 'Select a screen to share:' -l 10";
+    };
+  };
+};
  
   # система никса
 
