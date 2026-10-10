@@ -54,20 +54,6 @@ in
       window = {
         border = 0;
         titlebar = false;
-        commands = [
-          {
-            criteria = { app_id = "vesktop"; };
-            command = "move scratchpad, scratchpad show";
-          }
-          {
-            criteria = { class = "Spotify"; };
-            command = "move scratchpad, scratchpad show";
-          }
-          {
-            criteria = { app_id = "spotify"; };
-            command = "move scratchpad, scratchpad show";
-          }
-        ];
       };
 
       floating = {
@@ -96,30 +82,30 @@ in
           "${mod}+Up" = "focus up";
           "${mod}+Down" = "focus down";
 
-          "${mod}+f" = "fullscreen toggle";
-          "${mod}+q" = "kill";
-          "${mod}+v" = "floating toggle";
-          "${mod}+m" = "exit";
-          "${mod}+Shift+c" = "reload";
+          "--to-code ${mod}+f" = "fullscreen toggle";
+          "--to-code ${mod}+q" = "kill";
+          "--to-code ${mod}+v" = "floating toggle";
+          "--to-code ${mod}+m" = "exit";
+          "--to-code ${mod}+Shift+c" = "reload";
 
           "${mod}+space" = "exec ${ipc} panel-toggle launcher";
-          "${mod}+Shift+w" = "exec ${ipc} panel-toggle wallpaper";
-          "${mod}+p" = "exec ${ipc} panel-toggle session";
-          "${mod}+z" = "exec ${ipc} panel-toggle control-center";
-          "${mod}+Shift+s" = "exec ${ipc} screenshot-fullscreen";
-          "${mod}+Ctrl+s" = "exec ${ipc} screenshot-region";
+          "--to-code ${mod}+Shift+w" = "exec ${ipc} panel-toggle wallpaper";
+          "--to-code ${mod}+p" = "exec ${ipc} panel-toggle session";
+          "--to-code ${mod}+z" = "exec ${ipc} panel-toggle control-center";
+          "--to-code ${mod}+Shift+s" = "exec ${ipc} screenshot-fullscreen";
+          "--to-code ${mod}+Ctrl+s" = "exec ${ipc} screenshot-region";
 
           "--whole-window ${mod}+BTN_SIDE" = "exec playerctl previous";
           "--whole-window ${mod}+BTN_EXTRA" = "exec playerctl next";
 
-          "${mod}+a" = "exec kitty";
-          "${mod}+e" = "exec thunar";
-          "${mod}+w" = "exec firefox";
-          "${mod}+t" = "exec AyuGram";
-          "${mod}+s" = "exec steam";
+          "--to-code ${mod}+a" = "exec kitty";
+          "--to-code ${mod}+e" = "exec thunar";
+          "--to-code ${mod}+w" = "exec firefox";
+          "--to-code ${mod}+t" = "exec AyuGram";
+          "--to-code ${mod}+s" = "exec steam";
 
-          "${mod}+d" = "exec vesktop; [app_id=\"vesktop\"] scratchpad show";
-          "${mod}+c" = "exec spotify; [class=\"Spotify\"] scratchpad show";
+          "--to-code ${mod}+d" = "exec vesktop";
+          "--to-code ${mod}+c" = "exec spotify";
         };
     };
 
