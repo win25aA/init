@@ -50,7 +50,8 @@ in
     playerctl
     cava
     mpv                
-    loupe              
+    loupe      
+    doas     
     musikcube
     peazip
     tumbler            
