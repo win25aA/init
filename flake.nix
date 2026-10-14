@@ -28,12 +28,7 @@
     };
 # удалить для анстейбла
    hyprland.url = "github:hyprwm/Hyprland?ref=v0.55.4&submodules=1";
-
-    niri = {
-      url = "github:sodiboo/niri-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-  }; 
+};
 
   outputs = inputs@{ self, nixpkgs, home-manager, spotx-nix, ... }: {
     nixosConfigurations.winarowk = nixpkgs.lib.nixosSystem {
@@ -43,7 +38,6 @@
         ./hardware-configuration.nix
         ./configuration.nix
         home-manager.nixosModules.home-manager
-        inputs.niri.nixosModules.niri
       ];
     };
   };

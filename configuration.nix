@@ -160,6 +160,11 @@ programs.sway = {
     ];
   };
 
+
+services.udev.extraRules = ''
+  SUBSYSTEM=="usb", ATTR{idVendor}=="0e8d", MODE="0666", GROUP="users"
+'';
+
   services.xserver.enable = true;
   services.xserver.xkb = {
     layout = "us,ru";
