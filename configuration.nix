@@ -38,6 +38,7 @@ in
     python3
     gpu-screen-recorder-gtk
     protontricks
+    python3Packages.pip
     winetricks     
     ayugram-desktop 
     qbittorrent
