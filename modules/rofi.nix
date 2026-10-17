@@ -75,13 +75,14 @@ in
   '';
   xdg.configFile."rofi/desktop.rasi".text = ''
     @import "${config.home.homeDirectory}/.local/state/bspwm/rofi-colors.rasi"
-    * { background-color: @background; text-color: @foreground; border-color: @outline; spacing: 8px; }
-    window { width: 640px; border: 2px; border-radius: 10px; padding: 16px; }
+    * { background-color: transparent; text-color: @foreground; border-color: @outline; spacing: 8px; }
+    window { width: 640px; background-color: @background; border: 2px; border-radius: 10px; padding: 16px; }
     mainbox { children: [ inputbar, message, listview ]; }
     inputbar { children: [ prompt, entry ]; padding: 8px; }
-    entry { placeholder: "Поиск…"; }
-    listview { lines: 9; columns: 1; fixed-height: false; }
-    element { padding: 8px; border-radius: 6px; }
+    prompt { padding: 0px 12px 0px 0px; }
+    entry { placeholder: "Поиск…"; expand: true; }
+    listview { lines: 10; columns: 1; fixed-height: false; }
+    element { padding: 8px; spacing: 10px; border-radius: 6px; }
     element selected.normal { background-color: @selected; text-color: @on-selected; }
     element-icon { size: 28px; background-color: transparent; }
     element-text { background-color: transparent; text-color: inherit; }

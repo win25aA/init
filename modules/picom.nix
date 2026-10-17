@@ -6,7 +6,10 @@
     use-damage = true;
     shadow = true;
     shadow-radius = 8;
-    shadow-opacity = 0.6;
+    shadow-opacity = 0.35;
+    detect-rounded-corners = true;
+    detect-client-opacity = true;
+    shadow-ignore-shaped = true;
     shadow-offset-x = 0;
     shadow-offset-y = 0;
     shadow-color = "#1a1a1a";
@@ -22,11 +25,16 @@
     # Polybar retains its own original 8px corner geometry and 35px height.
     rounded-corners-exclude = [
       "window_type = 'dock'",
+      "class_g = 'Rofi'",
+      "class_g = 'Dunst'",
       "window_type = 'desktop'",
       "class_g = 'i3lock'",
       "class_g = 'flameshot'"
     ];
     shadow-exclude = [
+      "window_type = 'dock'",
+      "class_g = 'Rofi'",
+      "class_g = 'Dunst'",
       "window_type = 'desktop'",
       "class_g = 'i3lock'",
       "class_g = 'flameshot'"

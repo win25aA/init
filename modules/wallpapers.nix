@@ -25,16 +25,24 @@ let
     [ "$1" = --restore ] || notify-send 'Обои и Matugen' "$(basename "$image")"
   '';
   chooser = pkgs.writeShellScriptBin "choose-wallpaper" ''
-    export PATH=${lib.makeBinPath [ pkgs.findutils pkgs.coreutils pkgs.rofi ]}:$PATH
+    export PATH=${lib.makeBinPath [ pkgs.findutils pkgs.coreutils pkgs.rofi pkgs.imagemagick ]}:$PATH
     mapfile -d "" files < <(find ${lib.escapeShellArg directory} -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' -o -iname '*.bmp' \) -print0 | sort -z)
     [ "''${#files[@]}" -gt 0 ] || exit 0
+    cache="''${XDG_CACHE_HOME:-$HOME/.cache}/bspwm/wallpaper-thumbs"
+    mkdir -p "$cache"
     selection=$(
       for path in "''${files[@]}"; do
         name=$(basename "$path")
         name=''${name//$'\n'/ }
-        printf '%s\0icon\x1f%s\n' "$name" "$path"
+        key=$(printf '%s:%s' "$path" "$(stat -c '%Y:%s' -- "$path")" | sha256sum)
+        thumb="$cache/''${key%% *}.png"
+        if [ ! -s "$thumb" ]; then
+          magick "$path[0]" -auto-orient -thumbnail 256x144^ -gravity center -extent 256x144 "$thumb" 2>/dev/null || rm -f "$thumb"
+        fi
+        # PNG thumbnails also work when Rofi has no WebP pixbuf loader.
+        printf '%s\0icon\x1f%s\n' "$name" "$thumb"
       done | rofi -dmenu -i -no-custom -format i -p 'Обои' \
-        -theme-str 'window { width: 900px; } listview { columns: 3; lines: 3; } element { orientation: vertical; } element-icon { size: 160px; }'
+        -theme-str 'window { width: 88%; } listview { columns: 3; lines: 3; } element { orientation: vertical; } element-icon { size: 128px; } element-text { horizontal-align: 0.5; }'
     ) || exit 0
     [[ "$selection" =~ ^[0-9]+$ ]] || exit 0
     ${setWallpaper}/bin/set-wallpaper "''${files[$selection]}"

@@ -5,7 +5,7 @@ let
     state=$(${pkgs.playerctl}/bin/playerctl status 2>/dev/null || true)
     icon=
     [ "$state" != Playing ] || icon=
-    printf '%%{A1:playerctl previous:} %%{T2}%%{A}%%{A1:playerctl play-pause:} %%{T2}%s%%{A}%%{A1:playerctl next:} %%{T2}%%{A}%%{T-}\n' "$icon"
+    printf '%%{T2}%%{A1:playerctl previous:}%%{A}%%{O7}%%{A1:playerctl play-pause:}%s%%{A}%%{O7}%%{A1:playerctl next:}%%{A}%%{T-}\n' "$icon"
   '';
   bluetooth = pkgs.writeShellScriptBin "bspwm-bluetooth-status" ''
     if ${pkgs.bluez}/bin/bluetoothctl show 2>/dev/null | ${pkgs.gnugrep}/bin/grep -q 'Powered: yes'; then
@@ -54,7 +54,6 @@ let
     done
     printf '[system]\nsys_network_interface = %s\nsys_battery = %s\nsys_adapter = %s\nsys_graphics_card = %s\n' \
       "$interface" "$battery" "$adapter" "$backlight" > "$state/system.ini"
-    export VARINKA_SYSTEM="$state/system.ini" VARINKA_COLORS="$state/polybar-colors.ini"
     PRIMARY=""
     [ ! -r "$state/monitors.env" ] || . "$state/monitors.env"
     pids=()
@@ -62,7 +61,11 @@ let
     trap 'exit 0' TERM INT
     while IFS= read -r monitor; do
       [ -n "$monitor" ] || continue
-      MONITOR="$monitor" polybar -c ${config.xdg.configHome}/polybar/varinka/config.ini varinka-bar &
+      geometry=$(polybar --list-monitors | awk -v target="$monitor:" '$1 == target { print $2; exit }')
+      width=''${geometry%%x*}
+      title_length=24
+      if [[ "$width" =~ ^[0-9]+$ ]] && [ "$width" -lt 1200 ]; then title_length=8; fi
+      MONITOR="$monitor" VARINKA_TITLE_LENGTH="$title_length" polybar -c ${config.xdg.configHome}/polybar/varinka/config.ini varinka-bar &
       pids+=("$!")
       sleep 0.5
     done < <({ [ -z "$PRIMARY" ] || echo "$PRIMARY"; polybar --list-monitors | cut -d: -f1; } | awk '!seen[$0]++')
@@ -70,7 +73,7 @@ let
   '';
 in
 {
-  home.packages = [ polybar media bluetooth updates pkgs.maple-mono.NF pkgs.playerctl pkgs.pavucontrol ];
+  home.packages = [ polybar media bluetooth updates pkgs.maple-mono.NF pkgs.nerd-fonts.symbols-only pkgs.playerctl pkgs.pavucontrol ];
   fonts.fontconfig.enable = true;
   xdg.configFile = {
     "polybar/varinka/config.ini".source = ./polybar/config.ini;
