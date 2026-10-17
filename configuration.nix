@@ -118,6 +118,18 @@ programs.steam = {
   programs.dconf.enable = true;
   programs.nix-ld.enable = true;
   programs.ns-usbloader.enable = true;
+
+  # Add an HM-managed X11 session; keep the existing Wayland sessions/default.
+  services.xserver.displayManager.session = [ {
+    name = "bspwm";
+    manage = "window";
+    start = ''
+      ${pkgs.bash}/bin/bash "$HOME/.xsession-bspwm" &
+      waitPID=$!
+    '';
+  } ];
+  programs.i3lock.enable = true;
+  services.blueman.enable = true;
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -358,6 +370,8 @@ services.udev.extraRules = ''
 xdg.portal = {
   enable = true;
   extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  config.bspwm.default = [ "gtk" ];
+  config."none+bspwm".default = [ "gtk" ];
 
   config.sway = {
     default = [ "gtk" ];
