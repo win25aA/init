@@ -99,6 +99,13 @@ in
     ifuse
   ] ++ [ soundcloud-desktop ];
 
+  # хуйня которую надо удалить для анстейбла, еще в hyprland nix flake nix
+nix.settings = {
+  substituters = [ "https://hyprland.cachix.org" ];
+  trusted-public-keys = [
+    "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+  ];
+};
   # programs.
   programs.firefox.enable = true;
 programs.steam = {
@@ -111,18 +118,13 @@ programs.steam = {
   programs.dconf.enable = true;
   programs.nix-ld.enable = true;
   programs.ns-usbloader.enable = true;
-  # bspwm uses a Home Manager session, not the stock sxhkd launcher.
-  services.xserver.displayManager.session = [ {
-    name = "bspwm";
-    manage = "window";
-    start = ''
-      ${pkgs.bash}/bin/bash -c 'source "$HOME/.xprofile-bspwm"; exec bash "$HOME/.xsession-bspwm"' &
-      waitPID=$!
-    '';
-  } ];
-  services.displayManager.defaultSession = "none+bspwm";
-  programs.i3lock.enable = true;
-  services.blueman.enable = true;
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+    # удалить для анстейбла
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+  };
 
 programs.sway = {
   enable = true;
@@ -138,7 +140,6 @@ programs.sway = {
     export XDG_CURRENT_DESKTOP=sway
     export XDG_SESSION_DESKTOP=sway
     export XDG_SESSION_TYPE=wayland
-    export NIXOS_OZONE_WL=1
   '';
 };
 
@@ -247,7 +248,7 @@ services.udev.extraRules = ''
     package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
   };
 
-  # No global NIXOS_OZONE_WL: bspwm is X11; Sway has its own Wayland environment.
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   # локали и инет
   networking.hostName = "winarowk";
@@ -342,7 +343,6 @@ services.udev.extraRules = ''
     dejavu_fonts
     freefont_ttf
     nerd-fonts.jetbrains-mono
-    nerd-fonts.symbols-only
     liberation_ttf
     unifont
     noto-fonts-cjk-sans
@@ -358,9 +358,6 @@ services.udev.extraRules = ''
 xdg.portal = {
   enable = true;
   extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-
-  config.bspwm.default = [ "gtk" ];
-  config."none+bspwm".default = [ "gtk" ];
 
   config.sway = {
     default = [ "gtk" ];

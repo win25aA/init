@@ -37,9 +37,9 @@
       tab_title_template     "{title}"
       active_tab_font_style   bold
 
-      # Only Matugen supplies colors. Same-user socket for live color reload.
-      allow_remote_control socket-only
-      listen_on unix:''${XDG_RUNTIME_DIR}/kitty-{kitty_pid}
+      # BEGIN_KITTY_THEME
+      include current-theme.conf
+      # END_KITTY_THEME
     '';
   };
 }
