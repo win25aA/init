@@ -3,13 +3,13 @@
 let
   # Начальные значения нужны до первого выбора обоев. Все шаблоны ниже — здесь же.
   initialColors = {
-    surface = "#212529"; on_surface = "#f8f9fa";
+    surface = "#212529"; surface_container = "#272b2f"; on_surface = "#f8f9fa";
     primary = "#dee2e6"; on_primary = "#212529";
     secondary = "#adb5bd"; tertiary = "#e9ecef";
     error = "#dee2e6"; outline = "#8c8c8c";
     outline_variant = "#495057"; on_surface_variant = "#ced4da";
   };
-  templateNames = [ "polybar-colors.ini" "rofi-colors.rasi" "dunst-colors.conf" "bspwm-colors.sh" "lock-colors.sh" ];
+  templateNames = [ "silvia-colors.ini" "polybar-colors.ini" "rofi-colors.rasi" "dunst-colors.conf" "bspwm-colors.sh" "lock-colors.sh" ];
   initialTemplate = name:
     let
       names = builtins.attrNames initialColors;
@@ -47,6 +47,11 @@ in
     # --source-color-index, он передаётся в хуке noctalia), но оставляем
     # на будущее — после обновления matugen флаг станет не нужен.
     source_color_index = 0
+
+    [templates.polybar_silvia]
+    index = 99
+    input_path = "~/.config/matugen/silvia-colors.ini"
+    output_path = "~/.local/state/bspwm/silvia-colors.ini"
 
     [templates.x11_0]
     index = 100
@@ -265,6 +270,33 @@ in
     grey = {{colors.outline.default.hex}}
     indigo = {{colors.tertiary.default.hex}}
     blue-gray = {{colors.outline.default.hex}}
+  '';
+
+  # Silvia: raised surface, readable inactive workspaces and tonal module accents.
+  # The original Gruvbox layout stays; the wallpaper, not fixed Gruvbox RGB, sets hues.
+  xdg.configFile."matugen/silvia-colors.ini".text = ''
+    [color]
+    bg = {{colors.surface_container.default.hex}}
+    bg-alt = {{colors.outline_variant.default.hex}}
+    fg = {{colors.on_surface.default.hex}}
+    trans = #00000000
+    white = {{colors.on_surface.default.hex}}
+    black = {{colors.surface.default.hex}}
+    red = {{colors.error.default.hex}}
+    pink = {{colors.tertiary.default.hex}}
+    purple = {{colors.tertiary.default.hex}}
+    blue = {{colors.primary.default.hex}}
+    cyan = {{colors.secondary.default.hex}}
+    teal = {{colors.secondary.default.hex}}
+    green = {{colors.primary.default.hex}}
+    lime = {{colors.primary.default.hex}}
+    yellow = {{colors.tertiary.default.hex}}
+    amber = {{colors.tertiary.default.hex}}
+    orange = {{colors.error.default.hex}}
+    brown = {{colors.secondary.default.hex}}
+    grey = {{colors.outline.default.hex}}
+    indigo = {{colors.secondary.default.hex}}
+    blue-gray = {{colors.on_surface_variant.default.hex}}
   '';
 
   xdg.configFile."matugen/rofi-colors.rasi".text = ''

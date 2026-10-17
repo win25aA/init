@@ -1,0 +1,8 @@
+Original Silvia Polybar by gh0stzk / z0mbi3, GPL-3.0.
+https://github.com/gh0stzk/dotfiles/tree/a3f0ea1f7310a89fb1fbcdad9af6e96b15488867/config/bspwm/rices/silvia
+Pinned upstream config.ini and modules.ini adapted directly, not redrawn.
+Full-width 45px geometry, circular workspaces, module order and underlines retained.
+Profile, weather and network modules omitted as requested. Music and power retained.
+Fonts use JetBrains Mono, Font Awesome Solid and monospaced Nerd Symbols for Material glyphs.
+Actions use existing NixOS/Home Manager commands. All colors come from Matugen.
+License: ../LICENSE (GPL-3.0).

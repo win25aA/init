@@ -44,12 +44,13 @@ let
         esac
         ;;
       control)
-        choice=$(printf '%s\n' 'Громкость и устройства' 'Сеть' 'Bluetooth' 'Обои и Matugen' 'Буфер обмена' 'Уведомления' 'Ночной свет' 'Скриншот области' 'Проверить nixpkgs' 'Сессия' | choose 'Управление') || exit 0
+        choice=$(printf '%s\n' 'Громкость и устройства' 'Сеть' 'Bluetooth' 'Обои и Matugen' 'Тема панели' 'Буфер обмена' 'Уведомления' 'Ночной свет' 'Скриншот области' 'Проверить nixpkgs' 'Сессия' | choose 'Управление') || exit 0
         case "$choice" in
           'Громкость и устройства') pavucontrol ;;
           Сеть) nm-connection-editor ;;
           Bluetooth) blueman-manager ;;
           'Обои и Matugen') choose-wallpaper ;;
+          'Тема панели') polybar-theme ;;
           'Буфер обмена') bspwm-clipboard ;;
           Уведомления) bspwm-notifications ;;
           'Ночной свет') bspwm-nightlight ;;

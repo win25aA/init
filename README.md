@@ -8,7 +8,7 @@ bspwm добавлен рядом с существующими Wayland-сесс
 - `configuration.nix` — системные настройки, регистрация `bspwm-hm` в SDDM, PAM.
 - `home.nix` — импорты пользовательских модулей.
 - `modules/bspwm.nix` — окна, мониторы, автозапуск через отдельный systemd target.
-- `modules/polybar.nix` — запуск оригинальной Varinka и её действия.
+- `modules/polybar.nix` — запуск оригинальных Varinka / Silvia, переключение и действия.
 - `modules/polybar/` — рабочие INI, лицензия и ссылка на оригинал, без дубликатов.
 - `modules/sxhkd.nix` — бинды из Sway и управление звуком.
 - `modules/picom.nix` — скругления 10px, тени и размытие GLX.
@@ -54,6 +54,35 @@ Matugen с `scheme-content --source-color-index 0`, затем feh. При ош�
 до первой генерации. Хук в Wayland не трогает службы bspwm.
 Службы X11 стартуют только с `bspwm-session.target` и останавливаются при выходе.
 Погода, Wallhaven и PrismLauncher-плагины не переносились.
+
+## Темы Polybar
+
+Varinka сохранена и остаётся темой по умолчанию. Silvia — вторая оригинальная
+панель gh0stzk: во всю ширину, круглые индикаторы рабочих столов и подчёркивания
+модулей. В Silvia нет профиля, погоды и сети; музыка и питание оставлены.
+Другие виджеты из исходного rice не устанавливаются.
+
+Переключение без пересборки:
+
+```sh
+polybar-theme             # меню Varinka / Silvia
+polybar-theme silvia
+polybar-theme varinka
+```
+
+Также: Super+Z → «Тема панели»; в Silvia — правый клик по значку Arch.
+Выбор сохраняется в `~/.local/state/bspwm/polybar-theme` и применяется к обоим
+мониторам. При переключении в Sway/Hyprland сохраняется только выбор для следующего
+входа в bspwm: службы X11 не стартуют. Обои и настройки остальных приложений
+переключатель не меняет. Палитры обновляются по сохранённым обоям перед
+переключением; при ошибке Matugen старая тема остаётся.
+
+У Silvia отдельный шаблон `silvia-colors.ini` внутри `modules/matugen.nix`:
+фон — Material surface_container, текст — on_surface, акценты — primary /
+secondary / tertiary, питание — error. После смены обоев Matugen обновляет обе
+палитры; активная тема остаётся выбранной. У Varinka прежний шаблон сохранён.
+Исходные INI Silvia адаптированы из закреплённой ревизии автора; ссылка и список
+адаптаций — `modules/polybar/silvia/SOURCE`, общая лицензия — `modules/polybar/LICENSE`.
 
 ## Важные ограничения
 
