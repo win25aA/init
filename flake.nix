@@ -22,12 +22,15 @@
  
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     
+    # hyprland input retained only to keep the supplied lock file unchanged.
+    # No Hyprland module or package is enabled in the bspwm configuration.
+    hyprland.url = "github:hyprwm/Hyprland?ref=v0.55.4&submodules=1";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs"; 
     };
-# удалить для анстейбла
-   hyprland.url = "github:hyprwm/Hyprland?ref=v0.55.4&submodules=1";
+
 };
 
   outputs = inputs@{ self, nixpkgs, home-manager, spotx-nix, ... }: {

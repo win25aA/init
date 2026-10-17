@@ -235,7 +235,7 @@ download_dir = "/etc/nixos/wallpapers/"
 copy_to_wallpaper_dir = true
 
 [plugins]
-enabled = [ "radimous/prismlauncher-instances", "noctalia/wallhaven" ]
+enabled = []
 
 [shell]
 avatar_path = "/etc/nixos/wallpapers/.face"
