@@ -16,8 +16,8 @@ in
 
 
       logo = {
-        source = if builtins.pathExists ../wallpapers/.face then "${logoFile}" else "nixos";
-        type = if builtins.pathExists ../wallpapers/.face then "kitty" else "builtin";
+        source = "${logoFile}";
+        type = "kitty";
         height = 15;
         width = 35;
         padding = {

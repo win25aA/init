@@ -15,7 +15,7 @@
     output_path = "~/.config/btop/themes/matugen.theme"
 
     [templates.kitty]
-    input_path = "~/.config/matugen/kitty.conf"
+    input_path = "/home/winarowk/.config/matugen/kitty.conf"
     output_path = "~/.config/kitty/matugen-colors.conf"
 
     [templates.fish]
@@ -34,17 +34,10 @@
     input_path = "~/.config/matugen/mpv-colors.conf"
     output_path = "~/.config/mpv/matugen-colors.conf"
 
-    [templates.bspwm_palette]
-    input_path = "~/.config/matugen/bspwm-colors.json"
-    output_path = "~/.config/bspwm/colors.json"
-    index = 100
-    post_hook = "bspwm-desktop theme-reload"
-
   '';
 
 
   xdg.configFile."matugen/kitty.conf".text = ''
-    background            {{colors.surface.default.hex}}
     foreground            {{colors.on_surface.default.hex}}
     selection_foreground  {{colors.surface.default.hex}}
     selection_background  {{colors.primary.default.hex}}
@@ -185,25 +178,5 @@
 
   xdg.configFile."mpv/mpv.conf".text = ''
     include=~~/matugen-colors.conf
-  '';
-  xdg.configFile."matugen/bspwm-colors.json".text = ''
-{
-  "surface": "{{colors.surface.default.hex}}",
-  "on_surface": "{{colors.on_surface.default.hex}}",
-  "surface_variant": "{{colors.surface_variant.default.hex}}",
-  "on_surface_variant": "{{colors.on_surface_variant.default.hex}}",
-  "primary": "{{colors.primary.default.hex}}",
-  "on_primary": "{{colors.on_primary.default.hex}}",
-  "secondary": "{{colors.secondary.default.hex}}",
-  "tertiary": "{{colors.tertiary.default.hex}}",
-  "error": "{{colors.error.default.hex}}",
-  "outline": "{{colors.outline.default.hex}}",
-  "outline_variant": "{{colors.outline_variant.default.hex}}",
-  "surface_container": "{{colors.surface_container.default.hex}}",
-  "surface_container_high": "{{colors.surface_container_high.default.hex}}",
-  "surface_container_highest": "{{colors.surface_container_highest.default.hex}}",
-  "primary_container": "{{colors.primary_container.default.hex}}",
-  "on_primary_container": "{{colors.on_primary_container.default.hex}}"
-}
   '';
 }
