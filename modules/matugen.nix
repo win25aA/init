@@ -10,6 +10,14 @@
     # на будущее — после обновления matugen флаг станет не нужен.
     source_color_index = 0
 
+    # One template + one hook: derive X11 theme files only after the JSON is ready.
+    # Does not start bspwm services while running in Sway/Hyprland.
+    [templates.varinka]
+    index = 100
+    input_path = "~/.config/matugen/varinka-colors.json"
+    output_path = "~/.local/state/varinka/colors.json"
+    post_hook = "${config.home.profileDirectory}/bin/varinka reload-colors"
+
     [templates.btop]
     input_path = "~/.config/matugen/btop-colors.theme"
     output_path = "~/.config/btop/themes/matugen.theme"

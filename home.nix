@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./modules/bspwm.nix
     ./modules/hyprland.nix
     ./modules/kitty.nix
     ./modules/fish.nix

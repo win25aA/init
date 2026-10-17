@@ -1,0 +1,61 @@
+# Same shortcuts as the supplied Sway config. sxhkd is started with -m 1.
+super + {1-9,0}
+    bspc desktop -f '{1-9,10}'
+super + ctrl + {1-9,0}
+    varinka move '{1-9,10}'
+super + {Left,Right,Up,Down}
+    bspc node -f {west,east,north,south}
+super + f
+    bspc node -t ~fullscreen
+super + q
+    bspc node -c
+super + v
+    bspc node -t ~floating
+super + m
+    varinka exit
+super + shift + c
+    varinka reload
+super + space
+    varinka launcher
+super + shift + w
+    varinka wallpaper
+super + p
+    varinka power
+super + z
+    varinka control
+super + shift + s
+    varinka screenshot full
+super + ctrl + s
+    varinka screenshot region
+super + {a,e,w,t,s,d,c}
+    varinka exec {kitty,thunar,firefox,AyuGram,steam,vesktop,spotify}
+# Monitor-local desktop cycling; no global 5 -> 6 jump.
+super + button4
+    bspc desktop -f prev.local
+super + button5
+    bspc desktop -f next.local
+super + button8
+    playerctl previous
+super + button9
+    playerctl next
+# Additional replacements for Noctalia functions.
+super + l
+    varinka lock
+super + shift + v
+    varinka clipboard
+super + n
+    varinka notifications
+XF86AudioRaiseVolume
+    varinka audio up
+XF86AudioLowerVolume
+    varinka audio down
+XF86AudioMute
+    varinka audio mute
+XF86AudioMicMute
+    varinka audio mic
+XF86AudioPlay
+    playerctl play-pause
+XF86AudioPrev
+    playerctl previous
+XF86AudioNext
+    playerctl next
