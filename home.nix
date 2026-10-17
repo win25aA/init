@@ -3,6 +3,16 @@
 {
   imports = [
     ./modules/bspwm.nix
+    ./modules/polybar.nix
+    ./modules/sxhkd.nix
+    ./modules/picom.nix
+    ./modules/rofi.nix
+    ./modules/dunst.nix
+    ./modules/wallpapers.nix
+    ./modules/screenshots.nix
+    ./modules/lockscreen.nix
+    ./modules/clipboard.nix
+
     ./modules/hyprland.nix
     ./modules/kitty.nix
     ./modules/fish.nix

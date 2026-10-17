@@ -1,5 +1,43 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
+let
+  # Начальные значения нужны до первого выбора обоев. Все шаблоны ниже — здесь же.
+  initialColors = {
+    surface = "#212529"; on_surface = "#f8f9fa";
+    primary = "#dee2e6"; on_primary = "#212529";
+    secondary = "#adb5bd"; tertiary = "#e9ecef";
+    error = "#dee2e6"; outline = "#8c8c8c";
+    outline_variant = "#495057"; on_surface_variant = "#ced4da";
+  };
+  templateNames = [ "polybar-colors.ini" "rofi-colors.rasi" "dunst-colors.conf" "bspwm-colors.sh" "lock-colors.sh" ];
+  initialTemplate = name:
+    let
+      names = builtins.attrNames initialColors;
+      tokens = (map (key: "{{colors.${key}.default.hex}}") names)
+        ++ (map (key: "{{colors.${key}.default.hex_stripped}}") names);
+      values = (map (key: initialColors.${key}) names)
+        ++ (map (key: lib.removePrefix "#" initialColors.${key}) names);
+    in lib.replaceStrings tokens values config.xdg.configFile."matugen/${name}".text;
+  reloadColors = pkgs.writeShellScriptBin "bspwm-reload-colors" ''
+    export PATH=${lib.makeBinPath [ pkgs.bspwm pkgs.dunst pkgs.polybar pkgs.systemd pkgs.procps pkgs.coreutils ]}:$PATH
+    # Matugen используется также в Noctalia: не трогаем Wayland-сессии.
+    [ "$XDG_SESSION_TYPE" = x11 ] && [ "$XDG_CURRENT_DESKTOP" = bspwm ] || exit 0
+    bspc query -M >/dev/null 2>&1 || exit 0
+    state="$HOME/.local/state/bspwm"
+    [ ! -r "$state/bspwm-colors.sh" ] || . "$state/bspwm-colors.sh"
+    if [ -r "$state/dunst-colors.conf" ]; then
+      cat ${config.xdg.configHome}/dunst/dunstrc "$state/dunst-colors.conf" > "$state/dunstrc.new"
+      mv "$state/dunstrc.new" "$state/dunstrc"
+      if systemctl --user is-active --quiet bspwm-dunst.service; then
+        dunstctl reload "$state/dunstrc" || true
+      fi
+    fi
+    if systemctl --user is-active --quiet bspwm-polybar.service; then
+      polybar-msg cmd restart >/dev/null 2>&1 || true
+    fi
+    pkill -USR1 -u "$(id -u)" -x kitty 2>/dev/null || true
+  '';
+in
 {
   xdg.configFile."matugen/config.toml".text = ''
     [config]
@@ -10,13 +48,31 @@
     # на будущее — после обновления matugen флаг станет не нужен.
     source_color_index = 0
 
-    # One template + one hook: derive X11 theme files only after the JSON is ready.
-    # Does not start bspwm services while running in Sway/Hyprland.
-    [templates.varinka]
+    [templates.x11_0]
     index = 100
-    input_path = "~/.config/matugen/varinka-colors.json"
-    output_path = "~/.local/state/varinka/colors.json"
-    post_hook = "${config.home.profileDirectory}/bin/varinka reload-colors"
+    input_path = "~/.config/matugen/polybar-colors.ini"
+    output_path = "~/.local/state/bspwm/polybar-colors.ini"
+
+    [templates.x11_1]
+    index = 101
+    input_path = "~/.config/matugen/rofi-colors.rasi"
+    output_path = "~/.local/state/bspwm/rofi-colors.rasi"
+
+    [templates.x11_2]
+    index = 102
+    input_path = "~/.config/matugen/dunst-colors.conf"
+    output_path = "~/.local/state/bspwm/dunst-colors.conf"
+
+    [templates.x11_3]
+    index = 103
+    input_path = "~/.config/matugen/bspwm-colors.sh"
+    output_path = "~/.local/state/bspwm/bspwm-colors.sh"
+
+    [templates.x11_4]
+    index = 104
+    input_path = "~/.config/matugen/lock-colors.sh"
+    output_path = "~/.local/state/bspwm/lock-colors.sh"
+    post_hook = "${reloadColors}/bin/bspwm-reload-colors"
 
     [templates.btop]
     input_path = "~/.config/matugen/btop-colors.theme"
@@ -187,4 +243,82 @@
   xdg.configFile."mpv/mpv.conf".text = ''
     include=~~/matugen-colors.conf
   '';
+
+  # X11: шаблоны цветов живут в этом модуле, как и остальные шаблоны Matugen.
+  xdg.configFile."matugen/polybar-colors.ini".text = ''
+    [color]
+    bg = #FA{{colors.surface.default.hex_stripped}}
+    bg-alt = {{colors.outline_variant.default.hex}}
+    fg = {{colors.on_surface.default.hex}}
+    red = {{colors.primary.default.hex}}
+    pink = {{colors.tertiary.default.hex}}
+    purple = {{colors.on_surface_variant.default.hex}}
+    blue = {{colors.outline_variant.default.hex}}
+    cyan = {{colors.secondary.default.hex}}
+    teal = {{colors.tertiary.default.hex}}
+    green = {{colors.secondary.default.hex}}
+    lime = {{colors.tertiary.default.hex}}
+    yellow = {{colors.tertiary.default.hex}}
+    amber = {{colors.secondary.default.hex}}
+    orange = {{colors.error.default.hex}}
+    brown = {{colors.secondary.default.hex}}
+    grey = {{colors.outline.default.hex}}
+    indigo = {{colors.tertiary.default.hex}}
+    blue-gray = {{colors.outline.default.hex}}
+  '';
+
+  xdg.configFile."matugen/rofi-colors.rasi".text = ''
+    * {
+      background: {{colors.surface.default.hex}};
+      foreground: {{colors.on_surface.default.hex}};
+      selected: {{colors.primary.default.hex}};
+      on-selected: {{colors.on_primary.default.hex}};
+      outline: {{colors.outline_variant.default.hex}};
+    }
+  '';
+
+  xdg.configFile."matugen/dunst-colors.conf".text = ''
+    [urgency_low]
+      timeout = 4
+      background = "{{colors.surface.default.hex}}"
+      foreground = "{{colors.on_surface.default.hex}}"
+      frame_color = "{{colors.outline_variant.default.hex}}"
+    
+    [urgency_normal]
+      timeout = 7
+      background = "{{colors.surface.default.hex}}"
+      foreground = "{{colors.on_surface.default.hex}}"
+      frame_color = "{{colors.primary.default.hex}}"
+    
+    [urgency_critical]
+      timeout = 0
+      background = "{{colors.surface.default.hex}}"
+      foreground = "{{colors.on_surface.default.hex}}"
+      frame_color = "{{colors.error.default.hex}}"
+    
+  '';
+
+  xdg.configFile."matugen/bspwm-colors.sh".text = ''
+    bspc config normal_border_color "{{colors.outline_variant.default.hex}}"
+    bspc config active_border_color "{{colors.secondary.default.hex}}"
+    bspc config focused_border_color "{{colors.primary.default.hex}}"
+    bspc config presel_feedback_color "{{colors.primary.default.hex}}"
+  '';
+
+  xdg.configFile."matugen/lock-colors.sh".text = ''
+    bg="{{colors.surface.default.hex_stripped}}"
+    fg="{{colors.on_surface.default.hex_stripped}}"
+    primary="{{colors.primary.default.hex_stripped}}"
+    muted="{{colors.on_surface_variant.default.hex_stripped}}"
+    error="{{colors.error.default.hex_stripped}}"
+  '';
+
+  home.packages = [ reloadColors ];
+  home.activation.matugenX11Defaults = lib.hm.dag.entryAfter [ "writeBoundary" ] (''
+    $DRY_RUN_CMD mkdir -p "$HOME/.local/state/bspwm"
+  '' + lib.concatMapStringsSep "\n" (name: ''
+    if [ ! -e "$HOME/.local/state/bspwm/${name}" ]; then
+      $DRY_RUN_CMD install -m 600 ${pkgs.writeText "initial-${name}" (initialTemplate name)} "$HOME/.local/state/bspwm/${name}"
+    fi
+  '') templateNames);
 }

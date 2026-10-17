@@ -29,7 +29,33 @@ let
   };
 in
 {
-  imports = [ ./system/bspwm-session.nix ];
+  # Отдельная X11-сессия bspwm; Sway/Hyprland остаются без изменений.
+  services.xserver.windowManager.session = [ {
+    name = "bspwm-hm";
+    start = ''
+      unset WAYLAND_DISPLAY SWAYSOCK HYPRLAND_INSTANCE_SIGNATURE NIXOS_OZONE_WL
+      unset GBM_BACKEND WLR_NO_HARDWARE_CURSORS
+      export XDG_CURRENT_DESKTOP=bspwm
+      export XDG_SESSION_DESKTOP=bspwm
+      export XDG_SESSION_TYPE=x11
+      unset QT_QPA_PLATFORM GDK_BACKEND SDL_VIDEODRIVER
+      export _JAVA_AWT_WM_NONREPARENTING=1
+      ${pkgs.systemd}/bin/systemctl --user unset-environment \
+        WAYLAND_DISPLAY SWAYSOCK HYPRLAND_INSTANCE_SIGNATURE NIXOS_OZONE_WL GBM_BACKEND || true
+      ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd \
+        DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE \
+        NIXOS_OZONE_WL= WAYLAND_DISPLAY= SWAYSOCK= HYPRLAND_INSTANCE_SIGNATURE=
+      (
+        ${pkgs.bspwm}/bin/bspwm
+        ${pkgs.systemd}/bin/systemctl --user stop bspwm-session.target
+      ) &
+      waitPID=$!
+    '';
+  } ];
+  # i3lock-color uses the i3lock PAM service; no setuid workaround is needed.
+  security.pam.services.i3lock = { };
+  services.blueman.enable = true;
+
   # pkgs
   environment.systemPackages = with pkgs; [
     inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
@@ -357,6 +383,7 @@ services.udev.extraRules = ''
   hardware.bluetooth.powerOnBoot = true; 
   # чиню sway
 xdg.portal = {
+  config.bspwm.default = [ "gtk" ];
   enable = true;
   extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
