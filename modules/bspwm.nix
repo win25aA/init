@@ -92,6 +92,7 @@ in
     monitors = { };
     extraConfigEarly = ''
       ${monitors}
+      ${pkgs.xsetroot}/bin/xsetroot -cursor_name left_ptr
       ${pkgs.setxkbmap}/bin/setxkbmap -layout us,ru -option "" -option grp:alt_shift_toggle
     '';
     settings = {
