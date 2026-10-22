@@ -1,9 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
-# Polybar из риса Isabel — gh0stzk/dotfiles (bars/bar09)
 let
   launch = pkgs.writeShellScriptBin "polybar-launch" ''
-    # Запуск polybar: isa-bar на основном мониторе (с треем), isa-bar-secondary на остальных
 
     pkill -x polybar
     while pgrep -x polybar >/dev/null; do sleep 0.1; done
@@ -21,9 +19,7 @@ let
     done
   '';
 
-  # «Исполнитель - Название», без кнопок управления
   media = pkgs.writeShellScriptBin "polybar-media" ''
-    # Текущий трек для polybar: «Исполнитель - Название» (без кнопок управления)
 
     playerctl --follow metadata --format '{{status}}|||{{artist}}|||{{title}}' 2>/dev/null |
     while IFS= read -r line; do
@@ -38,13 +34,11 @@ let
       fi | sed 's/%{/%%{/g'
     done
 
-    # плееров нет — пустой модуль (polybar перезапустит скрипт сам)
     echo ""
     sleep 5
   '';
 
   notify = pkgs.writeShellScriptBin "polybar-notify" ''
-    # Колокольчик уведомлений: обычный / перечёркнутый в режиме «Не беспокоить»
 
     if [ "$(dunstctl is-paused 2>/dev/null)" = "true" ]; then
       echo "%{T4}"$'\uf1f6'"%{T-}"
@@ -60,9 +54,6 @@ in
   fonts.fontconfig.enable = true;
 
   xdg.configFile."polybar/config.ini".text = ''
-    ; Polybar из риса Isabel — gh0stzk/dotfiles (bars/bar09), адаптировано под NixOS.
-    ; Оригинал: https://github.com/gh0stzk/dotfiles
-    ; Цвета берутся из matugen-colors.ini, который генерирует matugen.
 
     [global/wm]
     margin-bottom = 0
@@ -77,7 +68,7 @@ in
     dpi = 96
     override-redirect = false
 
-    bottom = true
+    bottom = false
     fixed-center = false
 
     width = 100%
@@ -103,14 +94,9 @@ in
     module-margin-left = 0
     module-margin-right = 0
 
-    ; один шрифт на всё: кириллица + все иконки. Вариант Propo — у иконок
-    ; реальная ширина, поэтому они не наезжают на соседние символы
     font-0 = "JetBrainsMono Nerd Font Propo:style=Bold:size=10;3"
-    ; лаунчер NixOS
     font-1 = "JetBrainsMono Nerd Font Propo:size=15;4"
-    ; иконки рабочих столов
     font-2 = "JetBrainsMono Nerd Font Propo:size=13;4"
-    ; иконки модулей — чуть крупнее текста и по центру строки
     font-3 = "JetBrainsMono Nerd Font Propo:size=11;3"
 
     modules-left = launcher sep2 bspwm sep2 mplayer
@@ -127,8 +113,6 @@ in
     cursor-click = pointer
     cursor-scroll =
 
-    ; второй монитор — то же самое, только без трея (трей может быть один)
-    ; второй монитор узкий (1024) — без трея, трека и диска
     [bar/isa-bar-secondary]
     inherit = bar/isa-bar
     modules-left = launcher sep2 bspwm
@@ -147,10 +131,6 @@ in
   '';
 
   xdg.configFile."polybar/modules.ini".text = ''
-    ;  Модули из Isabel (gh0stzk/dotfiles, bars/bar09/modules.ini).
-    ;  Убрано: погода, карточка пользователя, кнопки mpd, сеть, обновления,
-    ;  батарея, bluetooth, пипетка, переключатель раскладок bspwm.
-    ;  Добавлено из noctalia: трек плеера, уведомления, меню управления.
 
     [module/date]
     type = internal/date
@@ -166,8 +146,6 @@ in
     format-prefix-foreground = ''${color.blue}
 
     label = "%date%%time%"
-
-    ######################################################
 
     [module/filesystem]
     type = internal/fs
@@ -189,8 +167,6 @@ in
     label-mounted = "%used% "
     label-mounted-foreground = ''${color.grey}
     label-unmounted = %mountpoint%: not mounted
-
-    ######################################################
 
     [module/pulseaudio]
     type = internal/pulseaudio
@@ -217,8 +193,6 @@ in
     ramp-volume-font = 4
 
     click-right = pavucontrol
-
-    ######################################################
 
     [module/bspwm]
     type = internal/bspwm
@@ -252,8 +226,6 @@ in
     label-empty-foreground = ''${color.grey}
     label-empty-font = 3
 
-    ######################################################
-
     [module/title]
     type = internal/xwindow
 
@@ -268,8 +240,6 @@ in
     label-empty = "NixOS"
     label-empty-foreground = ''${color.grey}
 
-    ######################################################
-
     [module/launcher]
     type = custom/text
     label = 󱄅
@@ -278,21 +248,15 @@ in
 
     click-left = rofi -show drun
 
-    ######################################################
-
     [module/sep]
     type = custom/text
     label = "  "
     label-foreground = ''${color.bg}
 
-    ######################################################
-
     [module/sep2]
     type = custom/text
     label = " 󰇙 "
     label-foreground = ''${color.indigo}
-
-    ######################################################
 
     [module/cpu_bar]
     type = internal/cpu
@@ -304,8 +268,6 @@ in
 
     label = "%percentage%% "
     label-foreground = ''${color.grey}
-
-    ######################################################
 
     [module/memory_bar]
     type = internal/memory
@@ -319,9 +281,6 @@ in
     label = "%used% "
     label-foreground = ''${color.grey}
 
-    ######################################################
-
-    ; иконка ноты из Isabel + «Исполнитель - Трек» текущего плеера (без кнопок)
     [module/mplayer]
     type = custom/script
     exec = polybar-media
@@ -336,8 +295,6 @@ in
     label-maxlen = 40
     label-foreground = ''${color.fg}
 
-    ######################################################
-
     [module/power]
     type = custom/text
     label = ""
@@ -346,9 +303,6 @@ in
 
     click-left = rofi-power
 
-    ######################################################
-
-    ; уведомления (dunst): ЛКМ — «не беспокоить», ПКМ — история
     [module/notify]
     type = custom/script
     exec = polybar-notify
@@ -361,9 +315,6 @@ in
     click-left = dunstctl set-paused toggle
     click-right = rofi-notifications
 
-    ######################################################
-
-    ; меню управления (вместо control center из noctalia)
     [module/control]
     type = custom/text
     label = ""
@@ -371,8 +322,6 @@ in
     label-foreground = ''${color.blue}
 
     click-left = rofi-control
-
-    #####################################################
 
     [module/tray]
     type = internal/tray

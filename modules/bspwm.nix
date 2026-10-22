@@ -1,20 +1,15 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  # xorg.* постепенно переезжает в корень nixpkgs
   xpkg = name: pkgs.${name} or pkgs.xorg.${name};
 
-  # мониторы как в sway/Hyprland: DVI 1440x900@75 слева, HDMI 1024x768@70 справа (1440,355)
   monitors = pkgs.writeShellScriptBin "bspwm-monitors" ''
-    # На X11 (NVIDIA) выходы называются DVI-D-0 / HDMI-0 вместо DVI-D-1 / HDMI-A-1,
-    # поэтому ищем их по типу разъёма. Можно задать вручную: BSPWM_MAIN=… BSPWM_SECOND=…
 
     connected=$(xrandr --query | awk '/ connected/ { print $1 }')
     second=''${BSPWM_SECOND:-$(grep -m1 '^HDMI' <<<"$connected")}
     main=''${BSPWM_MAIN:-$(grep -v -x -F "''${second:-none}" <<<"$connected" | head -n1)}
 
-    # выставить режим с нужной частотой; если драйвер его не отдаёт — добавить через cvt
-    set_mode() { # выход ширина высота частота позиция [доп. флаги]
+    set_mode() {
       local out=$1 w=$2 h=$3 hz=$4 pos=$5; shift 5
       xrandr --output "$out" --mode "''${w}x''${h}" --rate "$hz" --pos "$pos" --rotate normal "$@" && return
       local line name
@@ -26,18 +21,16 @@ let
         || xrandr --output "$out" --mode "''${w}x''${h}" --pos "$pos" --rotate normal "$@"
     }
 
-    # DPI 96: иначе X берёт его из EDID, и Firefox/GTK/polybar становятся огромными
     xrdb -merge <<<"Xft.dpi: 96"
 
     if [ -n "$main" ] && [ -n "$second" ]; then
       set_mode "$main"   1440 900 74.98 0x0 --primary
       set_mode "$second" 1024 768 70.07 1440x355
       xrandr --dpi 96
-      sleep 0.3   # дать bspwm увидеть новую раскладку
+      sleep 0.3
       bspc monitor "$main" -d 1 2 3 4 5
       bspc monitor "$second" -d 6 7 8 9 10
       bspc wm -O "$main" "$second"
-      # лишние мониторы, которые bspwm мог создать сам (например, при клоне экранов)
       for m in $(bspc query -M --names); do
         [ "$m" = "$main" ] || [ "$m" = "$second" ] || bspc monitor "$m" -r
       done
@@ -48,10 +41,7 @@ let
     fi
   '';
 
-  # обои + перегенерация цветов matugen (как хук noctalia)
   wallpaper = pkgs.writeShellScriptBin "bspwm-wallpaper" ''
-    # bspwm-wallpaper <картинка> [--no-reload]
-    # Ставит обои и перегенерирует ВСЕ цвета через matugen (как хук noctalia).
 
     wall=''${1:-}
     if [ ! -f "$wall" ]; then
@@ -78,7 +68,6 @@ let
   '';
 
   autostart = pkgs.writeShellScriptBin "bspwm-autostart" ''
-    # Автозапуск. Безопасно перезапускать (super + alt + r): ничего не дублируется.
 
     cache="''${XDG_CACHE_HOME:-$HOME/.cache}/bspwm-wallpaper"
     default_wall="/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
@@ -89,7 +78,6 @@ let
 
     xsetroot -cursor_name left_ptr
 
-    # цвета от matugen: при первом запуске генерируем, дальше просто ставим обои
     if [ ! -f "${config.xdg.configHome}/polybar/matugen-colors.ini" ]; then
       ${wallpaper}/bin/bspwm-wallpaper "$wall" --no-reload
     else
@@ -108,11 +96,9 @@ let
   '';
 
   lock = pkgs.writeShellScriptBin "bspwm-lock" ''
-    # Локскрин (замена локскрина noctalia): размытый скрин + цвета matugen
 
     pgrep -x 'i3lock(-color)?' >/dev/null && exit 0
 
-    # shellcheck disable=SC1091
     [ -f "${config.xdg.configHome}/i3lock/matugen-colors.sh" ] && . "${config.xdg.configHome}/i3lock/matugen-colors.sh"
 
     img="''${XDG_RUNTIME_DIR:-/tmp}/bspwm-lock.png"
@@ -145,7 +131,6 @@ let
   '';
 
   screenshot = pkgs.writeShellScriptBin "bspwm-screenshot" ''
-    # bspwm-screenshot full|region — сохраняет в ~/Pictures/Screenshots и копирует в буфер
 
     dir="''${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots"
     mkdir -p "$dir"
@@ -161,7 +146,6 @@ let
   '';
 
   volume = pkgs.writeShellScriptBin "bspwm-volume" ''
-    # bspwm-volume up|down|mute — громкость + OSD-уведомление
 
     sink=@DEFAULT_AUDIO_SINK@
     case "''${1:-}" in
@@ -202,10 +186,10 @@ in
     extraConfigEarly = "${monitors}/bin/bspwm-monitors";
 
     settings = {
-      border_width = 0;              # как в Hyprland: рамок нет
-      window_gap = 10;               # gaps_in 5 + 5 / gaps_out 10
+      border_width = 0;
+      window_gap = 10;
       split_ratio = 0.5;
-      automatic_scheme = "longest_side";   # похоже на dwindle
+      automatic_scheme = "longest_side";
       initial_polarity = "second_child";
       removal_adjustment = true;
       borderless_monocle = true;
@@ -214,7 +198,6 @@ in
       focus_follows_pointer = true;
       pointer_follows_focus = false;
       pointer_follows_monitor = true;
-      # Super + ЛКМ — двигать, Super + ПКМ — менять размер
       pointer_modifier = "mod4";
       pointer_action1 = "move";
       pointer_action2 = "resize_side";

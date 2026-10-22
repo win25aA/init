@@ -1,9 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
-# rofi: лаунчер + меню, заменяющие панели noctalia
 let
   power = pkgs.writeShellScriptBin "rofi-power" ''
-    # Меню сессии (как session-панель noctalia)
 
     lock=$'\uf023  Заблокировать'
     suspend=$'\uf236  Сон'
@@ -29,8 +27,6 @@ let
   '';
 
   control = pkgs.writeShellScriptBin "rofi-control" ''
-    # Центр управления (замена control-center noctalia):
-    # ночной свет, буфер обмена, уведомления, обои, звук, скриншот
 
     if pgrep -x gammastep >/dev/null; then night=$'\uf186  Ночной свет: вкл'; else night=$'\uf185  Ночной свет: выкл'; fi
     if [ "$(dunstctl is-paused 2>/dev/null)" = "true" ]; then dnd=$'\uf1f6  Не беспокоить: вкл'; else dnd=$'\uf0f3  Не беспокоить: выкл'; fi
@@ -60,7 +56,6 @@ let
   '';
 
   notifications = pkgs.writeShellScriptBin "rofi-notifications" ''
-    # История уведомлений dunst в rofi: Enter — показать снова, первая строка — очистить
 
     clear=$'\uf1f8  Очистить историю'
     json=$(dunstctl history 2>/dev/null) || exit 0
@@ -82,7 +77,6 @@ let
   '';
 
   wallpapers = pkgs.writeShellScriptBin "rofi-wallpaper" ''
-    # Выбор обоев из /etc/nixos/wallpapers (аналог панели обоев noctalia)
 
     dir=''${WALLPAPER_DIR:-/etc/nixos/wallpapers}
     mapfile -t files < <(find "$dir" -maxdepth 1 -type f \
@@ -119,6 +113,9 @@ in
         icon-theme: "Papirus-Dark";
         display-drun: "";
         drun-display-format: "{name}";
+        disable-history: false;
+        max-history-size: 100;
+        sort: false;
         hover-select: true;
         me-select-entry: "";
         me-accept-entry: "MousePrimary";

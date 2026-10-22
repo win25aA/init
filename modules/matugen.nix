@@ -197,7 +197,6 @@
   '';
 
   xdg.configFile."matugen/polybar-colors.ini".text = ''
-    ; Имена цветов как в Isabel, значения — роли Material You.
     [color]
     bg = {{colors.surface.default.hex}}
     bg-alt = {{colors.surface_container.default.hex}}

@@ -143,10 +143,8 @@ programs.sway = {
   '';
 };
 
-  # X11-сессия bspwm (появится в SDDM). Сам конфиг bspwm/sxhkd/polybar —
-  # в modules/bspwm.nix через Home Manager.
   services.xserver.windowManager.bspwm.enable = true;
-  services.xserver.dpi = 96; # без этого X берёт DPI из EDID — интерфейс огромный
+  services.xserver.dpi = 96;
 
   programs.virt-manager.enable = true;
   virtualisation.libvirtd = {
@@ -364,7 +362,6 @@ xdg.portal = {
   enable = true;
   extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
-  # запасной портал для сессий без своего (bspwm)
   config.common.default = [ "gtk" ];
 
   config.sway = {

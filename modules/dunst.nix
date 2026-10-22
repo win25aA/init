@@ -4,14 +4,13 @@
   home.packages = with pkgs; [ dunst libnotify ];
 
   xdg.configFile."dunst/dunstrc".text = ''
-    # dunst в стиле Isabel. Цвета — dunstrc.d/matugen-colors.conf (matugen.nix)
     [global]
         monitor = 0
         follow = mouse
         width = 300
         height = (0, 300)
         origin = top-center
-        offset = (0, 10)
+        offset = (0, 50)
         scale = 0
         notification_limit = 6
 
@@ -75,7 +74,6 @@
     [urgency_critical]
         timeout = 0
 
-    # OSD громкости — не попадает в историю
     [osd]
         appname = osd
         history_ignore = yes
