@@ -143,6 +143,10 @@ programs.sway = {
   '';
 };
 
+  # X11-сессия bspwm (появится в SDDM). Сам конфиг bspwm/sxhkd/polybar —
+  # в modules/bspwm.nix через Home Manager.
+  services.xserver.windowManager.bspwm.enable = true;
+
   programs.virt-manager.enable = true;
   virtualisation.libvirtd = {
     enable = true;
@@ -358,6 +362,9 @@ services.udev.extraRules = ''
 xdg.portal = {
   enable = true;
   extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
+  # запасной портал для сессий без своего (bspwm)
+  config.common.default = [ "gtk" ];
 
   config.sway = {
     default = [ "gtk" ];

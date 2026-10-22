@@ -11,6 +11,7 @@
     ./modules/nodejs.nix
     ./modules/btop.nix
     ./modules/sway.nix
+    ./modules/bspwm.nix
   ];
 
   home.stateVersion = "26.11";
