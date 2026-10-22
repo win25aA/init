@@ -119,6 +119,10 @@ in
         icon-theme: "Papirus-Dark";
         display-drun: "";
         drun-display-format: "{name}";
+        // часто запускаемые приложения — сверху (история запусков rofi)
+        disable-history: false;
+        max-history-size: 100;
+        sort: false;
         hover-select: true;
         me-select-entry: "";
         me-accept-entry: "MousePrimary";
