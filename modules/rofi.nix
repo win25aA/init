@@ -5,11 +5,11 @@ let
   power = pkgs.writeShellScriptBin "rofi-power" ''
     # Меню сессии (как session-панель noctalia)
 
-    lock=$'\uf023  Заблокировать'
-    suspend=$'\uf236  Сон'
-    logout=$'\uf2f5  Выйти'
-    reboot=$'\uf2f9  Перезагрузка'
-    shutdown=$'\uf011  Выключить'
+    lock=$'\U000f033e  Заблокировать'
+    suspend=$'\U000f04b2  Сон'
+    logout=$'\U000f0343  Выйти'
+    reboot=$'\U000f0709  Перезагрузка'
+    shutdown=$'\U000f0425  Выключить'
 
     confirm() {
       [ "$(printf 'Да\nНет\n' | rofi -dmenu -i -p "$1?" -theme-str 'window { width: 260px; } listview { lines: 2; }')" = "Да" ]
@@ -32,14 +32,14 @@ let
     # Центр управления (замена control-center noctalia):
     # ночной свет, буфер обмена, уведомления, обои, звук, скриншот
 
-    if pgrep -x gammastep >/dev/null; then night=$'\uf186  Ночной свет: вкл'; else night=$'\uf185  Ночной свет: выкл'; fi
-    if [ "$(dunstctl is-paused 2>/dev/null)" = "true" ]; then dnd=$'\uf1f6  Не беспокоить: вкл'; else dnd=$'\uf0f3  Не беспокоить: выкл'; fi
-    clip=$'\uf328  Буфер обмена'
-    hist=$'\uf0e0  История уведомлений'
-    walls=$'\uf03e  Обои'
-    sound=$'\uf028  Звук'
-    shot=$'\uf030  Скриншот области'
-    power=$'\uf011  Сессия'
+    if pgrep -x gammastep >/dev/null; then night=$'\U000f0594  Ночной свет: вкл'; else night=$'\U000f05a8  Ночной свет: выкл'; fi
+    if [ "$(dunstctl is-paused 2>/dev/null)" = "true" ]; then dnd=$'\U000f009b  Не беспокоить: вкл'; else dnd=$'\U000f009a  Не беспокоить: выкл'; fi
+    clip=$'\U000f0147  Буфер обмена'
+    hist=$'\U000f0369  История уведомлений'
+    walls=$'\U000f02e9  Обои'
+    sound=$'\U000f057e  Звук'
+    shot=$'\U000f0100  Скриншот области'
+    power=$'\U000f0425  Сессия'
 
     choice=$(printf '%s\n' "$night" "$dnd" "$clip" "$hist" "$walls" "$sound" "$shot" "$power" |
       rofi -dmenu -i -p "Управление" -theme-str 'window { width: 380px; } listview { lines: 8; }')
@@ -62,7 +62,7 @@ let
   notifications = pkgs.writeShellScriptBin "rofi-notifications" ''
     # История уведомлений dunst в rofi: Enter — показать снова, первая строка — очистить
 
-    clear=$'\uf1f8  Очистить историю'
+    clear=$'\U000f01b4  Очистить историю'
     json=$(dunstctl history 2>/dev/null) || exit 0
 
     mapfile -t ids < <(jq -r '.data[0][] | .id.data' <<<"$json")
@@ -127,7 +127,7 @@ in
     @import "${config.xdg.configHome}/rofi/matugen-colors.rasi"
 
     * {
-        font: "JetBrainsMono Nerd Font Bold 10";
+        font: "JetBrainsMono Nerd Font Propo Bold 10";
         background-color: transparent;
         text-color: @fg;
         margin: 0;

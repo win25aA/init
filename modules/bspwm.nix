@@ -110,9 +110,9 @@ let
     i3lock-color -n -e ''${img:+-i "$img"} \
       --clock --indicator --radius 110 --ring-width 8 \
       --time-str="%H:%M" --date-str="%A, %d %B" \
-      --time-font="Inconsolata SemiCondensed" --date-font="Inconsolata SemiCondensed" \
-      --layout-font="Inconsolata SemiCondensed" --verif-font="Inconsolata SemiCondensed" \
-      --wrong-font="Inconsolata SemiCondensed" \
+      --time-font="JetBrainsMono Nerd Font" --date-font="JetBrainsMono Nerd Font" \
+      --layout-font="JetBrainsMono Nerd Font" --verif-font="JetBrainsMono Nerd Font" \
+      --wrong-font="JetBrainsMono Nerd Font" \
       --time-size=48 --date-size=18 --layout-size=14 \
       --time-color="''${LOCK_FG}ff" --date-color="''${LOCK_DIM}ff" --layout-color="''${LOCK_DIM}ff" \
       --inside-color="''${LOCK_BG}cc" --ring-color="''${LOCK_RING}ff" \

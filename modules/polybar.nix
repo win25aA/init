@@ -2,33 +2,6 @@
 
 # Polybar из риса Isabel — gh0stzk/dotfiles (bars/bar09)
 let
-  # шрифты панели Isabel: Inconsolata SemiCondensed, Material Design Icons Desktop,
-  # Font Awesome 6 Free Solid (те же файлы, что в репозитории gh0stzk)
-  gh0stzkRev = "793f584892f1041c7703be6a48faa018502dc27a";
-  isabelFonts = pkgs.stdenvNoCC.mkDerivation {
-    pname = "isabel-polybar-fonts";
-    version = "1.0";
-    dontUnpack = true;
-    mdi = pkgs.fetchurl {
-      url = "https://raw.githubusercontent.com/gh0stzk/dotfiles/${gh0stzkRev}/misc/fonts/MaterialDesignIconsDesktop.ttf";
-      hash = "sha256-xcikoVf1OnCiJxbYC39NLfWioO6Sdz5AX3ym8lcsetM=";
-    };
-    fa = pkgs.fetchurl {
-      url = "https://raw.githubusercontent.com/gh0stzk/dotfiles/${gh0stzkRev}/misc/fonts/FontAwesome6-Free-Solid.otf";
-      hash = "sha256-HW7y2IjXd5EMk0WhWqQY1azH/Qv7iXlurrYQHW8O4nA=";
-    };
-    inconsolata = pkgs.fetchurl {
-      name = "Inconsolata-variable.ttf";
-      url = "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/inconsolata/Inconsolata%5Bwdth%2Cwght%5D.ttf";
-      hash = "sha256-I97SW0RwdNAGWTkr+bESPYnfVcsHsK2b/vM2bRmbX8s=";
-    };
-    installPhase = ''
-      install -Dm644 $mdi $out/share/fonts/truetype/MaterialDesignIconsDesktop.ttf
-      install -Dm644 $fa $out/share/fonts/opentype/FontAwesome6-Free-Solid.otf
-      install -Dm644 $inconsolata $out/share/fonts/truetype/Inconsolata-Variable.ttf
-    '';
-  };
-
   launch = pkgs.writeShellScriptBin "polybar-launch" ''
     # Запуск polybar: isa-bar на основном мониторе (с треем), isa-bar-secondary на остальных
 
@@ -74,16 +47,16 @@ let
     # Колокольчик уведомлений: обычный / перечёркнутый в режиме «Не беспокоить»
 
     if [ "$(dunstctl is-paused 2>/dev/null)" = "true" ]; then
-      echo $'\uf1f6'
+      echo "%{T4}"$'\U000f009b'"%{T-}"
     else
       n=$(dunstctl count history 2>/dev/null || echo 0)
-      if [ "''${n:-0}" -gt 0 ]; then echo $'\uf0f3'" $n"; else echo $'\uf0f3'; fi
+      if [ "''${n:-0}" -gt 0 ]; then echo "%{T4}"$'\U000f009a'"%{T-} $n"; else echo "%{T4}"$'\U000f009a'"%{T-}"; fi
     fi
   '';
 in
 
 {
-  home.packages = with pkgs; [ polybarFull playerctl dunst launch media notify isabelFonts ];
+  home.packages = with pkgs; [ polybarFull playerctl dunst launch media notify ];
   fonts.fontconfig.enable = true;
 
   xdg.configFile."polybar/config.ini".text = ''
@@ -123,18 +96,21 @@ in
     border-size = 0
     border-color = ''${color.bg}
 
-    padding-left = 2
-    padding-right = 2
+    padding-left = 3
+    padding-right = 3
 
-    module-margin-left = 0
-    module-margin-right = 0
+    module-margin-left = 1
+    module-margin-right = 1
 
-    font-0 = "Inconsolata:style=SemiCondensed Bold:size=11;2"
-    font-1 = "Material Design Icons Desktop:size=16;4"
-    font-2 = "Material Design Icons Desktop:size=12;3"
-    font-3 = "Font Awesome 6 Free Solid:size=10;3"
-    ; в Inconsolata нет кириллицы — запасной шрифт для заголовков окон и треков
-    font-4 = "JetBrainsMono Nerd Font:style=Bold:size=10;2"
+    ; один шрифт на всё: кириллица + все иконки. Вариант Propo — у иконок
+    ; реальная ширина, поэтому они не наезжают на соседние символы
+    font-0 = "JetBrainsMono Nerd Font Propo:style=Bold:size=10;3"
+    ; лаунчер NixOS
+    font-1 = "JetBrainsMono Nerd Font Propo:size=15;4"
+    ; иконки рабочих столов
+    font-2 = "JetBrainsMono Nerd Font Propo:size=13;4"
+    ; иконки модулей — чуть крупнее текста и по центру строки
+    font-3 = "JetBrainsMono Nerd Font Propo:size=12;4"
 
     modules-left = launcher sep2 bspwm sep2 mplayer
     modules-center = title
@@ -151,9 +127,11 @@ in
     cursor-scroll =
 
     ; второй монитор — то же самое, только без трея (трей может быть один)
+    ; второй монитор узкий (1024) — без трея, трека и диска
     [bar/isa-bar-secondary]
     inherit = bar/isa-bar
-    modules-right = filesystem sep cpu_bar sep memory_bar sep pulseaudio sep2 notify sep control sep date sep power
+    modules-left = launcher sep2 bspwm
+    modules-right = cpu_bar sep memory_bar sep pulseaudio sep2 notify sep date sep power
 
     [settings]
     screenchange-reload = false
@@ -199,10 +177,13 @@ in
     fixed-values = true
 
     format-mounted = <label-mounted>
-    format-mounted-prefix = " "
+    format-mounted-prefix = "󰋊 "
+    format-mounted-prefix-font = 4
+    format-mounted-prefix-foreground = ''${color.blue}
 
     format-unmounted = <label-unmounted>
-    format-unmounted-prefix = " "
+    format-unmounted-prefix = "󰋊 "
+    format-unmounted-prefix-font = 4
 
     label-mounted = "%used% "
     label-mounted-foreground = ''${color.grey}
@@ -218,19 +199,21 @@ in
     format-volume = <ramp-volume><label-volume>
     format-volume-prefix = ""
 
-    label-volume = " %percentage%"
+    label-volume = " %percentage%%"
     label-volume-foreground = ''${color.grey}
 
     format-muted = <label-muted>
-    format-muted-prefix = " "
+    format-muted-prefix = "󰖁 "
+    format-muted-prefix-font = 4
     label-muted = "Muted"
     label-muted-foreground = ''${color.red}
 
-    ramp-volume-0 = 
-    ramp-volume-1 = 
-    ramp-volume-2 = 
-    ramp-volume-3 = 
-    ramp-volume-4 = 
+    ramp-volume-0 = 󰕿
+    ramp-volume-1 = 󰖀
+    ramp-volume-2 = 󰖀
+    ramp-volume-3 = 󰕾
+    ramp-volume-4 = 󰕾
+    ramp-volume-font = 4
 
     click-right = pavucontrol
 
@@ -275,11 +258,11 @@ in
 
     format = <label>
     format-prefix = "󱂬 "
-    format-prefix-font = 3
+    format-prefix-font = 4
     format-prefix-foreground = ''${color.magenta}
 
     label = %title%
-    label-maxlen = 35
+    label-maxlen = 30
 
     label-empty = "NixOS"
     label-empty-foreground = ''${color.grey}
@@ -315,7 +298,8 @@ in
 
     interval = 0.5
     format = <label>
-    format-prefix = " "
+    format-prefix = "󰻠 "
+    format-prefix-font = 4
 
     label = "%percentage%% "
     label-foreground = ''${color.grey}
@@ -328,7 +312,8 @@ in
     interval = 3
 
     format = <label>
-    format-prefix = " "
+    format-prefix = "󰍛 "
+    format-prefix-font = 4
 
     label = "%used% "
     label-foreground = ''${color.grey}
@@ -342,18 +327,20 @@ in
     tail = true
 
     format = <label>
-    format-prefix = "  "
+    format-prefix = "󰎇 "
+    format-prefix-font = 4
     format-prefix-foreground = ''${color.green}
 
     label = %output%
-    label-maxlen = 45
+    label-maxlen = 40
     label-foreground = ''${color.fg}
 
     ######################################################
 
     [module/power]
     type = custom/text
-    label = " "
+    label = "󰐥"
+    label-font = 4
     label-foreground = ''${color.red}
 
     click-left = rofi-power
@@ -367,7 +354,7 @@ in
     interval = 2
 
     format = <label>
-    label = "%output% "
+    label = "%output%"
     label-foreground = ''${color.yellow}
 
     click-left = dunstctl set-paused toggle
@@ -378,7 +365,8 @@ in
     ; меню управления (вместо control center из noctalia)
     [module/control]
     type = custom/text
-    label = " "
+    label = "󰘮"
+    label-font = 4
     label-foreground = ''${color.blue}
 
     click-left = rofi-control
@@ -392,7 +380,7 @@ in
     format-background = ''${color.bg}
     tray-background = ''${color.bg}
     tray-foreground = ''${color.fg}
-    tray-spacing = 7px
+    tray-spacing = 10px
     tray-padding = 0px
     tray-size = 40%
   '';

@@ -33,7 +33,7 @@
         sort = yes
         idle_threshold = 120
 
-        font = Inconsolata Semi-Condensed Bold 10
+        font = JetBrainsMono Nerd Font Propo Bold 10
         line_height = 0
         markup = full
         format = "<b>%s</b>\n%b"
