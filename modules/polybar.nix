@@ -47,10 +47,10 @@ let
     # Колокольчик уведомлений: обычный / перечёркнутый в режиме «Не беспокоить»
 
     if [ "$(dunstctl is-paused 2>/dev/null)" = "true" ]; then
-      echo "%{T4}"$'\U000f009b'"%{T-}"
+      echo "%{T4}"$'\uf1f6'"%{T-}"
     else
       n=$(dunstctl count history 2>/dev/null || echo 0)
-      if [ "''${n:-0}" -gt 0 ]; then echo "%{T4}"$'\U000f009a'"%{T-} $n"; else echo "%{T4}"$'\U000f009a'"%{T-}"; fi
+      if [ "''${n:-0}" -gt 0 ]; then echo "%{T4}"$'\uf0f3'"%{T-} $n"; else echo "%{T4}"$'\uf0f3'"%{T-}"; fi
     fi
   '';
 in
@@ -96,11 +96,11 @@ in
     border-size = 0
     border-color = ''${color.bg}
 
-    padding-left = 3
-    padding-right = 3
+    padding-left = 2
+    padding-right = 2
 
-    module-margin-left = 1
-    module-margin-right = 1
+    module-margin-left = 0
+    module-margin-right = 0
 
     ; один шрифт на всё: кириллица + все иконки. Вариант Propo — у иконок
     ; реальная ширина, поэтому они не наезжают на соседние символы
@@ -110,7 +110,7 @@ in
     ; иконки рабочих столов
     font-2 = "JetBrainsMono Nerd Font Propo:size=13;4"
     ; иконки модулей — чуть крупнее текста и по центру строки
-    font-3 = "JetBrainsMono Nerd Font Propo:size=12;4"
+    font-3 = "JetBrainsMono Nerd Font Propo:size=11;3"
 
     modules-left = launcher sep2 bspwm sep2 mplayer
     modules-center = title
@@ -177,12 +177,12 @@ in
     fixed-values = true
 
     format-mounted = <label-mounted>
-    format-mounted-prefix = "󰋊 "
+    format-mounted-prefix = " "
     format-mounted-prefix-font = 4
     format-mounted-prefix-foreground = ''${color.blue}
 
     format-unmounted = <label-unmounted>
-    format-unmounted-prefix = "󰋊 "
+    format-unmounted-prefix = " "
     format-unmounted-prefix-font = 4
 
     label-mounted = "%used% "
@@ -208,11 +208,11 @@ in
     label-muted = "Muted"
     label-muted-foreground = ''${color.red}
 
-    ramp-volume-0 = 󰕿
-    ramp-volume-1 = 󰖀
-    ramp-volume-2 = 󰖀
-    ramp-volume-3 = 󰕾
-    ramp-volume-4 = 󰕾
+    ramp-volume-0 = 
+    ramp-volume-1 = 
+    ramp-volume-2 = 
+    ramp-volume-3 = 
+    ramp-volume-4 = 
     ramp-volume-font = 4
 
     click-right = pavucontrol
@@ -281,7 +281,7 @@ in
 
     [module/sep]
     type = custom/text
-    label = " "
+    label = "  "
     label-foreground = ''${color.bg}
 
     ######################################################
@@ -298,7 +298,7 @@ in
 
     interval = 0.5
     format = <label>
-    format-prefix = "󰻠 "
+    format-prefix = " "
     format-prefix-font = 4
 
     label = "%percentage%% "
@@ -327,7 +327,7 @@ in
     tail = true
 
     format = <label>
-    format-prefix = "󰎇 "
+    format-prefix = " "
     format-prefix-font = 4
     format-prefix-foreground = ''${color.green}
 
@@ -339,7 +339,7 @@ in
 
     [module/power]
     type = custom/text
-    label = "󰐥"
+    label = ""
     label-font = 4
     label-foreground = ''${color.red}
 
@@ -365,7 +365,7 @@ in
     ; меню управления (вместо control center из noctalia)
     [module/control]
     type = custom/text
-    label = "󰘮"
+    label = ""
     label-font = 4
     label-foreground = ''${color.blue}
 
