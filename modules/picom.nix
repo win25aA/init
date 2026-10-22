@@ -4,10 +4,7 @@
   home.packages = [ pkgs.picom ];
 
   xdg.configFile."picom/picom.conf".text = ''
-    # picom — тени/скругления/блюр как в моём Hyprland, анимации в духе Isabel,
-    # но спокойнее (без «пружины»). Цвет тени — от matugen.
 
-    ## ----- Общее ----- ##
     backend = "glx";
     vsync = true;
     dithered-present = false;
@@ -15,11 +12,9 @@
     detect-client-opacity = true;
     detect-transient = true;
     use-damage = true;
-    # полноэкранные игры идут мимо композитора — меньше задержка
     unredir-if-possible = true;
     log-level = "error";
 
-    ## ----- Тени (decoration.shadow) ----- ##
     shadow = true;
     shadow-radius = 14;
     shadow-opacity = 0.55;
@@ -27,23 +22,19 @@
     shadow-offset-y = -12;
     @include "${config.xdg.configHome}/picom/matugen-colors.conf"
 
-    ## ----- Затухание ----- ##
     fading = true;
     fade-in-step = 0.05;
     fade-out-step = 0.05;
     fade-delta = 5;
 
-    ## ----- Скругления (decoration.rounding) ----- ##
     corner-radius = 10;
 
-    ## ----- Блюр (decoration.blur: size 3, passes 2) ----- ##
     blur:
     {
         method = "dual_kawase";
         strength = 3;
     };
 
-    ## ----- Правила ----- ##
     rules: (
 
         {
@@ -51,7 +42,6 @@
             fade = false;
         },
 
-        # обычные окна и диалоги: блюр, тени, анимации
         {
             match = "window_type = 'normal' || window_type = 'dialog'";
             blur-background = true;
@@ -70,7 +60,6 @@
                     scale = 0.92;
                     duration = 0.16;
                 },
-                # переключение воркспейсов — лёгкое затухание
                 {
                     triggers = [ "show" ];
                     preset = "appear";
@@ -83,7 +72,6 @@
                     scale = 0.98;
                     duration = 0.12;
                 },
-                # перемещение/изменение размера при тайлинге
                 {
                     triggers = [ "geometry" ];
                     preset = "geometry-change";
@@ -114,7 +102,6 @@
             fade = true;
         },
 
-        # уведомления выезжают сверху, как в Isabel
         {
             match = "class_g = 'Dunst'";
             corner-radius = 0;
@@ -136,7 +123,6 @@
             );
         },
 
-        # меню rofi — быстрое появление
         {
             match = "class_g = 'Rofi'";
             corner-radius = 0;
@@ -165,7 +151,6 @@
             fade = true;
         },
 
-        # выделение области для скриншота и локскрин — без эффектов
         {
             match = "class_g = 'slop' || class_g = 'maim' || class_g = 'i3lock'";
             corner-radius = 0;
