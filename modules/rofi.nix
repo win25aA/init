@@ -113,6 +113,7 @@ in
   xdg.configFile."rofi/config.rasi".text = ''
     /* rofi — лаунчер и меню. Цвета: matugen-colors.rasi от matugen */
     configuration {
+        dpi: 96;
         modi: "drun";
         show-icons: true;
         icon-theme: "Papirus-Dark";
