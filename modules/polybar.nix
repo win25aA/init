@@ -74,6 +74,7 @@ in
     [bar/isa-bar]
     monitor = ''${env:MONITOR:}
     monitor-strict = false
+    dpi = 96
     override-redirect = false
 
     bottom = true

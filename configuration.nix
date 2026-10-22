@@ -146,6 +146,7 @@ programs.sway = {
   # X11-сессия bspwm (появится в SDDM). Сам конфиг bspwm/sxhkd/polybar —
   # в modules/bspwm.nix через Home Manager.
   services.xserver.windowManager.bspwm.enable = true;
+  services.xserver.dpi = 96; # без этого X берёт DPI из EDID — интерфейс огромный
 
   programs.virt-manager.enable = true;
   virtualisation.libvirtd = {

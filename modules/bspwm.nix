@@ -4,30 +4,45 @@ let
   # xorg.* постепенно переезжает в корень nixpkgs
   xpkg = name: pkgs.${name} or pkgs.xorg.${name};
 
-  # на X11 у NVIDIA выходы называются иначе, чем под Wayland — ищем по разрешению
+  # мониторы как в sway/Hyprland: DVI 1440x900@75 слева, HDMI 1024x768@70 справа (1440,355)
   monitors = pkgs.writeShellScriptBin "bspwm-monitors" ''
-    # Мониторы. На X11 у NVIDIA имена выходов другие, чем под Wayland
-    # (DVI-D-0 / HDMI-0 вместо DVI-D-1 / HDMI-A-1), поэтому ищем их по разрешению.
-    # Можно задать вручную: BSPWM_MAIN=DVI-D-0 BSPWM_SECOND=HDMI-0
+    # На X11 (NVIDIA) выходы называются DVI-D-0 / HDMI-0 вместо DVI-D-1 / HDMI-A-1,
+    # поэтому ищем их по типу разъёма. Можно задать вручную: BSPWM_MAIN=… BSPWM_SECOND=…
 
-    outputs=$(xrandr --query | awk '
-      / connected/ { o = $1; next }
-      o && /^ +[0-9]+x[0-9]+/ && /\+/ { print o, $1; o = "" }')
+    connected=$(xrandr --query | awk '/ connected/ { print $1 }')
+    second=''${BSPWM_SECOND:-$(grep -m1 '^HDMI' <<<"$connected")}
+    main=''${BSPWM_MAIN:-$(grep -v -x -F "''${second:-none}" <<<"$connected" | head -n1)}
 
-    main=''${BSPWM_MAIN:-$(awk '$2 == "1440x900" { print $1; exit }' <<<"$outputs")}
-    second=''${BSPWM_SECOND:-$(awk '$2 == "1024x768" { print $1; exit }' <<<"$outputs")}
+    # выставить режим с нужной частотой; если драйвер его не отдаёт — добавить через cvt
+    set_mode() { # выход ширина высота частота позиция [доп. флаги]
+      local out=$1 w=$2 h=$3 hz=$4 pos=$5; shift 5
+      xrandr --output "$out" --mode "''${w}x''${h}" --rate "$hz" --pos "$pos" --rotate normal "$@" && return
+      local line name
+      line=$(cvt "$w" "$h" "$hz" | sed -n 's/^Modeline //p')
+      name=$(awk '{ print $1 }' <<<"$line" | tr -d '"')
+      xrandr --newmode $(tr -d '"' <<<"$line") 2>/dev/null
+      xrandr --addmode "$out" "$name" 2>/dev/null
+      xrandr --output "$out" --mode "$name" --pos "$pos" --rotate normal "$@" \
+        || xrandr --output "$out" --mode "''${w}x''${h}" --pos "$pos" --rotate normal "$@"
+    }
 
-    if [ -n "$main" ] && [ -n "$second" ] && [ "$main" != "$second" ]; then
-      xrandr --output "$main" --primary --mode 1440x900 --rate 75 --pos 0x0 --rotate normal \
-             --output "$second" --mode 1024x768 --rate 70 --pos 1440x355 --rotate normal \
-        || xrandr --output "$main" --primary --mode 1440x900 --pos 0x0 \
-                  --output "$second" --mode 1024x768 --pos 1440x355
+    # DPI 96: иначе X берёт его из EDID, и Firefox/GTK/polybar становятся огромными
+    xrdb -merge <<<"Xft.dpi: 96"
+
+    if [ -n "$main" ] && [ -n "$second" ]; then
+      set_mode "$main"   1440 900 74.98 0x0 --primary
+      set_mode "$second" 1024 768 70.07 1440x355
+      xrandr --dpi 96
+      sleep 0.3   # дать bspwm увидеть новую раскладку
       bspc monitor "$main" -d 1 2 3 4 5
       bspc monitor "$second" -d 6 7 8 9 10
-      # bspwm сам сортирует мониторы по порядку xrandr — фиксируем основной первым
       bspc wm -O "$main" "$second"
+      # лишние мониторы, которые bspwm мог создать сам (например, при клоне экранов)
+      for m in $(bspc query -M --names); do
+        [ "$m" = "$main" ] || [ "$m" = "$second" ] || bspc monitor "$m" -r
+      done
     else
-      # один монитор (или не нашли нужные) — все 10 столов на первом
+      xrandr --dpi 96
       first=$(bspc query -M --names | head -n1)
       bspc monitor "$first" -d 1 2 3 4 5 6 7 8 9 10
     fi
@@ -177,8 +192,10 @@ in
     monitors wallpaper autostart lock screenshot volume
     feh matugen maim xclip imagemagick i3lock-color
     playerctl wireplumber libnotify clipmenu
-    (xpkg "xrandr") (xpkg "xsetroot")
+    (xpkg "xrandr") (xpkg "xsetroot") (xpkg "xrdb") libxcvt
   ];
+
+  xresources.properties."Xft.dpi" = 96;
 
   xsession.windowManager.bspwm = {
     enable = true;
