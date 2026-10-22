@@ -34,6 +34,26 @@
     input_path = "~/.config/matugen/mpv-colors.conf"
     output_path = "~/.config/mpv/matugen-colors.conf"
 
+    [templates.polybar]
+    input_path = "~/.config/matugen/polybar-colors.ini"
+    output_path = "~/.config/polybar/matugen-colors.ini"
+
+    [templates.rofi]
+    input_path = "~/.config/matugen/rofi-colors.rasi"
+    output_path = "~/.config/rofi/matugen-colors.rasi"
+
+    [templates.dunst]
+    input_path = "~/.config/matugen/dunst-colors.conf"
+    output_path = "~/.config/dunst/dunstrc.d/matugen-colors.conf"
+
+    [templates.picom]
+    input_path = "~/.config/matugen/picom-colors.conf"
+    output_path = "~/.config/picom/matugen-colors.conf"
+
+    [templates.i3lock]
+    input_path = "~/.config/matugen/i3lock-colors.sh"
+    output_path = "~/.config/i3lock/matugen-colors.sh"
+
   '';
 
 
@@ -174,6 +194,70 @@
   xdg.configFile."matugen/mpv-colors.conf".text = ''
     osd-color = "{{colors.primary.default.hex}}"
     osd-border-color = "{{colors.surface.default.hex}}"
+  '';
+
+  xdg.configFile."matugen/polybar-colors.ini".text = ''
+    ; Имена цветов как в Isabel, значения — роли Material You.
+    [color]
+    bg = {{colors.surface.default.hex}}
+    bg-alt = {{colors.surface_container.default.hex}}
+    fg = {{colors.on_surface.default.hex}}
+    grey = {{colors.outline.default.hex}}
+    indigo = {{colors.primary_container.default.hex}}
+    blue = {{colors.primary.default.hex}}
+    magenta = {{colors.tertiary.default.hex}}
+    green = {{colors.secondary.default.hex}}
+    yellow = {{colors.tertiary.default.hex}}
+    red = {{colors.error.default.hex}}
+  '';
+
+  xdg.configFile."matugen/rofi-colors.rasi".text = ''
+    * {
+        bg:     {{colors.surface.default.hex}};
+        bg-alt: {{colors.surface_container.default.hex}};
+        bg-sel: {{colors.surface_container_highest.default.hex}};
+        fg:     {{colors.on_surface.default.hex}};
+        grey:   {{colors.outline.default.hex}};
+        accent: {{colors.primary.default.hex}};
+        active: {{colors.secondary.default.hex}};
+        urgent: {{colors.error.default.hex}};
+    }
+  '';
+
+  xdg.configFile."matugen/dunst-colors.conf".text = ''
+    [global]
+        frame_color = "{{colors.primary.default.hex}}"
+        separator_color = "{{colors.outline_variant.default.hex}}"
+
+    [urgency_low]
+        background = "{{colors.surface.default.hex}}"
+        foreground = "{{colors.on_surface.default.hex}}"
+        highlight = "{{colors.primary.default.hex}}"
+
+    [urgency_normal]
+        background = "{{colors.surface.default.hex}}"
+        foreground = "{{colors.on_surface.default.hex}}"
+        highlight = "{{colors.primary.default.hex}}"
+
+    [urgency_critical]
+        background = "{{colors.surface.default.hex}}"
+        foreground = "{{colors.on_surface.default.hex}}"
+        frame_color = "{{colors.error.default.hex}}"
+        highlight = "{{colors.error.default.hex}}"
+  '';
+
+  xdg.configFile."matugen/picom-colors.conf".text = ''
+    shadow-color = "{{colors.shadow.default.hex}}";
+  '';
+
+  xdg.configFile."matugen/i3lock-colors.sh".text = ''
+    LOCK_BG="{{colors.surface.default.hex_stripped}}"
+    LOCK_FG="{{colors.on_surface.default.hex_stripped}}"
+    LOCK_DIM="{{colors.on_surface_variant.default.hex_stripped}}"
+    LOCK_RING="{{colors.surface_container_high.default.hex_stripped}}"
+    LOCK_ACCENT="{{colors.primary.default.hex_stripped}}"
+    LOCK_VERIFY="{{colors.secondary.default.hex_stripped}}"
+    LOCK_WRONG="{{colors.error.default.hex_stripped}}"
   '';
 
   xdg.configFile."mpv/mpv.conf".text = ''

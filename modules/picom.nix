@@ -1,0 +1,184 @@
+{ config, pkgs, inputs, ... }:
+
+{
+  home.packages = [ pkgs.picom ];
+
+  xdg.configFile."picom/picom.conf".text = ''
+    # picom — тени/скругления/блюр как в моём Hyprland, анимации в духе Isabel,
+    # но спокойнее (без «пружины»). Цвет тени — от matugen.
+
+    ## ----- Общее ----- ##
+    backend = "glx";
+    vsync = true;
+    dithered-present = false;
+    detect-rounded-corners = true;
+    detect-client-opacity = true;
+    detect-transient = true;
+    use-damage = true;
+    # полноэкранные игры идут мимо композитора — меньше задержка
+    unredir-if-possible = true;
+    log-level = "error";
+
+    ## ----- Тени (decoration.shadow) ----- ##
+    shadow = true;
+    shadow-radius = 14;
+    shadow-opacity = 0.55;
+    shadow-offset-x = -12;
+    shadow-offset-y = -12;
+    @include "${config.xdg.configHome}/picom/matugen-colors.conf"
+
+    ## ----- Затухание ----- ##
+    fading = true;
+    fade-in-step = 0.05;
+    fade-out-step = 0.05;
+    fade-delta = 5;
+
+    ## ----- Скругления (decoration.rounding) ----- ##
+    corner-radius = 10;
+
+    ## ----- Блюр (decoration.blur: size 3, passes 2) ----- ##
+    blur:
+    {
+        method = "dual_kawase";
+        strength = 3;
+    };
+
+    ## ----- Правила ----- ##
+    rules: (
+
+        {
+            blur-background = false;
+            fade = false;
+        },
+
+        # обычные окна и диалоги: блюр, тени, анимации
+        {
+            match = "window_type = 'normal' || window_type = 'dialog'";
+            blur-background = true;
+            shadow = true;
+            fade = true;
+            animations = (
+                {
+                    triggers = [ "open" ];
+                    preset = "appear";
+                    scale = 0.9;
+                    duration = 0.22;
+                },
+                {
+                    triggers = [ "close" ];
+                    preset = "disappear";
+                    scale = 0.92;
+                    duration = 0.16;
+                },
+                # переключение воркспейсов — лёгкое затухание
+                {
+                    triggers = [ "show" ];
+                    preset = "appear";
+                    scale = 0.98;
+                    duration = 0.14;
+                },
+                {
+                    triggers = [ "hide" ];
+                    preset = "disappear";
+                    scale = 0.98;
+                    duration = 0.12;
+                },
+                # перемещение/изменение размера при тайлинге
+                {
+                    triggers = [ "geometry" ];
+                    preset = "geometry-change";
+                    duration = 0.22;
+                }
+            );
+        },
+
+        {
+            match = "fullscreen";
+            corner-radius = 0;
+            shadow = false;
+        },
+
+        {
+            match = "window_type = 'tooltip'";
+            corner-radius = 0;
+            shadow = false;
+            opacity = 0.95;
+            fade = true;
+        },
+
+        {
+            match = "window_type = 'dropdown_menu' || window_type = 'menu' || "
+                    "window_type = 'popup' || window_type = 'popup_menu'";
+            corner-radius = 0;
+            shadow = false;
+            fade = true;
+        },
+
+        # уведомления выезжают сверху, как в Isabel
+        {
+            match = "class_g = 'Dunst'";
+            corner-radius = 0;
+            shadow = false;
+            blur-background = false;
+            animations = (
+                {
+                    triggers = [ "close", "hide" ];
+                    preset = "fly-out";
+                    direction = "up";
+                    duration = 0.2;
+                },
+                {
+                    triggers = [ "open", "show" ];
+                    preset = "fly-in";
+                    direction = "up";
+                    duration = 0.2;
+                }
+            );
+        },
+
+        # меню rofi — быстрое появление
+        {
+            match = "class_g = 'Rofi'";
+            corner-radius = 0;
+            shadow = false;
+            animations = (
+                {
+                    triggers = [ "open", "show" ];
+                    preset = "appear";
+                    scale = 0.95;
+                    duration = 0.12;
+                },
+                {
+                    triggers = [ "close", "hide" ];
+                    preset = "disappear";
+                    scale = 0.95;
+                    duration = 0.1;
+                }
+            );
+        },
+
+        {
+            match = "class_g = 'Polybar' || window_type = 'dock' || window_type = 'desktop'";
+            corner-radius = 0;
+            shadow = false;
+            blur-background = false;
+            fade = true;
+        },
+
+        # выделение области для скриншота и локскрин — без эффектов
+        {
+            match = "class_g = 'slop' || class_g = 'maim' || class_g = 'i3lock'";
+            corner-radius = 0;
+            shadow = false;
+            blur-background = false;
+            fade = false;
+            animations = ();
+        },
+
+        {
+            match = "_GTK_FRAME_EXTENTS@ || class_g = 'firefox'";
+            shadow = false;
+        }
+    )
+  '';
+}
