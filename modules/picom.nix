@@ -23,8 +23,8 @@
     @include "${config.xdg.configHome}/picom/matugen-colors.conf"
 
     fading = true;
-    fade-in-step = 0.05;
-    fade-out-step = 0.05;
+    fade-in-step = 0.025;
+    fade-out-step = 0.03;
     fade-delta = 5;
 
     corner-radius = 10;
@@ -51,31 +51,26 @@
                 {
                     triggers = [ "open" ];
                     preset = "appear";
-                    scale = 0.9;
-                    duration = 0.22;
+                    scale = 0.98;
+                    duration = 0.24;
                 },
                 {
                     triggers = [ "close" ];
                     preset = "disappear";
-                    scale = 0.92;
-                    duration = 0.16;
+                    scale = 0.98;
+                    duration = 0.20;
                 },
                 {
                     triggers = [ "show" ];
                     preset = "appear";
-                    scale = 0.98;
-                    duration = 0.14;
+                    scale = 1.0;
+                    duration = 0.20;
                 },
                 {
                     triggers = [ "hide" ];
                     preset = "disappear";
-                    scale = 0.98;
-                    duration = 0.12;
-                },
-                {
-                    triggers = [ "geometry" ];
-                    preset = "geometry-change";
-                    duration = 0.22;
+                    scale = 1.0;
+                    duration = 0.18;
                 }
             );
         },
@@ -110,15 +105,15 @@
             animations = (
                 {
                     triggers = [ "close", "hide" ];
-                    preset = "fly-out";
-                    direction = "up";
-                    duration = 0.2;
+                    preset = "disappear";
+                    scale = 1.0;
+                    duration = 0.20;
                 },
                 {
                     triggers = [ "open", "show" ];
-                    preset = "fly-in";
-                    direction = "up";
-                    duration = 0.2;
+                    preset = "appear";
+                    scale = 1.0;
+                    duration = 0.22;
                 }
             );
         },
@@ -131,14 +126,14 @@
                 {
                     triggers = [ "open", "show" ];
                     preset = "appear";
-                    scale = 0.95;
-                    duration = 0.12;
+                    scale = 0.99;
+                    duration = 0.22;
                 },
                 {
                     triggers = [ "close", "hide" ];
                     preset = "disappear";
-                    scale = 0.95;
-                    duration = 0.1;
+                    scale = 0.99;
+                    duration = 0.18;
                 }
             );
         },
