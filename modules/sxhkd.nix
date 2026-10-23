@@ -11,7 +11,7 @@
       "super + {Left,Right,Up,Down}" = "bspc node -f {west,east,north,south}";
       "super + shift + {Left,Right,Up,Down}" = "bspc node -s {west,east,north,south}";
 
-      "super + f" = "bspc node -t ~fullscreen";
+      "super + f" = "if bspc query -N -n focused.fullscreen >/dev/null; then bspc node -t tiled; else bspc node -t fullscreen; fi";
       "super + q" = "bspc node -c";
       "super + v" = "bspc node -t ~floating";
       "super + m" = "bspc quit";
