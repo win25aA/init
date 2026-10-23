@@ -19,6 +19,26 @@ let
     '';
   };
 
+  spotify-session = pkgs.symlinkJoin {
+    name = "spotify-session";
+    paths = [ pkgs.spotify-spotx ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram "$out/bin/spotify" --run '
+        if [ "$XDG_SESSION_TYPE" = "x11" ] || [ "$XDG_CURRENT_DESKTOP" = "bspwm" ]; then
+          unset NIXOS_OZONE_WL WAYLAND_DISPLAY
+          set -- --ozone-platform=x11 "$@"
+        fi
+      '
+
+      desktop="$out/share/applications/spotify.desktop"
+      if [ -e "$desktop" ]; then
+        cp --remove-destination "$(readlink -f "$desktop")" "$desktop"
+        sed -i -E "s|^Exec=[^ ]+|Exec=$out/bin/spotify|; s|^TryExec=.*|TryExec=$out/bin/spotify|" "$desktop"
+      fi
+    '';
+  };
+
   soundcloud-desktop = pkgs.appimageTools.wrapType2 {
     pname = "soundcloud-desktop";
     version = "8.4.13";
@@ -46,7 +66,7 @@ in
     osu-lazer-bin    
     gpu-screen-recorder
     (import inputs.creamlinux-installer { inherit pkgs; })
-    pkgs.spotify-spotx
+    spotify-session
     pavucontrol
     wireplumber
     playerctl
