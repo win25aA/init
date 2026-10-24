@@ -171,11 +171,11 @@ widget_order = [
     [lockscreen_widgets.widget."lockscreen-login-box@WL-1"]
     box_height = 196.0
     box_width = 720.0
-    cx = 709.000244140625
-    cy = 405.1199951171875
+    cx = 233.50007629394531
+    cy = 417.60000610351562
     output = "WL-1"
-    placement_height = 844.0
-    placement_width = 1418.0
+    placement_height = 870.0
+    placement_width = 467.0
     rotation = 0.0
     type = "login_box"
 
@@ -257,16 +257,16 @@ source = "wallpaper"
 directory = "/etc/nixos/wallpapers"
 
     [wallpaper.default]
-    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
     [wallpaper.last]
-    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
     [wallpaper.monitors.DVI-D-1]
-    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
 [widget.audio_visualizer]
 enabled = false

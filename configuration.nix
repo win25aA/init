@@ -208,7 +208,7 @@ services.udev.extraRules = ''
 
 
   services.zapret = {
-    enable = true;
+    enable = false;
     params = [
       # профиль 1 — голосовые порты Discord (UDP, без имени домена)
       "--filter-udp=50000-50100"
