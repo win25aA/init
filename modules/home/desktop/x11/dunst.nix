@@ -1,0 +1,83 @@
+# dunst: уведомления для X11.
+{ config, pkgs, inputs, ... }:
+
+{
+  home.packages = with pkgs; [ dunst libnotify ];
+
+  xdg.configFile."dunst/dunstrc".text = ''
+    [global]
+        monitor = 0
+        follow = mouse
+        width = 300
+        height = (0, 300)
+        origin = top-center
+        offset = (0, 50)
+        scale = 0
+        notification_limit = 6
+
+        progress_bar = true
+        progress_bar_height = 8
+        progress_bar_frame_width = 0
+        progress_bar_min_width = 150
+        progress_bar_max_width = 280
+        progress_bar_corner_radius = 4
+
+        indicate_hidden = yes
+        transparency = 0
+        separator_height = 1
+        padding = 10
+        horizontal_padding = 12
+        text_icon_padding = 10
+        frame_width = 0
+        gap_size = 6
+        sort = yes
+        idle_threshold = 120
+
+        font = JetBrainsMono Nerd Font Propo Bold 10
+        line_height = 0
+        markup = full
+        format = "<b>%s</b>\n%b"
+        alignment = left
+        vertical_alignment = center
+        show_age_threshold = 60
+        ellipsize = middle
+        ignore_newline = no
+        stack_duplicates = true
+        hide_duplicate_count = false
+        show_indicators = yes
+
+        enable_recursive_icon_lookup = true
+        icon_theme = "Papirus-Dark, Papirus"
+        icon_position = left
+        min_icon_size = 32
+        max_icon_size = 48
+
+        sticky_history = yes
+        history_length = 30
+        dmenu = rofi -dmenu -p dunst
+        browser = xdg-open
+        always_run_script = true
+        title = Dunst
+        class = Dunst
+        corner_radius = 6
+        ignore_dbusclose = false
+
+        mouse_left_click = do_action, close_current
+        mouse_middle_click = close_all
+        mouse_right_click = close_current
+
+    [urgency_low]
+        timeout = 4
+
+    [urgency_normal]
+        timeout = 6
+
+    [urgency_critical]
+        timeout = 0
+
+    [osd]
+        appname = osd
+        history_ignore = yes
+        format = "<b>%s</b>"
+  '';
+}
