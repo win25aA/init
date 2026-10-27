@@ -13,8 +13,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs"; 
     };
-# удалить для анстейбла
-   hyprland.url = "github:hyprwm/Hyprland?ref=v0.55.4&submodules=1";
 };
 
   outputs = inputs@{ self, nixpkgs, home-manager, spotx-nix, ... }: {
