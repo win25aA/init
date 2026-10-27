@@ -28,8 +28,10 @@
 
 | Файл | Для чего |
 | --- | --- |
-| [binds.nix](desktop/wayland/hyprland/binds.nix) | Сочетания клавиш Hyprland |
-| [default.nix](desktop/wayland/hyprland/default.nix) | Мониторы, оформление, автозапуск и правила окон |
+| [binds.lua](desktop/wayland/hyprland/binds.lua) | Сочетания клавиш Hyprland (Lua) |
+| [settings.lua](desktop/wayland/hyprland/settings.lua) | Мониторы, оформление, автозапуск и правила окон (Lua) |
+| [default.nix](desktop/wayland/hyprland/default.nix) | Генерация hyprland.lua через Home Manager, systemd и подключение Noctalia |
+| [binds.nix](desktop/wayland/hyprland/binds.nix) | Установка binds.lua через Home Manager |
 
 ## desktop/wayland/noctalia
 
