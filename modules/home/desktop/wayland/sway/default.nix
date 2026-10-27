@@ -3,10 +3,10 @@
 
 {
   imports = [
-    ./outputs.nix
-    ./appearance.nix
-    ./autostart.nix
-    ./keybindings.nix
+    ./outputs.nix # Разрешение и расположение мониторов Sway
+    ./appearance.nix # Внешний вид окон и рабочего стола
+    ./autostart.nix # Программы при входе в сессию
+    ./keybindings.nix # Сочетания клавиш Sway
   ];
 
   wayland.windowManager.sway = {

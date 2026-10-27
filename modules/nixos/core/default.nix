@@ -3,13 +3,13 @@
 
 {
   imports = [
-    ./nix.nix
-    ./overlays.nix
-    ./boot.nix
-    ./locale.nix
-    ./users.nix
-    ./home-manager.nix
-    ./security.nix
-    ./compat.nix
+    ./nix.nix # Настройки Nix, очистка и оптимизация хранилища
+    ./overlays.nix # Подключение собственных пакетов и SpotX
+    ./boot.nix # Загрузчик GRUB и его тема
+    ./locale.nix # Язык, часовой пояс и раскладка X11
+    ./users.nix # Учётная запись и группы пользователя
+    ./home-manager.nix # Связь системных и пользовательских настроек
+    ./security.nix # Polkit, pkexec и doas
+    ./compat.nix # Запуск Flatpak, AppImage и сторонних бинарников
   ];
 }

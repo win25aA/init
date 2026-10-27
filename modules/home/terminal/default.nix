@@ -3,9 +3,9 @@
 
 {
   imports = [
-    ./kitty.nix
-    ./fish
-    ./fastfetch.nix
-    ./btop.nix
+    ./kitty.nix # Шрифт, поведение и настройки Kitty
+    ./fish # Командная оболочка Fish
+    ./fastfetch.nix # Информация о системе и логотип
+    ./btop.nix # Настройки монитора ресурсов
   ];
 }

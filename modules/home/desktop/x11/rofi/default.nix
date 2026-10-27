@@ -3,7 +3,7 @@
 
 {
   imports = [
-    ./scripts.nix
+    ./scripts.nix # Вспомогательные команды этого приложения
   ];
 
   home.packages = with pkgs; [ rofi jq gammastep clipmenu pavucontrol ];

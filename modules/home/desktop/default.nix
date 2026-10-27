@@ -3,7 +3,7 @@
 
 {
   imports = [
-    ./wayland
-    ./x11
+    ./wayland # Hyprland, Sway и оболочка Noctalia
+    ./x11 # bspwm и его панель, меню и уведомления
   ];
 }

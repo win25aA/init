@@ -4,11 +4,12 @@
 
 {
   imports = [
-    ./hardware-configuration.nix
-    ../../modules/nixos
+    ./hardware-configuration.nix # Обнаруженное железо и корневой раздел
+    ../../modules/nixos # Подключение раздела nixos
   ];
 
   networking.hostName = "winarowk";
 
+  # Версия совместимости данных, не версия NixOS. При обычном обновлении не менять.
   system.stateVersion = "26.05";
 }

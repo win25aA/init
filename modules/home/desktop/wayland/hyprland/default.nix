@@ -3,11 +3,11 @@
 
 {
   imports = [
-    ./monitors.nix
-    ./appearance.nix
-    ./autostart.nix
-    ./binds.nix
-    ./rules.nix
+    ./monitors.nix # Разрешение, масштаб и расположение мониторов
+    ./appearance.nix # Внешний вид окон и рабочего стола
+    ./autostart.nix # Программы при входе в сессию
+    ./binds.nix # Сочетания клавиш Hyprland
+    ./rules.nix # Правила для отдельных окон
   ];
 
   wayland.windowManager.hyprland = {

@@ -5,16 +5,16 @@
 
 {
   imports = [
-    ./templates/kitty.nix
-    ./templates/btop.nix
-    ./templates/fish.nix
-    ./templates/gtk.nix
-    ./templates/mpv.nix
-    ./templates/polybar.nix
-    ./templates/rofi.nix
-    ./templates/dunst.nix
-    ./templates/picom.nix
-    ./templates/i3lock.nix
+    ./templates/kitty.nix # Шаблон цветов Matugen для kitty
+    ./templates/btop.nix # Шаблон цветов Matugen для btop
+    ./templates/fish.nix # Шаблон цветов Matugen для fish
+    ./templates/gtk.nix # Шаблон цветов Matugen для gtk
+    ./templates/mpv.nix # Шаблон цветов Matugen для mpv
+    ./templates/polybar.nix # Шаблон цветов Matugen для polybar
+    ./templates/rofi.nix # Шаблон цветов Matugen для rofi
+    ./templates/dunst.nix # Шаблон цветов Matugen для dunst
+    ./templates/picom.nix # Шаблон цветов Matugen для picom
+    ./templates/i3lock.nix # Шаблон цветов Matugen для i3lock
   ];
 
   # mkBefore: секция [config] всегда первой в файле

@@ -3,6 +3,6 @@
 
 {
   imports = [
-    ./nodejs.nix
+    ./nodejs.nix # Каталог глобальных npm-пакетов и пользовательский PATH
   ];
 }

@@ -3,9 +3,9 @@
 
 {
   imports = [
-    ./networking.nix
-    ./dns.nix
-    ./zapret.nix
-    ./vpn.nix
+    ./networking.nix # NetworkManager и подключение к сети
+    ./dns.nix # DNS и DNS-over-TLS
+    ./zapret.nix # Обход блокировок через zapret
+    ./vpn.nix # AmneziaVPN
   ];
 }

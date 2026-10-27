@@ -3,8 +3,8 @@
 
 {
   imports = [
-    ./gtk.nix
-    ./cursor.nix
-    ./matugen
+    ./gtk.nix # Темы GTK/Qt
+    ./cursor.nix # Тема и размер курсора
+    ./matugen # Генерация цветов из обоев
   ];
 }

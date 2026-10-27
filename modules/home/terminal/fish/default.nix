@@ -3,8 +3,8 @@
 
 {
   imports = [
-    ./abbreviations.nix
-    ./nixos-helpers.nix
+    ./abbreviations.nix # Сокращения команд Fish
+    ./nixos-helpers.nix # Команды nrs и nback: пересборка и откат
   ];
 
   programs.fish = {

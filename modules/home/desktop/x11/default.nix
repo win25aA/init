@@ -3,11 +3,11 @@
 
 {
   imports = [
-    ./bspwm
-    ./sxhkd.nix
-    ./polybar
-    ./picom.nix
-    ./rofi
-    ./dunst.nix
+    ./bspwm # bspwm: окна, правила и вспомогательные команды
+    ./sxhkd.nix # Сочетания клавиш bspwm
+    ./polybar # Панель bspwm
+    ./picom.nix # Эффекты и прозрачность X11
+    ./rofi # Меню запуска и вспомогательные меню
+    ./dunst.nix # Уведомления X11
   ];
 }

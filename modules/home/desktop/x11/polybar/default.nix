@@ -3,9 +3,9 @@
 
 {
   imports = [
-    ./scripts.nix
-    ./bar.nix
-    ./modules.nix
+    ./scripts.nix # Вспомогательные команды этого приложения
+    ./bar.nix # Расположение и внешний вид панели
+    ./modules.nix # Индикаторы и содержимое панели
   ];
 
   home.packages = with pkgs; [ polybarFull playerctl dunst ];

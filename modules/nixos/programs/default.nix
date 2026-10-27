@@ -3,15 +3,15 @@
 
 {
   imports = [
-    ./internet.nix
-    ./communication.nix
-    ./media.nix
-    ./gaming.nix
-    ./development.nix
-    ./file-manager.nix
-    ./archives.nix
-    ./editors.nix
-    ./cli.nix
-    ./virtualisation.nix
+    ./internet.nix # Firefox и qBittorrent
+    ./communication.nix # Мессенджеры
+    ./media.nix # Музыка, видео, изображения и запись экрана
+    ./gaming.nix # Steam, Wine и игровые лаунчеры
+    ./development.nix # Инструменты разработки
+    ./file-manager.nix # Файловый менеджер
+    ./archives.nix # Архиваторы
+    ./editors.nix # Текстовые редакторы
+    ./cli.nix # Общие консольные утилиты
+    ./virtualisation.nix # Виртуальные машины
   ];
 }
