@@ -5,7 +5,7 @@
 {
   spotify-session     = pkgs.callPackage ./spotify-session.nix { };
   soundcloud-desktop  = pkgs.callPackage ./soundcloud-desktop.nix { };
-  noctalia-nvml       = pkgs.callPackage ./noctalia-nvml.nix { inherit inputs; };
+  noctalia-nvml       = pkgs.callPackage ./noctalia-nvml.nix { };
   simple-sddm-2-theme = pkgs.callPackage ./simple-sddm-2-theme.nix { };
   creamlinux-installer = import inputs.creamlinux-installer { inherit pkgs; };
 }

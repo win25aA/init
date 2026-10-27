@@ -1,9 +1,9 @@
 # noctalia с доступом к NVML (статистика NVIDIA): добавляем драйверные либы в LD_LIBRARY_PATH.
-{ symlinkJoin, makeWrapper, stdenv, inputs }:
+{ symlinkJoin, makeWrapper, noctalia }:
 
 symlinkJoin {
   name = "noctalia-nvml";
-  paths = [ inputs.noctalia.packages.${stdenv.hostPlatform.system}.default ];
+  paths = [ noctalia ];
   nativeBuildInputs = [ makeWrapper ];
   postBuild = ''
     for bin in $out/bin/*; do
