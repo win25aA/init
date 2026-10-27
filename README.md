@@ -3,7 +3,7 @@
 ```
 flake.nix                 входы и сборка хоста
 hosts/winarowk/           точка входа машины (hostName, stateVersion, железо)
-pkgs/                     собственные пакеты (spotify-session, soundcloud, noctalia-nvml, тема SDDM, creamlinux)
+pkgs/                     собственные пакеты (spotify-session, noctalia-nvml, тема SDDM)
 modules/nixos/            системные модули
   core/                   nix, оверлеи, загрузка, локаль, пользователи, home-manager, безопасность, совместимость
   hardware/               nvidia, звук, bluetooth, диски, печать, внешние устройства

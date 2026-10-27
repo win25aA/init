@@ -19,6 +19,5 @@
     # игры и лаунчеры
     prismlauncher
     osu-lazer-bin
-    creamlinux-installer   # pkgs/default.nix
   ];
 }
