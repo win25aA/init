@@ -1,4 +1,4 @@
-config_version = 15
+config_version = 14
 
 [bar.default]
 center = [ "group:g2" ]
@@ -257,16 +257,16 @@ source = "wallpaper"
 directory = "/etc/nixos/wallpapers"
 
     [wallpaper.default]
-    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
 
     [wallpaper.last]
-    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
 
     [wallpaper.monitors.DVI-D-1]
-    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
 
 [widget.audio_visualizer]
 enabled = false

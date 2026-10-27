@@ -1,0 +1,285 @@
+config_version = 15
+
+[bar.default]
+center = [ "group:g2" ]
+end = [ "group:g1", "tray", "volume", "group:g3" ]
+font_weight = 700
+start = [ "workspaces", "clock" ]
+
+    [[bar.default.capsule_group]]
+    enabled = true
+    fill = "surface_variant"
+    id = "g2"
+    members = [ "media", "audio_visualizer" ]
+    opacity = 1.0
+    padding = 6.0
+
+    [[bar.default.capsule_group]]
+    enabled = false
+    fill = "surface_variant"
+    id = "g1"
+    members = [ "cpu", "ram" ]
+    opacity = 1.0
+    padding = 6.0
+
+    [[bar.default.capsule_group]]
+    enabled = true
+    fill = "surface_variant"
+    id = "g3"
+    members = [ "control-center", "session" ]
+    opacity = 1.0
+    padding = 6.0
+
+[control_center]
+hidden_tabs = [ "monitor", "power", "network" ]
+
+    [[control_center.shortcuts]]
+    type = "nightlight"
+
+    [[control_center.shortcuts]]
+    type = "clipboard"
+
+    [[control_center.shortcuts]]
+    type = "notification"
+
+[desktop_widgets]
+schema_version = 2
+widget_order = [ "desktop-widget-0000000000000001" ]
+
+    [desktop_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget.desktop-widget-0000000000000001]
+    box_height = 160.0
+    box_width = 256.0
+    cx = 144.0
+    cy = 118.0
+    output = "DVI-D-1"
+    placement_height = 900.0
+    placement_width = 1440.0
+    rotation = -0.0
+    type = "weather"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000001.settings]
+        background = false
+        shadow = false
+
+[location]
+address = "vysokaya gora tatarstan"
+latitude = 55.912199999999999
+longitude = 49.312800000000003
+
+[lockscreen_widgets]
+enabled = false
+schema_version = 2
+widget_order = [
+    "lockscreen-login-box@WL-1",
+    "lockscreen-login-box@winit",
+    "lockscreen-login-box@WAYLAND-1",
+    "lockscreen-login-box@HDMI-A-1",
+    "lockscreen-login-box@DVI-D-1"
+]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@DVI-D-1"]
+    box_height = 196.0
+    box_width = 720.0
+    cx = 720.0
+    cy = 781.0
+    output = "DVI-D-1"
+    placement_height = 900.0
+    placement_width = 1440.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@DVI-D-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
+    box_height = 196.0
+    box_width = 720.0
+    cx = 512.0
+    cy = 649.0
+    output = "HDMI-A-1"
+    placement_height = 768.0
+    placement_width = 1024.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@WAYLAND-1"]
+    box_height = 196.0
+    box_width = 720.0
+    cx = 231.0
+    cy = 131.0
+    output = "WAYLAND-1"
+    placement_height = 0.0
+    placement_width = 0.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@WAYLAND-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@WL-1"]
+    box_height = 196.0
+    box_width = 720.0
+    cx = 233.50007629394531
+    cy = 417.60000610351562
+    output = "WL-1"
+    placement_height = 870.0
+    placement_width = 467.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@WL-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@winit"]
+    box_height = 196.0
+    box_width = 720.0
+    cx = 248.0
+    cy = 231.0
+    output = "winit"
+    placement_height = 0.0
+    placement_width = 0.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@winit".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+[osd.kinds]
+media = false
+
+[plugin_settings."noctalia/screen_recorder"]
+audio_source = "both"
+
+[plugin_settings."noctalia/wallhaven"]
+download_dir = "/etc/nixos/wallpapers/"
+
+[plugin_settings."whyoolw/dropwall"]
+copy_to_wallpaper_dir = true
+
+[plugins]
+enabled = [ "radimous/prismlauncher-instances", "noctalia/wallhaven" ]
+
+[shell]
+avatar_path = "/etc/nixos/wallpapers/.face"
+lang = "ru"
+
+    [shell.screen_corners]
+    size = 30
+
+[theme]
+community_palette = "Cyberpunk"
+source = "wallpaper"
+
+    [theme.templates]
+    builtin_ids = []
+    enable_builtin_templates = false
+    enable_community_templates = false
+
+[wallpaper]
+directory = "/etc/nixos/wallpapers"
+
+    [wallpaper.default]
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+
+    [wallpaper.last]
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+
+    [wallpaper.monitors.DVI-D-1]
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+
+    [wallpaper.monitors.HDMI-A-1]
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+
+[widget.audio_visualizer]
+enabled = false
+
+[widget.control-center]
+capsule = true
+custom_image_colorize = true
+
+[widget.cpu]
+display = "text"
+
+[widget.ram]
+display = "text"
+
+[widget.tray]
+color = "primary"
