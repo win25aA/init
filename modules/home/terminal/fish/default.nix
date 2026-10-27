@@ -1,14 +1,41 @@
-# fish: основа (приветствие, промпт, инициализация).
+# Fish: сокращения, приветствие, промпт и инициализация.
+# Пересборка и откат системы — в nixos-helpers.nix.
 { ... }:
 
 {
   imports = [
-    ./abbreviations.nix # Сокращения команд Fish
     ./nixos-helpers.nix # Команды nrs и nback: пересборка и откат
   ];
 
   programs.fish = {
     enable = true;
+
+    # Сокращения команд
+    shellAbbrs = {
+      # --- git ---
+      lg = "lazygit";
+      gd = "git diff";
+      ga = "git add .";
+      gc = "git commit -am";
+      gl = "git log";
+      gs = "git status";
+      gst = "git stash";
+      gsp = "git stash pop";
+      gp = "git push";
+      gpl = "git pull";
+      gsw = "git switch";
+      gsm = "git switch main";
+      gb = "git branch";
+      gbd = "git branch -d";
+      gco = "git checkout";
+      gsh = "git show";
+
+      # --- ls ---
+      l = "ls";
+      ll = "ls -l";
+      la = "ls -a";
+      lla = "ls -la";
+    };
 
     shellAliases = {
       ls = "eza --icons --group-directories-first -1";

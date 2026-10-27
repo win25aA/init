@@ -1,4 +1,4 @@
-# Браузеры и торренты.
+# Интернет: браузер, торренты и мессенджеры.
 { pkgs, ... }:
 
 {
@@ -6,5 +6,9 @@
 
   environment.systemPackages = with pkgs; [
     qbittorrent
+
+    # Мессенджеры
+    vesktop
+    ayugram-desktop
   ];
 }

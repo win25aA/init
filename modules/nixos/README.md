@@ -1,6 +1,6 @@
 # Системные настройки
 
-Здесь настраивается вся машина. Чтобы поменять личный вид или клавиши приложения, смотри [пользовательские настройки](../home/README.md). Начинай с [default.nix](default.nix).
+Настройки всей машины. Для личного вида и клавиш смотри [пользовательский раздел](../home/README.md). Начинай с [default.nix](default.nix).
 
 [Назад к карте конфига](../../README.md)
 
@@ -65,14 +65,11 @@
 
 | Файл | Для чего |
 | --- | --- |
-| [archives.nix](programs/archives.nix) | Архиваторы |
-| [cli.nix](programs/cli.nix) | Общие консольные утилиты |
-| [communication.nix](programs/communication.nix) | Мессенджеры |
 | [default.nix](programs/default.nix) | Установка программ по категориям |
 | [development.nix](programs/development.nix) | Инструменты разработки |
-| [editors.nix](programs/editors.nix) | Текстовые редакторы |
 | [file-manager.nix](programs/file-manager.nix) | Файловый менеджер |
 | [gaming.nix](programs/gaming.nix) | Steam, Wine и игровые лаунчеры |
-| [internet.nix](programs/internet.nix) | Firefox и qBittorrent |
+| [internet.nix](programs/internet.nix) | Firefox, qBittorrent и мессенджеры |
 | [media.nix](programs/media.nix) | Музыка, видео, изображения и запись экрана |
+| [utilities.nix](programs/utilities.nix) | Архиваторы, текстовые редакторы и консольные утилиты |
 | [virtualisation.nix](programs/virtualisation.nix) | Виртуальные машины |

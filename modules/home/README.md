@@ -1,21 +1,16 @@
 # Личные настройки
 
-Здесь настройки пользователя winarowk. Установка основных программ находится в [системном разделе](../nixos/programs/default.nix). Начинай с [default.nix](default.nix).
+Настройки пользователя winarowk. Основные программы устанавливаются в [системном разделе](../nixos/programs/default.nix). Начинай с [default.nix](default.nix).
 
 [Назад к карте конфига](../../README.md)
-
-## apps
-
-| Файл | Для чего |
-| --- | --- |
-| [default.nix](apps/default.nix) | Настройки отдельных приложений |
-| [mpv.nix](apps/mpv.nix) | Подключение цветов для видеоплеера mpv |
 
 ## Вход в раздел
 
 | Файл | Для чего |
 | --- | --- |
+| [apps.nix](apps.nix) | Настройки приложений: подключение цветов mpv |
 | [default.nix](default.nix) | Точка входа раздела |
+| [development.nix](development.nix) | Каталог глобальных npm-пакетов и пользовательский PATH |
 
 ## desktop
 
@@ -33,12 +28,8 @@
 
 | Файл | Для чего |
 | --- | --- |
-| [appearance.nix](desktop/wayland/hyprland/appearance.nix) | Внешний вид окон и рабочего стола |
-| [autostart.nix](desktop/wayland/hyprland/autostart.nix) | Программы при входе в сессию |
 | [binds.nix](desktop/wayland/hyprland/binds.nix) | Сочетания клавиш Hyprland |
-| [default.nix](desktop/wayland/hyprland/default.nix) | Hyprland: настройки, мониторы и сочетания клавиш |
-| [monitors.nix](desktop/wayland/hyprland/monitors.nix) | Разрешение, масштаб и расположение мониторов |
-| [rules.nix](desktop/wayland/hyprland/rules.nix) | Правила для отдельных окон |
+| [default.nix](desktop/wayland/hyprland/default.nix) | Мониторы, оформление, автозапуск и правила окон |
 
 ## desktop/wayland/noctalia
 
@@ -50,11 +41,8 @@
 
 | Файл | Для чего |
 | --- | --- |
-| [appearance.nix](desktop/wayland/sway/appearance.nix) | Внешний вид окон и рабочего стола |
-| [autostart.nix](desktop/wayland/sway/autostart.nix) | Программы при входе в сессию |
-| [default.nix](desktop/wayland/sway/default.nix) | Sway: настройки, мониторы и сочетания клавиш |
+| [default.nix](desktop/wayland/sway/default.nix) | Мониторы, оформление и автозапуск Sway |
 | [keybindings.nix](desktop/wayland/sway/keybindings.nix) | Сочетания клавиш Sway |
-| [outputs.nix](desktop/wayland/sway/outputs.nix) | Разрешение и расположение мониторов Sway |
 
 ## desktop/x11/bspwm
 
@@ -88,13 +76,6 @@
 | [default.nix](desktop/x11/rofi/default.nix) | Меню запуска и вспомогательные меню |
 | [scripts.nix](desktop/x11/rofi/scripts.nix) | Вспомогательные команды этого приложения |
 
-## dev
-
-| Файл | Для чего |
-| --- | --- |
-| [default.nix](dev/default.nix) | Пользовательское окружение разработки |
-| [nodejs.nix](dev/nodejs.nix) | Каталог глобальных npm-пакетов и пользовательский PATH |
-
 ## terminal
 
 | Файл | Для чего |
@@ -108,8 +89,7 @@
 
 | Файл | Для чего |
 | --- | --- |
-| [abbreviations.nix](terminal/fish/abbreviations.nix) | Сокращения команд Fish |
-| [default.nix](terminal/fish/default.nix) | Командная оболочка Fish |
+| [default.nix](terminal/fish/default.nix) | Сокращения, приветствие и инициализация Fish |
 | [nixos-helpers.nix](terminal/fish/nixos-helpers.nix) | Команды nrs и nback: пересборка и откат |
 
 ## theming

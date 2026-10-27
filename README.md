@@ -13,10 +13,10 @@
 | Интернет / DNS / VPN / zapret | [Раздел сети](modules/nixos/network/default.nix) |
 | Экран входа | [sddm.nix](modules/nixos/desktop/sddm.nix) |
 | Загрузочное меню GRUB | [boot.nix](modules/nixos/core/boot.nix) |
-| Мониторы Hyprland | [monitors.nix](modules/home/desktop/wayland/hyprland/monitors.nix) |
+| Мониторы Hyprland | [Настройки Hyprland](modules/home/desktop/wayland/hyprland/default.nix) |
 | Горячие клавиши Hyprland | [binds.nix](modules/home/desktop/wayland/hyprland/binds.nix) |
-| Автозапуск Hyprland | [autostart.nix](modules/home/desktop/wayland/hyprland/autostart.nix) |
-| Внешний вид и правила окон Hyprland | [appearance.nix](modules/home/desktop/wayland/hyprland/appearance.nix), [rules.nix](modules/home/desktop/wayland/hyprland/rules.nix) |
+| Автозапуск Hyprland | [Настройки Hyprland](modules/home/desktop/wayland/hyprland/default.nix) |
+| Внешний вид и правила окон Hyprland | [Настройки Hyprland](modules/home/desktop/wayland/hyprland/default.nix) |
 | Мониторы, клавиши и автозапуск Sway | [Папка Sway](modules/home/desktop/wayland/sway/default.nix) |
 | Окна, клавиши, панель и меню bspwm | [Раздел X11](modules/home/desktop/x11/default.nix) |
 | Настройки Noctalia | [settings.toml](modules/home/desktop/wayland/noctalia/settings.toml), [config.toml](modules/home/desktop/wayland/noctalia/config.toml) |
@@ -27,6 +27,16 @@
 | Шрифты системы | [fonts.nix](modules/nixos/desktop/fonts.nix) |
 | Язык, часовой пояс, раскладка X11 | [locale.nix](modules/nixos/core/locale.nix) |
 | Раскладка Wayland | `input` в [Hyprland](modules/home/desktop/wayland/hyprland/default.nix) или [Sway](modules/home/desktop/wayland/sway/default.nix) |
+
+## Принцип структуры
+
+Одна самостоятельная задача — один модуль. Короткие связанные настройки находятся вместе; отдельная папка нужна только там, где действительно несколько больших частей.
+
+- Hyprland и Sway: основные настройки в `default.nix`, сочетания клавиш рядом отдельным файлом.
+- Fish: обычные настройки и сокращения вместе, длинные команды пересборки отдельно.
+- Небольшие настройки приложений и разработки: `modules/home/apps.nix` и `modules/home/development.nix`, без промежуточных папок.
+- Интернет-программы и мессенджеры вместе; повседневные утилиты вместе. Драйверы, службы и крупные конфиги не смешаны.
+- Matugen сохраняет отдельный шаблон для каждого приложения: там независимые форматы и цвета, а не просто списки из нескольких строк.
 
 ## Как устроены папки
 
@@ -60,7 +70,7 @@ flake.nix
         ├── core, hardware, network, desktop, programs
         └── core/home-manager.nix
             └── modules/home/default.nix
-                └── desktop, theming, terminal, apps, dev
+                └── desktop, theming, terminal, apps.nix, development.nix
 ```
 
 Это схема подключения, не порядок запуска программ. Home Manager подключён в flake, а `core/home-manager.nix` передаёт ему пользовательские настройки.
