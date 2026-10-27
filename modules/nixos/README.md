@@ -31,7 +31,7 @@
 | [bspwm.nix](desktop/bspwm.nix) | Включение сессии bspwm |
 | [default.nix](desktop/default.nix) | Рабочий стол и графическая сессия |
 | [fonts.nix](desktop/fonts.nix) | Системные шрифты |
-| [hyprland.nix](desktop/hyprland.nix) | Установка Hyprland и портала из отдельного flake |
+| [hyprland.nix](desktop/hyprland.nix) | Hyprland и совместимый портал из nixpkgs |
 | [portals.nix](desktop/portals.nix) | Порталы: выбор файлов и интеграция приложений |
 | [sddm.nix](desktop/sddm.nix) | Экран входа и его тема |
 | [sway.nix](desktop/sway.nix) | Установка SwayFX |

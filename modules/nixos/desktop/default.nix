@@ -6,7 +6,7 @@
     ./xserver.nix # Общая настройка X11
     ./sddm.nix # Экран входа и его тема
     ./wayland.nix # Noctalia и общие утилиты Wayland
-    ./hyprland.nix # Установка Hyprland и портала из отдельного flake
+    ./hyprland.nix # Hyprland и совместимый портал из nixpkgs
     ./sway.nix # Установка SwayFX
     ./bspwm.nix # Включение сессии bspwm
     ./portals.nix # Порталы: выбор файлов и интеграция приложений
