@@ -2,6 +2,10 @@
 
 Этот репозиторий описывает систему `winarowk`. Главное правило: **установка программы** и **её личные настройки** могут находиться в разных местах.
 
+## Пробная QS-оболочка illogical-impulse
+
+В этой ветке Hyprland запускает QS от end-4, а Sway — прежнюю Noctalia. [Что изменено и как безопасно попробовать](docs/illogical-impulse.md). Остальные настройки Hyprland сохранены.
+
 ## Сначала выбери задачу
 
 | Хочу изменить | Открыть |
@@ -19,7 +23,8 @@
 | Внешний вид и правила окон Hyprland | [Настройки Hyprland](modules/home/desktop/wayland/hyprland/settings.lua) |
 | Мониторы, клавиши и автозапуск Sway | [Папка Sway](modules/home/desktop/wayland/sway/default.nix) |
 | Окна, клавиши, панель и меню bspwm | [Раздел X11](modules/home/desktop/x11/default.nix) |
-| Настройки Noctalia | [settings.toml](modules/home/desktop/wayland/noctalia/settings.toml), [config.toml](modules/home/desktop/wayland/noctalia/config.toml) |
+| Настройки QS / illogical-impulse | [Подключение QS](modules/home/desktop/wayland/illogical-impulse.nix), [памятка](docs/illogical-impulse.md); личный JSON — `~/.config/illogical-impulse/config.json` |
+| Настройки Noctalia (Sway) | [settings.toml](modules/home/desktop/wayland/noctalia/settings.toml), [config.toml](modules/home/desktop/wayland/noctalia/config.toml) |
 | Терминал Kitty | [kitty.nix](modules/home/terminal/kitty.nix) |
 | Fish, сокращения, команды `nrs` / `nback` | [Папка Fish](modules/home/terminal/fish/default.nix) |
 | Темы GTK/Qt и курсор | [Раздел оформления](modules/home/theming/default.nix) |
@@ -115,7 +120,7 @@ hyprctl monitors
 hyprctl binds
 ```
 
-Затем проверь `SUPER+1…0`, `SUPER+CTRL+1…0`, мышь, меню Noctalia, скриншоты и оба special-воркспейса. В `configerrors` не должно быть ошибок. Сборка Nix сама по себе не проверяет работу мониторов и приложений в графической сессии.
+Затем проверь `SUPER+1…0`, `SUPER+CTRL+1…0`, мышь, меню QS, скриншоты и оба special-воркспейса. В `configerrors` не должно быть ошибок. Сборка Nix сама по себе не проверяет работу мониторов и приложений в графической сессии.
 
 ## Что не менять наугад
 

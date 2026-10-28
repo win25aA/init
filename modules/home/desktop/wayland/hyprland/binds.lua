@@ -1,6 +1,6 @@
 -- Hyprland: все прежние сочетания клавиш, в нативном Lua API.
 local mod = "SUPER"
-local ipc = "noctalia msg"
+local ipc = "ii-panel"
 
 -- Воркспейсы 1–10; десятый остаётся на клавише 0.
 for i = 1, 10 do
@@ -25,11 +25,11 @@ hl.bind(mod .. " + M", hl.dsp.exec_cmd(
     "command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"
 ))
 
--- Noctalia.
-hl.bind(mod .. " + space", hl.dsp.exec_cmd(ipc .. " panel-toggle launcher"))
-hl.bind(mod .. " + SHIFT + W", hl.dsp.exec_cmd(ipc .. " panel-toggle wallpaper"))
-hl.bind(mod .. " + P", hl.dsp.exec_cmd(ipc .. " panel-toggle session"))
-hl.bind(mod .. " + Z", hl.dsp.exec_cmd(ipc .. " panel-toggle control-center"))
+-- illogical-impulse: прежние сочетания клавиш, новые команды оболочки.
+hl.bind(mod .. " + space", hl.dsp.exec_cmd(ipc .. " launcher"))
+hl.bind(mod .. " + SHIFT + W", hl.dsp.exec_cmd(ipc .. " wallpaper"))
+hl.bind(mod .. " + P", hl.dsp.exec_cmd(ipc .. " session"))
+hl.bind(mod .. " + Z", hl.dsp.exec_cmd(ipc .. " control-center"))
 hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd(ipc .. " screenshot-fullscreen"))
 hl.bind(mod .. " + CTRL + S", hl.dsp.exec_cmd(ipc .. " screenshot-region"))
 hl.bind(mod .. " + mouse:275", hl.dsp.exec_cmd("playerctl previous"))

@@ -6,6 +6,7 @@
     ./xserver.nix # Общая настройка X11
     ./sddm.nix # Экран входа и его тема
     ./wayland.nix # Noctalia и общие утилиты Wayland
+    ./illogical-impulse.nix # Шрифты и PAM для QS-оболочки
     ./hyprland.nix # Hyprland и совместимый портал из nixpkgs
     ./sway.nix # Установка SwayFX
     ./bspwm.nix # Включение сессии bspwm

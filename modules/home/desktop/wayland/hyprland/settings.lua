@@ -97,6 +97,6 @@ hl.env("XDG_SESSION_TYPE", "wayland")
 -- Аналог exec-once: только старт сессии, не обычная перезагрузка конфига.
 -- Systemd/D-Bus hook Home Manager уже зарегистрирован перед этим модулем.
 hl.on("hyprland.start", function()
-    hl.exec_cmd("noctalia")
+    hl.exec_cmd("ii-shell")
     hl.exec_cmd("AmneziaVPN")
 end)
