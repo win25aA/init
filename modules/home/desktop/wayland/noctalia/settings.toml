@@ -4,9 +4,12 @@ config_version = 15
 center = [ "group:g2" ]
 end = [ "group:g1", "tray", "volume", "group:g3" ]
 font_weight = 700
-start = [ "workspaces", "clock" ]
+start = [ "workspaces", "clock", "radio" ]
 
     [[bar.default.capsule_group]]
+    accordion = false
+    accordion_direction = "end"
+    border_width = 1.0
     enabled = true
     fill = "surface_variant"
     id = "g2"
@@ -15,6 +18,9 @@ start = [ "workspaces", "clock" ]
     padding = 6.0
 
     [[bar.default.capsule_group]]
+    accordion = false
+    accordion_direction = "end"
+    border_width = 1.0
     enabled = false
     fill = "surface_variant"
     id = "g1"
@@ -23,6 +29,9 @@ start = [ "workspaces", "clock" ]
     padding = 6.0
 
     [[bar.default.capsule_group]]
+    accordion = false
+    accordion_direction = "end"
+    border_width = 1.0
     enabled = true
     fill = "surface_variant"
     id = "g3"
@@ -225,6 +234,9 @@ widget_order = [
 [osd.kinds]
 media = false
 
+[plugin_settings."nilsonlinux/world-radio"]
+Panel_placement = "floating"
+
 [plugin_settings."noctalia/screen_recorder"]
 audio_source = "both"
 
@@ -235,11 +247,12 @@ download_dir = "/etc/nixos/wallpapers/"
 copy_to_wallpaper_dir = true
 
 [plugins]
-enabled = [ "radimous/prismlauncher-instances", "noctalia/wallhaven" ]
+enabled = [ "radimous/prismlauncher-instances", "noctalia/wallhaven", "nilsonlinux/world-radio", "theblackdon/theme-switcher" ]
 
 [shell]
-avatar_path = "/etc/nixos/wallpapers/.face"
+avatar_path = "/etc/nixos/wallpapers/.158.jpg"
 lang = "ru"
+settings_window_translucent = true
 
     [shell.launcher]
     pinned = [ "org.vinegarhq.Sober", "osu!", "org.prismlauncher.PrismLauncher", "com.usebottles.bottles" ]
@@ -260,16 +273,16 @@ source = "wallpaper"
 directory = "/etc/nixos/wallpapers"
 
     [wallpaper.default]
-    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
     [wallpaper.last]
-    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
     [wallpaper.monitors.DVI-D-1]
-    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
 [widget.audio_visualizer]
 enabled = false
@@ -280,6 +293,9 @@ custom_image_colorize = true
 
 [widget.cpu]
 display = "text"
+
+[widget.radio]
+type = "nilsonlinux/world-radio:radio"
 
 [widget.ram]
 display = "text"
