@@ -43,6 +43,7 @@ in
         "--to-code ${mod}+Shift+w" = "exec ${ipc} panel-toggle wallpaper";
         "--to-code ${mod}+p" = "exec ${ipc} panel-toggle session";
         "--to-code ${mod}+z" = "exec ${ipc} panel-toggle control-center";
+        "--to-code ${mod}+Shift+z" = "exec ${ipc} panel-toggle nilsonlinux/world-radio:Panel";
         "--to-code ${mod}+Shift+s" = "exec ${ipc} screenshot-fullscreen";
         "--to-code ${mod}+Ctrl+s" = "exec ${ipc} screenshot-region";
 
