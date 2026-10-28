@@ -2,8 +2,10 @@ config_version = 15
 
 [bar.default]
 center = [ "group:g2" ]
+concave_edge_corners = false
 end = [ "group:g1", "tray", "volume", "group:g3" ]
 font_weight = 700
+radius = 10
 start = [ "workspaces", "clock", "radio" ]
 
     [[bar.default.capsule_group]]

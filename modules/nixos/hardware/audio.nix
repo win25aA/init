@@ -15,6 +15,7 @@
   environment.systemPackages = with pkgs; [
     pavucontrol
     wireplumber
+    socat
     playerctl
   ];
 }
