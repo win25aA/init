@@ -4,6 +4,6 @@
 {
   nixpkgs.overlays = [
     inputs.spotx-nix.overlays.default
-    (final: prev: import ../../../pkgs { pkgs = final; })
+    (final: prev: import ../../../pkgs { pkgs = final; inherit inputs; })
   ];
 }

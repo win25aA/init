@@ -9,6 +9,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Только исходники QS-оболочки, без установщика и Hyprland-конфигов end-4.
+    illogical-impulse = {
+      url = "git+https://github.com/end-4/dots-hyprland?submodules=1";
+      flake = false;
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs"; 

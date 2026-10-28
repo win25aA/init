@@ -56,7 +56,8 @@
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",
-        "spotx-nix": "spotx-nix"
+        "spotx-nix": "spotx-nix",
+        "illogical-impulse": "illogical-impulse"
       }
     },
     "spotx-bash": {
@@ -95,6 +96,24 @@
         "owner": "SpotX-Official",
         "repo": "SpotX-Nix",
         "type": "github"
+      }
+    },
+    "illogical-impulse": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791686915,
+        "narHash": "sha256-kfEDg0jGfQibLGARY+EvBFLsWj5H7F984dPDm4bGeVs=",
+        "ref": "refs/heads/main",
+        "rev": "2f2a376fdb2ad738bf55f693dd0b474b64bb0ab8",
+        "revCount": 6333,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/end-4/dots-hyprland"
+      },
+      "original": {
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/end-4/dots-hyprland"
       }
     }
   },
