@@ -1,4 +1,4 @@
-# Общее для Wayland-сессий (Hyprland и Sway): оболочка noctalia и утилиты.
+# Общие Wayland-утилиты и Noctalia для Sway (Hyprland использует QS).
 { pkgs, ... }:
 
 {

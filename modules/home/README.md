@@ -22,7 +22,9 @@
 
 | Файл | Для чего |
 | --- | --- |
-| [default.nix](desktop/wayland/default.nix) | Hyprland, Sway и оболочка Noctalia |
+| [default.nix](desktop/wayland/default.nix) | Hyprland с QS, Sway с Noctalia |
+
+| [illogical-impulse.nix](desktop/wayland/illogical-impulse.nix) | QS-оболочка и история буфера только для Hyprland |
 
 ## desktop/wayland/hyprland
 

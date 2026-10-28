@@ -1,0 +1,235 @@
+--- a/dots/.config/quickshell/ii/modules/common/Config.qml
++++ b/dots/.config/quickshell/ii/modules/common/Config.qml
+@@ -81,8 +81,8 @@
+             property string panelFamily: "ii" // "ii", "waffle"
+ 
+             property JsonObject policies: JsonObject {
+-                property int ai: 1 // 0: No | 1: Yes | 2: Local
+-                property int weeb: 1 // 0: No | 1: Open | 2: Closet
++                property int ai: 0 // 0: No | 1: Yes | 2: Local
++                property int weeb: 2 // 0: No | 1: Open | 2: Closet
+             }
+ 
+             property JsonObject ai: JsonObject {
+@@ -108,13 +108,13 @@
+                 property bool extraBackgroundTint: true
+                 property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
+                 property JsonObject fonts: JsonObject {
+-                    property string main: "Google Sans Flex"
+-                    property string numbers: "Google Sans Flex"
+-                    property string title: "Google Sans Flex"
++                    property string main: "Inter"
++                    property string numbers: "Inter"
++                    property string title: "Inter"
+                     property string iconNerd: "JetBrains Mono NF"
+                     property string monospace: "JetBrains Mono NF"
+-                    property string reading: "Readex Pro"
+-                    property string expressive: "Space Grotesk"
++                    property string reading: "Inter"
++                    property string expressive: "Inter"
+                 }
+                 property JsonObject transparency: JsonObject {
+                     property bool enable: false
+@@ -124,8 +124,8 @@
+                 }
+                 property JsonObject wallpaperTheming: JsonObject {
+                     property bool enableAppsAndShell: true
+-                    property bool enableQtApps: true
+-                    property bool enableTerminal: true
++                    property bool enableQtApps: false
++                    property bool enableTerminal: false
+                     property JsonObject terminalGenerationProps: JsonObject {
+                         property real harmony: 0.6
+                         property real harmonizeThreshold: 100
+@@ -150,15 +150,15 @@
+             }
+ 
+             property JsonObject apps: JsonObject {
+-                property string bluetooth: "kcmshell6 kcm_bluetooth"
++                property string bluetooth: "blueman-manager"
+                 property string changePassword: "kitty -1 --hold=yes fish -i -c 'passwd'"
+-                property string network: "kcmshell6 kcm_networkmanagement"
+-                property string manageUser: "kcmshell6 kcm_users"
+-                property string networkEthernet: "kcmshell6 kcm_networkmanagement"
+-                property string taskManager: "plasma-systemmonitor --page-name Processes"
++                property string network: "nm-connection-editor"
++                property string manageUser: "kitty -e passwd"
++                property string networkEthernet: "nm-connection-editor"
++                property string taskManager: "kitty -e btop"
+                 property string terminal: "kitty -1" // This is only for shell actions
+-                property string update: "kitty -1 --hold=yes fish -i -c 'pkexec pacman -Syu'"
+-                property string volumeMixer: `~/.config/hypr/hyprland/scripts/launch_first_available.sh "pavucontrol-qt" "pavucontrol"`
++                property string update: "ii-update-info"
++                property string volumeMixer: "pavucontrol"
+             }
+ 
+             property JsonObject background: JsonObject {
+@@ -191,7 +191,7 @@
+                             property bool animateChange: true
+                             property bool vertical: false
+                             property JsonObject font: JsonObject {
+-                                property string family: "Google Sans Flex"
++                                property string family: "Inter"
+                                 property real weight: 350
+                                 property real width: 100
+                                 property real size: 90
+@@ -382,7 +382,7 @@
+                 property bool centerClock: true
+                 property bool showLockedText: true
+                 property JsonObject security: JsonObject {
+-                    property bool unlockKeyring: true
++                    property bool unlockKeyring: false
+                     property bool requirePasswordToPower: false
+                 }
+                 property bool materialShapeChars: true
+@@ -577,7 +577,7 @@
+             }
+ 
+             property JsonObject updates: JsonObject {
+-                property bool enableCheck: true
++                property bool enableCheck: false
+                 property int checkInterval: 120 // minutes
+                 property int adviseUpdateThreshold: 75 // packages
+                 property int stronglyAdviseUpdateThreshold: 200 // packages
+--- a/dots/.config/quickshell/ii/scripts/colors/switchwall.sh
++++ b/dots/.config/quickshell/ii/scripts/colors/switchwall.sh
+@@ -34,30 +34,11 @@
+     "$XDG_CONFIG_HOME"/matugen/templates/kde/kde-material-you-colors-wrapper.sh --scheme-variant "$kde_scheme_variant"
+ }
+ 
++# Shell-only mode: do not change GTK/Qt, terminals, editors or Matugen.
+ pre_process() {
+-    local mode_flag="$1"
+-    # Set GNOME color-scheme if mode_flag is dark or light
+-    if [[ "$mode_flag" == "dark" ]]; then
+-        gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+-        gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
+-    elif [[ "$mode_flag" == "light" ]]; then
+-        gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
+-        gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
+-    fi
+-
+-    if [ ! -d "$CACHE_DIR"/user/generated ]; then
+-        mkdir -p "$CACHE_DIR"/user/generated
+-    fi
+-}
+-
+-post_process() {
+-    local screen_width="$1"
+-    local screen_height="$2"
+-    local wallpaper_path="$3"
+-
+-    handle_kde_material_you_colors &
+-    "$SCRIPT_DIR/code/material-code-set-color.sh" &
+-}
++    mkdir -p "$STATE_DIR/user/generated"
++}
++post_process() { :; }
+ 
+ check_and_prompt_upscale() {
+     local img="$1"
+@@ -100,8 +81,9 @@
+     fi
+ }
+ 
+-CUSTOM_DIR="$XDG_CONFIG_HOME/hypr/custom"
++CUSTOM_DIR="$STATE_DIR/ii-integration"
+ RESTORE_SCRIPT_DIR="$CUSTOM_DIR/scripts"
++mkdir -p "$RESTORE_SCRIPT_DIR"
+ RESTORE_SCRIPT="$RESTORE_SCRIPT_DIR/__restore_video_wallpaper.sh"
+ THUMBNAIL_DIR="$RESTORE_SCRIPT_DIR/mpvpaper_thumbnails"
+ VIDEO_OPTS="no-audio loop hwdec=auto scale=bilinear interpolation=no video-sync=display-resample panscan=1.0 video-scale-x=1.0 video-scale-y=1.0 video-align-x=0.5 video-align-y=0.5 load-scripts=no"
+@@ -303,12 +285,12 @@
+         [[ "$term_fg_boost" != "null" && -n "$term_fg_boost" ]] && generate_colors_material_args+=(--term_fg_boost "$term_fg_boost")
+     fi
+ 
+-    matugen "${matugen_args[@]}"
++    : # Existing user Matugen configuration is intentionally untouched.
+     source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
+     python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
+         > "$STATE_DIR"/user/generated/material_colors.scss
+     deactivate
+-    "$SCRIPT_DIR"/applycolor.sh
++    ii-write-colors "$STATE_DIR/user/generated/material_colors.scss" "$STATE_DIR/user/generated/colors.json"
+ 
+     # Pass screen width, height, and wallpaper path to post_process
+     max_width_desired="$(hyprctl monitors -j | jq '([.[].width] | min)' | xargs)"
+--- a/dots/.config/quickshell/ii/services/HyprlandConfig.qml
++++ b/dots/.config/quickshell/ii/services/HyprlandConfig.qml
+@@ -19,37 +19,11 @@
+     readonly property string configuratorScriptPath: Quickshell.shellPath("scripts/hyprland/hyprconfigurator.py")
+     readonly property string shellOverridesPath: FileUtils.trimFileProtocol(`${Directories.config}/hypr/hyprland/shellOverrides/main.lua`)
+ 
+-    function set(key: string, value: var) {
+-        Quickshell.execDetached(["bash", "-c", //
+-            `${root.configuratorScriptPath} --file ${root.shellOverridesPath} --set "${key}" "${value}"` //
+-        ])
+-    }
+-    
+-    function setMany(entries: var) {
+-        let args = ""
+-        for (let key in entries) {
+-            args += `--set "${key}" "${entries[key]}" `
+-        }
+-        Quickshell.execDetached(["bash", "-c", //
+-            `${root.configuratorScriptPath} --file ${root.shellOverridesPath} ${args}` //
+-        ])
+-    }
+-    
+-    function reset(key: string) {
+-        Quickshell.execDetached(["bash", "-c", //
+-            `${root.configuratorScriptPath} --file ${root.shellOverridesPath} --reset "${key}"` //
+-        ])
+-    }
+-    
+-    function resetMany(keys: list<string>) {
+-        let args = ""
+-        for (let i = 0; i < keys.length; i++) {
+-            args += `--reset "${keys[i]}" `
+-        }
+-        Quickshell.execDetached(["bash", "-c", //
+-            `${root.configuratorScriptPath} --file ${root.shellOverridesPath} ${args}` //
+-        ])
+-    }
++    // The user's Home Manager config is authoritative. No end-4 overrides are written.
++    function set(key: string, value: var) { console.warn("Edit settings.lua in your NixOS repository: " + key) }
++    function setMany(entries: var) { console.warn("Edit settings.lua in your NixOS repository") }
++    function reset(key: string) { console.warn("Edit settings.lua in your NixOS repository: " + key) }
++    function resetMany(keys: list<string>) { console.warn("Edit settings.lua in your NixOS repository") }
+ 
+     Connections {
+         target: Hyprland
+--- a/dots/.config/quickshell/ii/services/FirstRunExperience.qml
++++ b/dots/.config/quickshell/ii/services/FirstRunExperience.qml
+@@ -26,8 +26,7 @@
+     }
+ 
+     function handleFirstRun() {
+-        Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, root.defaultWallpaperPath])
+-        Quickshell.execDetached(["bash", "-c", `qs -p '${root.welcomeQmlPath}'`])
++        console.info("illogical-impulse: using the existing user configuration; see docs/illogical-impulse.md")
+     }
+ 
+     FileView {
+--- a/dots/.config/quickshell/ii/modules/common/panels/lock/LockContext.qml
++++ b/dots/.config/quickshell/ii/modules/common/panels/lock/LockContext.qml
+@@ -98,6 +98,8 @@
+     PamContext {
+         id: pam
+ 
++        config: "quickshell"
++
+         // pam_unix will ask for a response for the password prompt
+         onPamMessage: {
+             if (this.responseRequired) {
+--- a/dots/.config/quickshell/ii/services/Wallpapers.qml
++++ b/dots/.config/quickshell/ii/services/Wallpapers.qml
+@@ -19,7 +19,7 @@
+     property string generateThumbnailsMagickScriptPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/thumbnails/generate-thumbnails-magick.sh`
+     property alias directory: folderModel.folder
+     readonly property string effectiveDirectory: FileUtils.trimFileProtocol(folderModel.folder.toString())
+-    property url defaultFolder: Qt.resolvedUrl(`${Directories.pictures}/Wallpapers`)
++    property url defaultFolder: Qt.resolvedUrl("file://" + Quickshell.env("II_WALLPAPER_DIR"))
+     property alias folderModel: folderModel // Expose for direct binding when needed
+     property string searchQuery: ""
+     readonly property list<string> extensions: [ // TODO: add videos
