@@ -23,6 +23,11 @@
       autoLoad = false;
     };
 
+    extraLuaFiles.animations = {
+      content = ./animations.lua;
+      autoLoad = false;
+    };
+
     extraConfig = ''
       -- Noctalia 5.x возвращает модуль: одного require недостаточно.
       -- Тема загружается до личных настроек, как прежний sourceFirst.
@@ -38,6 +43,7 @@
       end
 
       require("settings")
+      require("animations")
     '';
   };
 
