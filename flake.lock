@@ -1,6 +1,6 @@
 {
   "nodes": {
-    "flake-compat_2": {
+    "flake-compat": {
       "flake": false,
       "locked": {
         "lastModified": 1767039857,
@@ -23,11 +23,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1790989254,
-        "narHash": "sha256-ZN+riaeFuE+DZ5zfqJiXlM12jLwZzeIXiNkU1YeHMXI=",
+        "lastModified": 1793124281,
+        "narHash": "sha256-KdGTOgYXgMDA/ymTV10yLMt9tOjz9EmTgnTvaD+bhe4=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "acd21c5a3420a9d5fd0ed06299b10828267ef9ba",
+        "rev": "1e3ebeb683d055d1675d3f64e6d2b186cb2ee504",
         "type": "github"
       },
       "original": {
@@ -36,13 +36,13 @@
         "type": "github"
       }
     },
-    "nixpkgs_2": {
+    "nixpkgs": {
       "locked": {
-        "lastModified": 1790822859,
-        "narHash": "sha256-69xHQhAeMAD2wDXO7T2pcOZIF9Sga2W+JkmY2a11Ops=",
+        "lastModified": 1792773339,
+        "narHash": "sha256-rZLrzrC6i+jnTAlvPZHogKDulY7WWDEv9hJeHieO7Zw=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "c59305bab2065cfecc4944690d9eedbb56f3a9fa",
+        "rev": "3ec636362e1816bc2f0888fa0fa2c69f1bc9e504",
         "type": "github"
       },
       "original": {
@@ -55,18 +55,18 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "spotx-nix": "spotx-nix"
       }
     },
     "spotx-bash": {
       "flake": false,
       "locked": {
-        "lastModified": 1790880486,
-        "narHash": "sha256-PJ1oEaUi5VAGCc31UWFElmdPvKiL2N/C9bf5fQwihrc=",
+        "lastModified": 1792937975,
+        "narHash": "sha256-MCnLCiEXpIXVGfYhlyQSw9UVzUm24jbR2CKYgW4Pabs=",
         "owner": "SpotX-Official",
         "repo": "SpotX-Bash",
-        "rev": "7489197f343aaa76fd99beff85f7325b62e0cbcc",
+        "rev": "d145b19123041ecdee848460a4b06e40527a2c9e",
         "type": "github"
       },
       "original": {
@@ -77,18 +77,18 @@
     },
     "spotx-nix": {
       "inputs": {
-        "flake-compat": "flake-compat_2",
+        "flake-compat": "flake-compat",
         "nixpkgs": [
           "nixpkgs"
         ],
         "spotx-bash": "spotx-bash"
       },
       "locked": {
-        "lastModified": 1790894673,
-        "narHash": "sha256-sfwdNrWc0OTtsLVquDFHbf9dsnRa6aYfQO7Ezu7qib0=",
+        "lastModified": 1792945448,
+        "narHash": "sha256-ZQ1zQV9i3ODwPvKqld9YC8b2/f/1LKaPgAuvqbHV1IQ=",
         "owner": "SpotX-Official",
         "repo": "SpotX-Nix",
-        "rev": "59e5d343739719015edd3c6637ea70bf5f886fb4",
+        "rev": "54f055db9c1bf60224a060bf3e289f23719edc01",
         "type": "github"
       },
       "original": {

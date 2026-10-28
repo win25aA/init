@@ -5,7 +5,7 @@
   environment.systemPackages = with pkgs; [
     # музыка
     spotify-session      # pkgs/spotify-session.nix
-    amberol
+    vlc
     musikcube
     cava
 
