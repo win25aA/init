@@ -26,8 +26,14 @@ let
     qtbase qtdeclarative qt5compat qtimageformats qtmultimedia qtpositioning
     qtquicktimeline qtsensors qtsvg qtvirtualkeyboard qtwayland
   ] ++ [ kdePackages.kirigami kdePackages.syntax-highlighting ];
-  qmlPath = lib.makeSearchPath qt6.qtbase.qtQmlPrefix ([ quickshell ] ++ qtModules);
-  pluginPath = lib.makeSearchPath qt6.qtbase.qtPluginPrefix qtModules;
+  # kirigami — metapackage: его out содержит только nix-support, а QML
+  # находится в kirigami.unwrapped и qqc2-desktop-style. Ручная обёртка,
+  # в отличие от wrapQtAppsHook, должна сама включить propagated-зависимости.
+  # propagatedBuildInputs могут ссылаться на dev-output; QML нужен из lib/out.
+  qtRuntime = lib.unique (map (p: p.lib or p.out or p)
+    (lib.closePropagation ([ quickshell ] ++ qtModules)));
+  qmlPath = lib.makeSearchPath qt6.qtbase.qtQmlPrefix qtRuntime;
+  pluginPath = lib.makeSearchPath qt6.qtbase.qtPluginPrefix qtRuntime;
 in
 stdenvNoCC.mkDerivation {
   pname = "illogical-impulse-shell";
@@ -136,6 +142,26 @@ stdenvNoCC.mkDerivation {
       chmod +x "$file"
     done
     runHook postInstall
+  '';
+
+  # Не выпускать пакет, если пути QML снова потеряются при обновлении nixpkgs.
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    for module in org/kde/kirigami org/kde/syntaxhighlighting Qt5Compat/GraphicalEffects QtPositioning; do
+      found=false
+      for base in ${lib.concatStringsSep " " (map (p: "${p}/${qt6.qtbase.qtQmlPrefix}") qtRuntime)}; do
+        if [ -f "$base/$module/qmldir" ]; then
+          found=true
+          break
+        fi
+      done
+      if [ "$found" != true ]; then
+        echo "Required QML module is missing from the QS runtime: $module" >&2
+        exit 1
+      fi
+    done
+    runHook postInstallCheck
   '';
 
   meta = {
