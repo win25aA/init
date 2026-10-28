@@ -241,6 +241,7 @@ Panel_placement = "floating"
 
 [plugin_settings."noctalia/screen_recorder"]
 audio_source = "both"
+video_source = "focused"
 
 [plugin_settings."noctalia/wallhaven"]
 download_dir = "/etc/nixos/wallpapers/"
@@ -249,14 +250,7 @@ download_dir = "/etc/nixos/wallpapers/"
 copy_to_wallpaper_dir = true
 
 [plugins]
-enabled = [
-    "radimous/prismlauncher-instances",
-    "noctalia/wallhaven",
-    "nilsonlinux/world-radio",
-    "theblackdon/theme-switcher",
-    "noctalia/screen_recorder",
-    "aabidk20/yt-music"
-]
+enabled = [ "nilsonlinux/world-radio", "noctalia/screen_recorder", "aabidk20/yt-music" ]
 
 [shell]
 avatar_path = "/etc/nixos/wallpapers/.158.jpg"
