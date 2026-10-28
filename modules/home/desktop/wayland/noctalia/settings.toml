@@ -1,7 +1,7 @@
 config_version = 15
 
 [bar.default]
-center = [ "group:g2" ]
+center = [ "group:g2", "recorder" ]
 concave_edge_corners = false
 end = [ "group:g1", "tray", "volume", "group:g3" ]
 font_weight = 700
@@ -241,6 +241,8 @@ Panel_placement = "floating"
 
 [plugin_settings."noctalia/screen_recorder"]
 audio_source = "both"
+directory = "/home/winarowk/Videos"
+frame_rate_mode = "cfr"
 video_source = "focused"
 
 [plugin_settings."noctalia/wallhaven"]
@@ -302,6 +304,9 @@ type = "nilsonlinux/world-radio:radio"
 
 [widget.ram]
 display = "text"
+
+[widget.recorder]
+type = "noctalia/screen_recorder:recorder"
 
 [widget.tray]
 color = "primary"
