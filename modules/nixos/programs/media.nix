@@ -3,17 +3,13 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # музыка
     spotify-session      # pkgs/spotify-session.nix
     vlc
     musikcube
     cava
-
-    # видео и картинки
     mpv
     loupe
-
-    # запись экрана
+    yt-dlp
     gpu-screen-recorder
     gpu-screen-recorder-gtk
   ];
