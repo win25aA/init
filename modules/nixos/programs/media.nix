@@ -12,7 +12,5 @@
     yt-dlp
     gpu-screen-recorder-gtk
   ];
-  # Устанавливает backend и безопасный wrapper gsr-kms-server.
-  # Совместимый FFmpeg для NVIDIA 580 подключается через core/overlays.nix.
   programs.gpu-screen-recorder.enable = true;
 }
