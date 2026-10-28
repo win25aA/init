@@ -42,7 +42,8 @@ start = [ "workspaces", "clock", "radio" ]
     padding = 6.0
 
 [control_center]
-hidden_tabs = [ "monitor", "power", "network" ]
+hidden_tabs = [ "monitor", "power", "network", "screen-time" ]
+sidebar = "full"
 
     [[control_center.shortcuts]]
     type = "nightlight"
