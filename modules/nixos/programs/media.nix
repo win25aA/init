@@ -10,8 +10,9 @@
     mpv
     loupe
     yt-dlp
-    gpu-screen-recorder
     gpu-screen-recorder-gtk
   ];
-programs.gpu-screen-recorder.enable = true;
+  # Устанавливает backend и безопасный wrapper gsr-kms-server.
+  # Совместимый FFmpeg для NVIDIA 580 подключается через core/overlays.nix.
+  programs.gpu-screen-recorder.enable = true;
 }
