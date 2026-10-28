@@ -241,6 +241,9 @@ enabled = [ "radimous/prismlauncher-instances", "noctalia/wallhaven" ]
 avatar_path = "/etc/nixos/wallpapers/.face"
 lang = "ru"
 
+    [shell.launcher]
+    pinned = [ "org.vinegarhq.Sober", "osu!", "org.prismlauncher.PrismLauncher", "com.usebottles.bottles" ]
+
     [shell.screen_corners]
     size = 30
 
