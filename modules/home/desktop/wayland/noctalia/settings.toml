@@ -253,7 +253,7 @@ download_dir = "/etc/nixos/wallpapers/"
 copy_to_wallpaper_dir = true
 
 [plugins]
-enabled = [ "nilsonlinux/world-radio", "noctalia/screen_recorder", "aabidk20/yt-music", "tadomika_ari/w-engine" ]
+enabled = [ "nilsonlinux/world-radio", "noctalia/screen_recorder", "aabidk20/yt-music", "noctalia/mpvpaper" ]
 
 [shell]
 avatar_path = "/etc/nixos/wallpapers/.158.jpg"
