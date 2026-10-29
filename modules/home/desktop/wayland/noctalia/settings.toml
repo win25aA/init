@@ -1,7 +1,7 @@
 config_version = 15
 
 [bar.default]
-center = [ "group:g2", "recorder" ]
+center = [ "group:g2", "recorder", "w-engine-widget" ]
 concave_edge_corners = false
 end = [ "group:g1", "tray", "volume", "group:g3" ]
 font_weight = 700
@@ -253,7 +253,7 @@ download_dir = "/etc/nixos/wallpapers/"
 copy_to_wallpaper_dir = true
 
 [plugins]
-enabled = [ "nilsonlinux/world-radio", "noctalia/screen_recorder", "aabidk20/yt-music" ]
+enabled = [ "nilsonlinux/world-radio", "noctalia/screen_recorder", "aabidk20/yt-music", "tadomika_ari/w-engine" ]
 
 [shell]
 avatar_path = "/etc/nixos/wallpapers/.158.jpg"
@@ -279,16 +279,16 @@ source = "wallpaper"
 directory = "/etc/nixos/wallpapers"
 
     [wallpaper.default]
-    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
 
     [wallpaper.last]
-    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
 
     [wallpaper.monitors.DVI-D-1]
-    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven_p8o3rj.png"
 
 [widget.audio_visualizer]
 enabled = false
@@ -311,3 +311,6 @@ type = "noctalia/screen_recorder:recorder"
 
 [widget.tray]
 color = "primary"
+
+[widget.w-engine-widget]
+type = "tadomika_ari/w-engine:w-engine-widget"
