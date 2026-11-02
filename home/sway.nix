@@ -26,7 +26,10 @@ lib.mkMerge [
         output = lib.listToAttrs (map (m: {
           name = m.name;
           value = { scale = m.scale; }
-            // lib.optionalAttrs (m.mode != "preferred") { mode = m.mode; }
+            // lib.optionalAttrs (m.mode != "preferred") {
+              # Sway требует частоту с «Hz»: 1440x900@74.98Hz
+              mode = if lib.hasInfix "@" m.mode && !(lib.hasSuffix "Hz" m.mode) then "${m.mode}Hz" else m.mode;
+            }
             // lib.optionalAttrs (m.position != "auto") {
               position = lib.replaceStrings [ "x" ] [ " " ] m.position;
             };
