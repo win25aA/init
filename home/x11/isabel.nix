@@ -1,11 +1,11 @@
 # Тема Isabel из gh0stzk/dotfiles для bspwm, переделанная под NixOS (декларативно).
 # Откуда берётся: flake-вход `gh0stzk` (github:gh0stzk/dotfiles) — темы rofi, анимации picom,
-# шрифты, обои и скрипты меню. Тут только подключение и мои правки.
+# шрифты и скрипты меню. Обои свои, цвета из них делает matugen.
 #
 #   Панель (polybar)  → ./isabel/polybar.ini (цвета, модули, шрифты — всё там)
-#   Лаунчер и меню    → темы rofi из gh0stzk + цвета Isabel (блок «rofi» ниже)
+#   Лаунчер и меню    → темы rofi из gh0stzk + цвета matugen
 #   Анимации и тени   → picom из gh0stzk как есть
-#   Уведомления       → dunst из gh0stzk + цвета Isabel
+#   Уведомления       → dunst из gh0stzk + цвета matugen
 { config, lib, pkgs, inputs, ... }:
 
 let
@@ -33,6 +33,7 @@ let
         active: #81ae5f;
         urgent: #e06c75;
     }
+    @import "${config.xdg.configHome}/rofi/isabel-shared-matugen.rasi"
     RASI
   '';
 
@@ -57,8 +58,10 @@ let
   polybarLaunch = pkgs.writeShellScriptBin "polybar-launch" ''
     pkill -x polybar
     while pgrep -x polybar >/dev/null; do sleep 0.1; done
+    cfg="${config.xdg.configHome}/polybar/matugen-config.ini"
+    [ -f "$cfg" ] || cfg="${config.xdg.configHome}/polybar/config.ini"
     for m in $(polybar --list-monitors | cut -d: -f1); do
-      MONITOR=$m setsid -f polybar -q isa-bar -c ${config.xdg.configHome}/polybar/config.ini >/dev/null 2>&1
+      MONITOR=$m setsid -f polybar -q isa-bar -c "$cfg" >/dev/null 2>&1
     done
   '';
 
@@ -108,31 +111,114 @@ lib.mkMerge [
   }
 
   # ════════════════════════════════════════════════════════════
-  # rofi: обычные меню (Управление, Уведомления и т.д.) — тоже в цветах Isabel.
+  # Запасные цвета нужны до первой генерации или если обои отсутствуют.
+  # Эти файлы обычные, не симлинки: matugen может их перезаписать.
   {
-    xdg.configFile."rofi/isabel-colors.rasi".text = ''
-      * {
-          bg:     #14171c;
-          bg-alt: #181b21;
-          bg-sel: #8677cf;
-          fg:     #abb2bf;
-          grey:   #5c6370;
-          accent: #8677cf;
-          active: #81ae5f;
-          urgent: #e06c75;
-      }
+    home.activation.isabelColorFallback = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      mkdir -p "${config.xdg.configHome}/rofi" "${config.xdg.configHome}/polybar" \
+        "${config.xdg.configHome}/dunst/dunstrc.d" "${config.xdg.configHome}/i3lock"
+      if [ ! -f "${config.xdg.configHome}/rofi/isabel-shared-matugen.rasi" ]; then
+        printf '* {}\n' > "${config.xdg.configHome}/rofi/isabel-shared-matugen.rasi"
+      fi
+      if [ ! -f "${config.xdg.configHome}/rofi/matugen-colors.rasi" ]; then
+        cat > "${config.xdg.configHome}/rofi/matugen-colors.rasi" <<'RASI'
+      * { bg: #14171c; bg-alt: #181b21; bg-sel: #8677cf; fg: #abb2bf; grey: #5c6370; accent: #8677cf; active: #81ae5f; urgent: #e06c75; }
+      RASI
+      fi
     '';
   }
 
   # ════════════════════════════════════════════════════════════
-  # dunst: уведомления. Основа из gh0stzk, цвета Isabel.
+  # Matugen: сохраняем геометрию Isabel, заменяя только цвета.
+  {
+    xdg.configFile."matugen/config.toml".text = ''
+      [templates.isabel_polybar]
+      input_path = "~/.config/matugen/isabel-polybar.ini"
+      output_path = "~/.config/polybar/matugen-config.ini"
+
+      [templates.isabel_rofi]
+      input_path = "~/.config/matugen/isabel-rofi.rasi"
+      output_path = "~/.config/rofi/isabel-shared-matugen.rasi"
+
+      [templates.rofi]
+      input_path = "~/.config/matugen/rofi-colors.rasi"
+      output_path = "~/.config/rofi/matugen-colors.rasi"
+
+      [templates.dunst]
+      input_path = "~/.config/matugen/dunst-colors.conf"
+      output_path = "~/.config/dunst/dunstrc.d/zzz-matugen.conf"
+
+      [templates.i3lock]
+      input_path = "~/.config/matugen/i3lock-colors.sh"
+      output_path = "~/.config/i3lock/matugen-colors.sh"
+    '';
+
+    xdg.configFile."matugen/isabel-polybar.ini".text = lib.replaceStrings
+      [ "bg = #14171c" "fg = #abb2bf" "red = #be5046" "green = #81ae5f" "blue = #4889be" "magenta = #7560d3" "grey = #6b7280" "indigo = #5f6fbd" ]
+      [ "bg = {{colors.surface.default.hex}}" "fg = {{colors.on_surface.default.hex}}" "red = {{colors.error.default.hex}}" "green = {{colors.secondary.default.hex}}" "blue = {{colors.primary.default.hex}}" "magenta = {{colors.tertiary.default.hex}}" "grey = {{colors.outline.default.hex}}" "indigo = {{colors.primary.default.hex}}" ]
+      (builtins.readFile ./isabel/polybar.ini);
+
+    xdg.configFile."matugen/isabel-rofi.rasi".text = ''
+      * {
+        background: {{colors.surface.default.hex}};
+        bg-alt: {{colors.surface_container.default.hex}};
+        background-alt: {{colors.surface_container.default.hex}};
+        foreground: {{colors.on_surface.default.hex}};
+        selected: {{colors.primary.default.hex}};
+        active: {{colors.secondary.default.hex}};
+        urgent: {{colors.error.default.hex}};
+      }
+    '';
+    xdg.configFile."matugen/rofi-colors.rasi".text = ''
+      * {
+        bg: {{colors.surface.default.hex}};
+        bg-alt: {{colors.surface_container.default.hex}};
+        bg-sel: {{colors.surface_container_highest.default.hex}};
+        fg: {{colors.on_surface.default.hex}};
+        grey: {{colors.outline.default.hex}};
+        accent: {{colors.primary.default.hex}};
+        active: {{colors.secondary.default.hex}};
+        urgent: {{colors.error.default.hex}};
+      }
+    '';
+    xdg.configFile."matugen/dunst-colors.conf".text = ''
+      [global]
+      frame_color = "{{colors.primary.default.hex}}"
+      separator_color = "{{colors.outline_variant.default.hex}}"
+      [urgency_low]
+      background = "{{colors.surface.default.hex}}"
+      foreground = "{{colors.on_surface.default.hex}}"
+      highlight = "{{colors.primary.default.hex}}"
+      [urgency_normal]
+      background = "{{colors.surface.default.hex}}"
+      foreground = "{{colors.on_surface.default.hex}}"
+      highlight = "{{colors.primary.default.hex}}"
+      [urgency_critical]
+      background = "{{colors.surface.default.hex}}"
+      foreground = "{{colors.on_surface.default.hex}}"
+      frame_color = "{{colors.error.default.hex}}"
+      highlight = "{{colors.error.default.hex}}"
+    '';
+    xdg.configFile."matugen/i3lock-colors.sh".text = ''
+      LOCK_BG="{{colors.surface.default.hex_stripped}}"
+      LOCK_FG="{{colors.on_surface.default.hex_stripped}}"
+      LOCK_DIM="{{colors.on_surface_variant.default.hex_stripped}}"
+      LOCK_RING="{{colors.surface_container_high.default.hex_stripped}}"
+      LOCK_ACCENT="{{colors.primary.default.hex_stripped}}"
+      LOCK_VERIFY="{{colors.secondary.default.hex_stripped}}"
+      LOCK_WRONG="{{colors.error.default.hex_stripped}}"
+    '';
+  }
+
+  # ════════════════════════════════════════════════════════════
+  # dunst: оформление Isabel; цвета переопределяет zzz-matugen.conf.
   {
     xdg.configFile."dunst/dunstrc".text = lib.replaceStrings
       [ "/usr/bin/dmenu -p dunst:" "/usr/bin/xdg-open" ]
       [ "${pkgs.rofi}/bin/rofi -dmenu -p dunst:" "${pkgs.xdg-utils}/bin/xdg-open" ]
       (builtins.readFile "${inputs.gh0stzk}/config/dunst/dunstrc");
 
-    # «zz-» — чтобы этот файл читался последним и его цвета были главными.
+    # Цвета в zzz-matugen.conf имеют приоритет над этим оформлением.
     xdg.configFile."dunst/dunstrc.d/zz-isabel.conf".text = ''
       [global]
       origin = top-center
@@ -143,7 +229,7 @@ lib.mkMerge [
       frame_color = "#8677cf"
       font = Inconsolata Semi Condensed Bold 9
       icon_theme = "Papirus-Dark, Adwaita"
-      format = "<span size='xx-large' font_desc='Cantarell 9' weight='bold' foreground='#4889be'>%s</span>\n%b"
+      format = "<span size='xx-large' font_desc='Cantarell 9' weight='bold'>%s</span>\n%b"
 
       [urgency_low]
       timeout = 3

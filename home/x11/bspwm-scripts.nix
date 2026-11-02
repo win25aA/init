@@ -56,26 +56,42 @@ let
 
     feh --no-fehbg --bg-fill "$wall"
     rofi-header "$wall"
+    if ! matugen image "$wall" --type scheme-content --source-color-index 0; then
+      notify-send "Обои" "Не удалось обновить цвета matugen"
+      exit 1
+    fi
 
     [ "''${2:-}" = "--no-reload" ] && exit 0
 
-    notify-send -i "$wall" "Обои" "Обои сменены"
+    polybar-launch
+    pkill -x dunst 2>/dev/null || true
+    setsid -f dunst >/dev/null 2>&1
+    pkill -USR1 -x kitty 2>/dev/null || true
+    notify-send -i "$wall" "Обои" "Цвета обновлены"
     true
   '';
 
   autostart = pkgs.writeShellScriptBin "bspwm-autostart" ''
 
     cache="''${XDG_CACHE_HOME:-$HOME/.cache}/bspwm-wallpaper"
-    default_wall="${inputs.gh0stzk}/config/bspwm/rices/isabel/walls/wall-04.webp"
+    dir="''${WALLPAPER_DIR:-/etc/nixos/wallpapers}"
+    default_wall="$dir/astolfo-wallpapers.jpg"
     wall=$(cat "$cache" 2>/dev/null || true)
+    # Не восстанавливаем старые обои Isabel из кэша.
+    wall_dir=$(realpath "$dir" 2>/dev/null || true)
+    case "$wall" in "$wall_dir"/*) ;; *) wall="" ;; esac
     [ -f "$wall" ] || wall="$default_wall"
+    if [ ! -f "$wall" ] && [ -d "$dir" ]; then
+      wall=$(find "$dir" -maxdepth 1 -type f         \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \)         ! -name '.*' | sort | head -n1)
+    fi
 
     run() { pgrep -x "$1" >/dev/null || setsid -f "$@" >/dev/null 2>&1; }
 
     xsetroot -cursor_name left_ptr
 
-    feh --no-fehbg --bg-fill "$wall"
-    [ -f "$HOME/.cache/rofi_header.webp" ] || rofi-header "$wall"
+    if [ -f "$wall" ]; then
+      ${wallpaper}/bin/bspwm-wallpaper "$wall" --no-reload
+    fi
 
     pgrep -x picom >/dev/null || picom --daemon --config "${config.xdg.configHome}/bspwm/config/picom/picom.conf"
     run dunst
@@ -92,9 +108,10 @@ let
 
     pgrep -x 'i3lock(-color)?' >/dev/null && exit 0
 
-    # Цвета экрана блокировки — Isabel
+    # Запасные цвета; если matugen уже работал, используем его цвета.
     LOCK_BG=14171c LOCK_FG=abb2bf LOCK_DIM=5c6370 LOCK_RING=181b21
     LOCK_VERIFY=81ae5f LOCK_WRONG=be5046 LOCK_ACCENT=8677cf
+    [ ! -f "${config.xdg.configHome}/i3lock/matugen-colors.sh" ] || . "${config.xdg.configHome}/i3lock/matugen-colors.sh"
 
     img="''${XDG_RUNTIME_DIR:-/tmp}/bspwm-lock.png"
     maim -u "$img" && magick "$img" -scale 10% -blur 0x2 -resize 1000% "$img" || img=""

@@ -8,7 +8,7 @@ lib.mkMerge [
     home.packages = with pkgs; [ rofi jq gammastep clipmenu pavucontrol ];
 
     xdg.configFile."rofi/config.rasi".text = ''
-      /* rofi — обычные меню. Цвета Isabel: isabel-colors.rasi (home/x11/isabel.nix).
+      /* rofi — обычные меню. Цвета из обоев: matugen-colors.rasi (home/x11/isabel.nix).
          Лаунчер (Super+Space) — отдельная тема gh0stzk: RofiLauncher. */
       configuration {
           dpi: 96;
@@ -26,7 +26,7 @@ lib.mkMerge [
           kb-cancel: "Escape,Super+space";
       }
 
-      @import "${config.xdg.configHome}/rofi/isabel-colors.rasi"
+      @import "${config.xdg.configHome}/rofi/matugen-colors.rasi"
 
       * {
           font: "JetBrainsMono Nerd Font Propo Bold 10";
@@ -166,8 +166,8 @@ lib.mkMerge [
 
       wallpapers = pkgs.writeShellScriptBin "rofi-wallpaper" ''
 
-        dirs=(''${WALLPAPER_DIR:-/etc/nixos/wallpapers} ${inputs.gh0stzk}/config/bspwm/rices/isabel/walls)
-        mapfile -t files < <(find "''${dirs[@]}" -maxdepth 1 -type f \
+        dir="''${WALLPAPER_DIR:-/etc/nixos/wallpapers}"
+        mapfile -t files < <(find "$dir" -maxdepth 1 -type f \
           \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) \
           ! -name '.*' | sort)
         [ ''${#files[@]} -eq 0 ] && { notify-send "Обои" "Нет картинок"; exit 1; }

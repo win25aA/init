@@ -15,7 +15,7 @@ lib.mkMerge [
     {
       home.packages = with pkgs; [
         monitors wallpaper autostart lock screenshot volume
-        feh maim xclip imagemagick i3lock-color
+        feh maim xclip imagemagick i3lock-color matugen
         playerctl wireplumber libnotify clipmenu
         (xpkg "xrandr") (xpkg "xsetroot") (xpkg "xrdb") libxcvt
       ];
