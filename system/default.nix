@@ -8,6 +8,6 @@
     ./hardware.nix # Видеокарта, звук, Bluetooth, диски, печать, телефоны
     ./network.nix # Интернет, DNS, zapret, VPN
     ./desktop.nix # Экран входа, Hyprland / Sway / bspwm, шрифты, темы
-    ./programs.nix # Все программы
+    ./programs.nix # Все программы: с переключателями и обычным списком
   ];
 }

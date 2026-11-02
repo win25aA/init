@@ -1,4 +1,4 @@
-# Fish: оболочка и команды nrs / nback.
+# Fish: оболочка, команды nrs / nback, PATH и npm.
 { lib, ... }:
 
 lib.mkMerge [
@@ -158,5 +158,18 @@ lib.mkMerge [
         set_color normal
       '';
     };
+  }
+
+  # ════════════════════════════════════════════════════════════
+  # PATH и npm: глобальные npm-пакеты в ~/.npm-global, ~/.local/bin в PATH.
+  {
+    home.sessionVariables = {
+      NPM_CONFIG_PREFIX = "$HOME/.npm-global";
+    };
+
+    home.sessionPath = [
+      "$HOME/.npm-global/bin"
+      "$HOME/.local/bin"
+    ];
   }
 ]

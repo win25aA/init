@@ -8,10 +8,9 @@
     ./noctalia # Бар и оболочка Noctalia
     ./x11 # bspwm, polybar, rofi, picom, dunst
     ./terminal.nix # kitty, fastfetch, btop
-    ./fish.nix # Fish и команды nrs / nback
+    ./fish.nix # Fish, команды nrs / nback, PATH и npm
     ./theming.nix # GTK/Qt и курсор
     ./matugen.nix # Цвета из обоев для всех программ
-    ./apps.nix # mpv, npm и PATH
   ];
 
   # Версия совместимости Home Manager. Не менять просто ради обновления пакетов.

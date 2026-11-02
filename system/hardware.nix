@@ -61,7 +61,6 @@ lib.mkMerge [
     };
 
     environment.systemPackages = with pkgs; [
-      pavucontrol
       wireplumber
       socat
       playerctl
@@ -76,22 +75,10 @@ lib.mkMerge [
   }
 
   # ════════════════════════════════════════════════════════════
-  # Файловые системы и дисковые утилиты.
+  # Файловые системы (дисковые утилиты — в system/programs.nix).
   # Дополнительные диски конкретного ПК подключаются в hosts/<имя-пк>.
   {
     boot.supportedFilesystems = [ "btrfs" ];
-
-    environment.systemPackages = with pkgs; [
-      gparted
-      gptfdisk
-      ncdu
-      btrfs-progs
-      exfat
-      exfatprogs
-      ntfs3g
-      dosfstools
-      mtools
-    ];
   }
 
   # ════════════════════════════════════════════════════════════
@@ -113,11 +100,5 @@ lib.mkMerge [
     services.udev.extraRules = ''
       SUBSYSTEM=="usb", ATTR{idVendor}=="0e8d", MODE="0666", GROUP="users"
     '';
-
-    environment.systemPackages = with pkgs; [
-      libimobiledevice
-      ifuse
-      android-tools
-    ];
   }
 ]

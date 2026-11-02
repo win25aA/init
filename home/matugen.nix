@@ -214,6 +214,10 @@ lib.mkMerge [
       osd-color = "{{colors.primary.default.hex}}"
       osd-border-color = "{{colors.surface.default.hex}}"
     '';
+    # Подключает эти цвета в mpv
+    xdg.configFile."mpv/mpv.conf".text = ''
+      include=~~/matugen-colors.conf
+    '';
   }
 
   # ════════════════════════════════════════════════════════════

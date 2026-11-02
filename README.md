@@ -5,7 +5,7 @@
 | Хочу поменять… | Файл |
 | --- | --- |
 | **Железо этого ПК**: мониторы, видеокарта, загрузка, доп. диски | `hosts/winarowk/default.nix` |
-| Программы (поставить / удалить) | `system/programs.nix` |
+| **Программы (поставить / удалить)** — строка в конец списка | `system/programs.nix` |
 | Видеокарта, звук, Bluetooth, диски, печать, телефоны | `system/hardware.nix` |
 | Интернет, DNS, zapret, VPN | `system/network.nix` |
 | Экран входа, сессии, шрифты, системные темы | `system/desktop.nix` |
@@ -17,10 +17,9 @@
 | Noctalia (бар) | `home/noctalia/` (меняется через её настройки) |
 | bspwm, polybar, rofi, picom, dunst | `home/x11/` |
 | kitty, fastfetch, btop | `home/terminal.nix` |
-| Fish: сокращения, промпт, `nrs` / `nback` / `nf` | `home/fish.nix` |
+| Fish: сокращения, промпт, `nrs` / `nback` / `nf`, PATH, npm | `home/fish.nix` |
 | GTK/Qt тема, курсор | `home/theming.nix` |
-| Цвета из обоев (matugen) | `home/matugen.nix` |
-| mpv, npm, PATH | `home/apps.nix` |
+| Цвета из обоев (matugen), в т.ч. mpv | `home/matugen.nix` |
 | Новый ПК | `hosts/README.md` |
 
 Внутри больших файлов — блоки с заголовками (линия `════`).
