@@ -5,7 +5,7 @@
 {
   imports = [
     ./hardware-configuration.nix # Обнаруженное железо и корневой раздел
-    ../../modules/nixos # Подключение раздела nixos
+    ../../system # Подключение раздела nixos
   ];
 
   networking.hostName = "winarowk";

@@ -5,7 +5,7 @@
 {
   imports = [
     ./hardware-configuration.nix # Создаётся командой nixos-generate-config
-    ../../modules/nixos
+    ../../system
   ];
 
   # Видеокарта: nvidia | amd | intel | other
