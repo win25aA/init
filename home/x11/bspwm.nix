@@ -1,4 +1,4 @@
-# bspwm: окна, правила и сочетания клавиш (sxhkd). Скрипты: bspwm-scripts.nix.
+# bspwm: окна, правила и сочетания клавиш (sxhkd). Скрипты: bspwm-scripts.nix. Тема: isabel.nix.
 { config, lib, pkgs, inputs, ... }:
 
 lib.mkMerge [
@@ -8,14 +8,14 @@ lib.mkMerge [
     let
       xpkg = name: pkgs.${name} or pkgs.xorg.${name};
 
-      inherit (import ./bspwm-scripts.nix { inherit pkgs config; })
+      inherit (import ./bspwm-scripts.nix { inherit pkgs config inputs; })
         monitors wallpaper autostart lock screenshot volume;
     in
 
     {
       home.packages = with pkgs; [
         monitors wallpaper autostart lock screenshot volume
-        feh matugen maim xclip imagemagick i3lock-color
+        feh maim xclip imagemagick i3lock-color
         playerctl wireplumber libnotify clipmenu
         (xpkg "xrandr") (xpkg "xsetroot") (xpkg "xrdb") libxcvt
       ];
@@ -28,14 +28,19 @@ lib.mkMerge [
 
         settings = {
           border_width = 0;
-          window_gap = 10;
-          split_ratio = 0.5;
+          # Отступы и пропорции — как в Isabel
+          window_gap = 5;
+          split_ratio = 0.51;
+          top_padding = 1;
+          bottom_padding = 1;
+          left_padding = 1;
+          right_padding = 1;
           automatic_scheme = "longest_side";
           initial_polarity = "second_child";
           removal_adjustment = true;
           borderless_monocle = true;
           gapless_monocle = false;
-          single_monocle = false;
+          single_monocle = true;
           focus_follows_pointer = true;
           pointer_follows_focus = false;
           pointer_follows_monitor = true;
@@ -51,6 +56,7 @@ lib.mkMerge [
           "org.pulseaudio.pavucontrol" = { state = "floating"; center = true; rectangle = "820x520+0+0"; };
           "AmneziaVPN" = { state = "floating"; center = true; };
           "Thunar:*:File Operation Progress" = { state = "floating"; };
+          "scratchpad" = { state = "floating"; sticky = true; center = true; rectangle = "900x500+0+0"; };
         };
 
         extraConfig = "${autostart}/bin/bspwm-autostart &";
@@ -76,9 +82,14 @@ lib.mkMerge [
         "super + v" = "bspc node -t ~floating";
         "super + m" = "bspc quit";
 
-        "super + space" = "rofi -show drun";
+        "super + space" = "RofiLauncher";
+        "super + alt + space" = "RofiLauncher --choose-style";
         "super + shift + w" = "rofi-wallpaper";
-        "super + p" = "rofi-power";
+        "super + p" = "PowerMenu";
+        "Print" = "ScreenShoTer";
+        "super + shift + c" = "Colorpicker";
+        "super + b" = "rofi-bluetooth";
+        "super + alt + Return" = "bspwm-scratchpad";
         "super + z" = "rofi-control";
         "super + shift + s" = "bspwm-screenshot full";
         "super + ctrl + s" = "bspwm-screenshot region";

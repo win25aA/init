@@ -1,6 +1,6 @@
 # bspwm: скрипты (мониторы, обои, автозапуск, блокировка, скриншоты, громкость).
 # Это не модуль, а функция: её импортирует ./bspwm.nix и сам кладёт скрипты в PATH.
-{ pkgs, config }:
+{ pkgs, config, inputs }:
 
 let
   monitors = pkgs.writeShellScriptBin "bspwm-monitors" ''
@@ -51,26 +51,22 @@ let
     wall=$(realpath "$wall")
 
     cache="''${XDG_CACHE_HOME:-$HOME/.cache}"
-    mkdir -p "$cache" "${config.xdg.configHome}"/{polybar,rofi,dunst/dunstrc.d,picom,i3lock}
+    mkdir -p "$cache"
     printf '%s\n' "$wall" > "$cache/bspwm-wallpaper"
 
     feh --no-fehbg --bg-fill "$wall"
-    matugen image "$wall" --type scheme-content --source-color-index 0
+    rofi-header "$wall"
 
     [ "''${2:-}" = "--no-reload" ] && exit 0
 
-    polybar-msg cmd restart >/dev/null 2>&1 || polybar-launch
-    dunstctl reload 2>/dev/null || { pkill -x dunst; setsid -f dunst >/dev/null 2>&1; }
-    pkill -USR1 -x picom 2>/dev/null
-    pkill -USR1 -x kitty 2>/dev/null
-    notify-send -i "$wall" "Обои" "Цвета обновлены"
+    notify-send -i "$wall" "Обои" "Обои сменены"
     true
   '';
 
   autostart = pkgs.writeShellScriptBin "bspwm-autostart" ''
 
     cache="''${XDG_CACHE_HOME:-$HOME/.cache}/bspwm-wallpaper"
-    default_wall="/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
+    default_wall="${inputs.gh0stzk}/config/bspwm/rices/isabel/walls/wall-04.webp"
     wall=$(cat "$cache" 2>/dev/null || true)
     [ -f "$wall" ] || wall="$default_wall"
 
@@ -78,13 +74,10 @@ let
 
     xsetroot -cursor_name left_ptr
 
-    if [ ! -f "${config.xdg.configHome}/polybar/matugen-colors.ini" ]; then
-      ${wallpaper}/bin/bspwm-wallpaper "$wall" --no-reload
-    else
-      feh --no-fehbg --bg-fill "$wall"
-    fi
+    feh --no-fehbg --bg-fill "$wall"
+    [ -f "$HOME/.cache/rofi_header.webp" ] || rofi-header "$wall"
 
-    pgrep -x picom >/dev/null || picom --daemon
+    pgrep -x picom >/dev/null || picom --daemon --config "${config.xdg.configHome}/bspwm/config/picom/picom.conf"
     run dunst
     run clipmenud
     pgrep -f polkit-gnome-authentication-agent-1 >/dev/null || setsid -f ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 >/dev/null 2>&1
@@ -99,7 +92,9 @@ let
 
     pgrep -x 'i3lock(-color)?' >/dev/null && exit 0
 
-    [ -f "${config.xdg.configHome}/i3lock/matugen-colors.sh" ] && . "${config.xdg.configHome}/i3lock/matugen-colors.sh"
+    # Цвета экрана блокировки — Isabel
+    LOCK_BG=14171c LOCK_FG=abb2bf LOCK_DIM=5c6370 LOCK_RING=181b21
+    LOCK_VERIFY=81ae5f LOCK_WRONG=be5046 LOCK_ACCENT=8677cf
 
     img="''${XDG_RUNTIME_DIR:-/tmp}/bspwm-lock.png"
     maim -u "$img" && magick "$img" -scale 10% -blur 0x2 -resize 1000% "$img" || img=""

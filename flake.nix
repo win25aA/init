@@ -13,6 +13,12 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Тема Isabel для bspwm (темы rofi, picom, шрифты, обои, скрипты). Не flake, просто файлы.
+    gh0stzk = {
+      url = "github:gh0stzk/dotfiles";
+      flake = false;
+    };
   };
 
   outputs = inputs@{ self, nixpkgs, home-manager, spotx-nix, ... }:

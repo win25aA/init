@@ -15,7 +15,8 @@
 | Hyprland: анимации | `home/hyprland/animations.lua` |
 | Sway | `home/sway.nix` |
 | Noctalia (бар) | `home/noctalia/` (меняется через её настройки) |
-| bspwm, polybar, rofi, picom, dunst | `home/x11/` |
+| bspwm (X11): клавиши, правила окон | `home/x11/bspwm.nix` |
+| bspwm: тема Isabel — панель, лаунчер, анимации, уведомления | `home/x11/isabel.nix`, панель: `home/x11/isabel/polybar.ini` |
 | kitty, fastfetch, btop | `home/terminal.nix` |
 | Fish: сокращения, промпт, `nrs` / `nback` / `nf`, PATH, npm | `home/fish.nix` |
 | GTK/Qt тема, курсор | `home/theming.nix` |

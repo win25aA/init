@@ -1,14 +1,15 @@
-# Rofi: лаунчер и меню.
-{ config, lib, pkgs, ... }:
+# Rofi: меню «Управление», уведомления, обои (лаунчер и выключение — из Isabel, см. isabel.nix).
+{ config, lib, pkgs, inputs, ... }:
 
 lib.mkMerge [
   # ════════════════════════════════════════════════════════════
-  # rofi: лаунчер и тема.
+  # rofi: тема для обычных меню.
   {
     home.packages = with pkgs; [ rofi jq gammastep clipmenu pavucontrol ];
 
     xdg.configFile."rofi/config.rasi".text = ''
-      /* rofi — лаунчер и меню. Цвета: matugen-colors.rasi от matugen */
+      /* rofi — обычные меню. Цвета Isabel: isabel-colors.rasi (home/x11/isabel.nix).
+         Лаунчер (Super+Space) — отдельная тема gh0stzk: RofiLauncher. */
       configuration {
           dpi: 96;
           modi: "drun";
@@ -25,7 +26,7 @@ lib.mkMerge [
           kb-cancel: "Escape,Super+space";
       }
 
-      @import "${config.xdg.configHome}/rofi/matugen-colors.rasi"
+      @import "${config.xdg.configHome}/rofi/isabel-colors.rasi"
 
       * {
           font: "JetBrainsMono Nerd Font Propo Bold 10";
@@ -110,34 +111,9 @@ lib.mkMerge [
   }
 
   # ════════════════════════════════════════════════════════════
-  # rofi: меню (сессия, центр управления, уведомления, обои).
+  # rofi: меню (центр управления, уведомления, обои).
   (
     let
-      power = pkgs.writeShellScriptBin "rofi-power" ''
-
-        lock=$'\uf023  Заблокировать'
-        suspend=$'\uf236  Сон'
-        logout=$'\U000f0343  Выйти'
-        reboot=$'\U000f0709  Перезагрузка'
-        shutdown=$'\uf011  Выключить'
-
-        confirm() {
-          [ "$(printf 'Да\nНет\n' | rofi -dmenu -i -p "$1?" -theme-str 'window { width: 260px; } listview { lines: 2; }')" = "Да" ]
-        }
-
-        choice=$(printf '%s\n' "$lock" "$suspend" "$logout" "$reboot" "$shutdown" |
-          rofi -dmenu -i -p "Сессия" -theme-str 'window { width: 320px; } listview { lines: 5; }')
-
-        case "$choice" in
-          "$lock")     bspwm-lock ;;
-          "$suspend")  bspwm-lock & sleep 1; systemctl suspend ;;
-          "$logout")   confirm "Выйти" && bspc quit ;;
-          "$reboot")   confirm "Перезагрузить" && systemctl reboot ;;
-          "$shutdown") confirm "Выключить" && systemctl poweroff ;;
-        esac
-        true
-      '';
-
       control = pkgs.writeShellScriptBin "rofi-control" ''
 
         if pgrep -x gammastep >/dev/null; then night=$'\uf186  Ночной свет: вкл'; else night=$'\uf185  Ночной свет: выкл'; fi
@@ -161,8 +137,8 @@ lib.mkMerge [
           "$hist")  rofi-notifications ;;
           "$walls") rofi-wallpaper ;;
           "$sound") pavucontrol & ;;
-          "$shot")  sleep 0.3; bspwm-screenshot region ;;
-          "$power") rofi-power ;;
+          "$shot")  ScreenShoTer ;;
+          "$power") PowerMenu ;;
         esac
         true
       '';
@@ -190,27 +166,23 @@ lib.mkMerge [
 
       wallpapers = pkgs.writeShellScriptBin "rofi-wallpaper" ''
 
-        dir=''${WALLPAPER_DIR:-/etc/nixos/wallpapers}
-        mapfile -t files < <(find "$dir" -maxdepth 1 -type f \
+        dirs=(''${WALLPAPER_DIR:-/etc/nixos/wallpapers} ${inputs.gh0stzk}/config/bspwm/rices/isabel/walls)
+        mapfile -t files < <(find "''${dirs[@]}" -maxdepth 1 -type f \
           \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) \
           ! -name '.*' | sort)
-        [ ''${#files[@]} -eq 0 ] && { notify-send "Обои" "Нет картинок в $dir"; exit 1; }
+        [ ''${#files[@]} -eq 0 ] && { notify-send "Обои" "Нет картинок"; exit 1; }
 
         idx=$(for f in "''${files[@]}"; do
                 printf '%s\0icon\x1f%s\n' "$(basename "$f")" "$f"
-              done | rofi -dmenu -i -show-icons -format i -p "Обои" -theme-str '
-                window   { width: 900px; }
-                listview { columns: 4; lines: 2; flow: horizontal; }
-                element  { orientation: vertical; padding: 10px; }
-                element-icon { size: 160px; }
-                element-text { horizontal-align: 0.5; }')
+              done | rofi -dmenu -i -show-icons -format i \
+                -theme ${config.xdg.configHome}/bspwm/config/rofi-themes/WallSelect.rasi)
 
         [ -n "$idx" ] && bspwm-wallpaper "''${files[$idx]}"
         true
       '';
     in
     {
-      home.packages = [ power control notifications wallpapers ];
+      home.packages = [ control notifications wallpapers ];
     }
   )
 ]
