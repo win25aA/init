@@ -1,6 +1,6 @@
 # SwayFX: мониторы, внешний вид и автозапуск.
 # Сочетания клавиш вынесены в keybindings.nix.
-{ pkgs, ... }:
+{ lib, osConfig, pkgs, ... }:
 
 {
   imports = [
@@ -22,20 +22,19 @@
         xkb_options = "grp:alt_shift_toggle";
       };
 
-      # Мониторы и рабочие столы
-      output = {
-        "DVI-D-1" = {
-          mode = "1440x900@74.98Hz";
-          position = "0 0";
-        };
-        "HDMI-A-1" = {
-          mode = "1024x768@70.07Hz";
-          position = "1440 355";
-        };
-      };
-      workspaceOutputAssign =
-        (map (n: { workspace = toString n; output = "DVI-D-1"; }) [ 1 2 3 4 5 ])
-        ++ (map (n: { workspace = toString n; output = "HDMI-A-1"; }) [ 6 7 8 9 10 ]);
+      # Мониторы и рабочие столы: из hosts/<имя-пк> (my.monitors).
+      # Если список пуст, Sway сам включает все мониторы.
+      output = lib.listToAttrs (map (m: {
+        name = m.name;
+        value = { scale = m.scale; }
+          // lib.optionalAttrs (m.mode != "preferred") { mode = m.mode; }
+          // lib.optionalAttrs (m.position != "auto") {
+            position = lib.replaceStrings [ "x" ] [ " " ] m.position;
+          };
+      }) osConfig.my.monitors);
+      workspaceOutputAssign = lib.concatMap (m:
+        map (n: { workspace = toString n; output = m.name; }) m.workspaces
+      ) osConfig.my.monitors;
 
       # Внешний вид
       gaps = {

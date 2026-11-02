@@ -1,7 +1,44 @@
 # Hyprland: Home Manager генерирует hyprland.lua и подключает Lua-модули.
 # Пакет и портал по-прежнему устанавливает системный модуль NixOS.
-{ config, lib, ... }:
+{ config, lib, osConfig, ... }:
 
+let
+  monitors = osConfig.my.monitors;
+  nvidia = osConfig.my.gpu == "nvidia";
+
+  monitorLua = m: ''
+    hl.monitor({
+        output = "${m.name}",
+        mode = "${m.mode}",
+        position = "${m.position}",
+        scale = "${m.scale}",
+    })
+  '';
+
+  workspaceLua = m: lib.concatMapStrings (ws: ''
+    hl.workspace_rule({ workspace = "${toString ws}", monitor = "${m.name}" })
+  '') m.workspaces;
+
+  # Настройки, зависящие от железа (берутся из hosts/<имя-пк>).
+  hardwareLua = ''
+    -- Сгенерировано из my.monitors и my.gpu. Правится в hosts/<имя-пк>.
+
+    -- Запасное правило: любой монитор без своей настройки
+    -- включается в родном разрешении и ставится автоматически.
+    hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "1" })
+
+  '' + lib.concatMapStrings monitorLua monitors
+    + lib.concatMapStrings workspaceLua monitors
+    + lib.optionalString nvidia ''
+
+    -- NVIDIA
+    hl.env("LIBVA_DRIVER_NAME", "nvidia")
+    hl.env("GBM_BACKEND", "nvidia-drm")
+    hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
+    hl.env("NVD_BACKEND", "direct")
+    hl.env("WLR_NO_HARDWARE_CURSORS", "1")
+  '';
+in
 {
   imports = [
     ./binds.nix # Подключение binds.lua через Home Manager
@@ -18,6 +55,11 @@
 
     # Сначала Home Manager регистрирует свои systemd/D-Bus hooks,
     # затем extraConfig загружает настройки с автозапуском приложений.
+    extraLuaFiles.hardware = {
+      content = hardwareLua;
+      autoLoad = false;
+    };
+
     extraLuaFiles.settings = {
       content = ./settings.lua;
       autoLoad = false;
@@ -42,6 +84,7 @@
         print("Noctalia theme: " .. tostring(err))
       end
 
+      require("hardware")
       require("settings")
       require("animations")
     '';

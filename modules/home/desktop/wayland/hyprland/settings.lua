@@ -1,26 +1,8 @@
 -- Hyprland 0.55+: мониторы, оформление, автозапуск и правила окон.
 -- Устанавливается Home Manager; редактировать нужно этот исходный файл.
 
--- Мониторы: режимы, частоты, координаты и масштаб сохранены.
-hl.monitor({
-    output = "DVI-D-1",
-    mode = "1440x900@74.98",
-    position = "0x0",
-    scale = "1",
-})
-hl.monitor({
-    output = "HDMI-A-1",
-    mode = "1024x768@70.07",
-    position = "1440x355",
-    scale = "1",
-})
-
-for i = 1, 10 do
-    hl.workspace_rule({
-        workspace = tostring(i),
-        monitor = i <= 5 and "DVI-D-1" or "HDMI-A-1",
-    })
-end
+-- Мониторы и NVIDIA-переменные генерируются в default.nix
+-- из настроек ПК (hosts/<имя-пк>), см. модуль "hardware".
 
 hl.config({
     general = {
@@ -86,12 +68,6 @@ hl.window_rule({
     workspace = "special:communication",
 })
 
--- NVIDIA: все шесть переменных из прежнего конфига.
-hl.env("LIBVA_DRIVER_NAME", "nvidia")
-hl.env("GBM_BACKEND", "nvidia-drm")
-hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
-hl.env("NVD_BACKEND", "direct")
-hl.env("WLR_NO_HARDWARE_CURSORS", "1")
 hl.env("XDG_SESSION_TYPE", "wayland")
 
 -- Аналог exec-once: только старт сессии, не обычная перезагрузка конфига.

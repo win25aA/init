@@ -8,7 +8,7 @@
     nrs = ''
       set -l config_dir /etc/nixos
 
-      sudo nixos-rebuild switch --flake $config_dir#winarowk
+      sudo nixos-rebuild switch --flake $config_dir#(hostname)
 
       if test $status -eq 0
           echo ""

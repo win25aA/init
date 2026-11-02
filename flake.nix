@@ -1,4 +1,4 @@
- { 
+{
   description = "Мой объединенный flake";
 
   inputs = {
@@ -11,18 +11,30 @@
 
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs"; 
-    };
-};
-
-  outputs = inputs@{ self, nixpkgs, home-manager, spotx-nix, ... }: {
-    nixosConfigurations.winarowk = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
-      modules = [
-        ./hosts/winarowk
-        home-manager.nixosModules.home-manager
-      ];
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
+
+  outputs = inputs@{ self, nixpkgs, home-manager, spotx-nix, ... }:
+    let
+      lib = nixpkgs.lib;
+
+      # Каждая папка в hosts/ (кроме _template) — отдельный компьютер.
+      hosts = lib.attrNames (lib.filterAttrs
+        (name: type: type == "directory" && name != "_template")
+        (builtins.readDir ./hosts));
+
+      mkHost = name: lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/${name}
+          home-manager.nixosModules.home-manager
+          { networking.hostName = lib.mkDefault name; }
+        ];
+      };
+    in
+    {
+      nixosConfigurations = lib.genAttrs hosts mkHost;
+    };
 }
