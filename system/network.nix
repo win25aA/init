@@ -23,7 +23,7 @@ lib.mkMerge [
   # zapret — обход DPI (сейчас выключен: enable = false).
   {
     services.zapret = {
-      enable = false;
+      enable = true;
       params = [
         # профиль 1 — голосовые порты Discord (UDP, без имени домена)
         "--filter-udp=50000-50100"
