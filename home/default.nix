@@ -6,7 +6,6 @@
     ./hyprland # Hyprland: settings.lua, binds.lua, animations.lua
     ./sway.nix # SwayFX
     ./noctalia # Бар и оболочка Noctalia
-    ./x11 # bspwm, polybar, rofi, picom, dunst
     ./terminal.nix # kitty, fastfetch, btop
     ./fish.nix # Fish, команды nrs / nback, PATH и npm
     ./theming.nix # GTK/Qt и курсор

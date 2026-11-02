@@ -16,22 +16,6 @@
         "type": "github"
       }
     },
-    "gh0stzk": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1792356144,
-        "narHash": "sha256-5ofCj7jfyyMKBq8RGjtjq/F+B9iYWr3TnqeF/BEZulk=",
-        "owner": "gh0stzk",
-        "repo": "dotfiles",
-        "rev": "793f584892f1041c7703be6a48faa018502dc27a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gh0stzk",
-        "repo": "dotfiles",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -70,7 +54,6 @@
     },
     "root": {
       "inputs": {
-        "gh0stzk": "gh0stzk",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "spotx-nix": "spotx-nix"
