@@ -130,11 +130,11 @@ widget_order = [
     [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
     box_height = 196.0
     box_width = 720.0
-    cx = 640.0
-    cy = 608.43756103515625
+    cx = 512.0
+    cy = 649.0001220703125
     output = "HDMI-A-1"
-    placement_height = 720.0
-    placement_width = 1280.0
+    placement_height = 768.0
+    placement_width = 1024.0
     rotation = 0.0
     type = "login_box"
 
@@ -284,16 +284,16 @@ source = "wallpaper"
 directory = "/etc/nixos/wallpapers"
 
     [wallpaper.default]
-    path = "/etc/nixos/wallpapers/astolfo-wallpapers.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
     [wallpaper.last]
-    path = "/etc/nixos/wallpapers/astolfo-wallpapers.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
     [wallpaper.monitors.DVI-D-1]
-    path = "/etc/nixos/wallpapers/astolfo-wallpapers.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/etc/nixos/wallpapers/astolfo-wallpapers.jpg"
+    path = "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg"
 
 [widget.audio_visualizer]
 enabled = false
