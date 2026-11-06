@@ -7,7 +7,7 @@
     ./base.nix # Nix, загрузчик, язык, пользователь, безопасность
     ./hardware.nix # Видеокарта, звук, Bluetooth, диски, печать, телефоны
     ./network.nix # Интернет, DNS, zapret, VPN
-    ./desktop.nix # Экран входа, Hyprland / Sway / bspwm, шрифты, темы
+    ./desktop.nix # Экран входа, Hyprland / Sway, шрифты, темы
     ./programs.nix # Все программы: с переключателями и обычным списком
   ];
 }

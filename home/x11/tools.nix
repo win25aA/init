@@ -1,58 +1,20 @@
-# bspwm: скрипты (мониторы, обои, автозапуск, блокировка, скриншоты, громкость).
-# Это не модуль, а функция: её импортирует ./bspwm.nix и сам кладёт скрипты в PATH.
-{ pkgs, config }:
+# Общие X11-утилиты: обои, блокировка, снимки и громкость.
+{ pkgs, config, ... }:
 
 let
-  monitors = pkgs.writeShellScriptBin "bspwm-monitors" ''
-
-    connected=$(xrandr --query | awk '/ connected/ { print $1 }')
-    second=''${BSPWM_SECOND:-$(grep -m1 '^HDMI' <<<"$connected")}
-    main=''${BSPWM_MAIN:-$(grep -v -x -F "''${second:-none}" <<<"$connected" | head -n1)}
-
-    set_mode() {
-      local out=$1 w=$2 h=$3 hz=$4 pos=$5; shift 5
-      xrandr --output "$out" --mode "''${w}x''${h}" --rate "$hz" --pos "$pos" --rotate normal "$@" && return
-      local line name
-      line=$(cvt "$w" "$h" "$hz" | sed -n 's/^Modeline //p')
-      name=$(awk '{ print $1 }' <<<"$line" | tr -d '"')
-      xrandr --newmode $(tr -d '"' <<<"$line") 2>/dev/null
-      xrandr --addmode "$out" "$name" 2>/dev/null
-      xrandr --output "$out" --mode "$name" --pos "$pos" --rotate normal "$@" \
-        || xrandr --output "$out" --mode "''${w}x''${h}" --pos "$pos" --rotate normal "$@"
-    }
-
-    xrdb -merge <<<"Xft.dpi: 96"
-
-    if [ -n "$main" ] && [ -n "$second" ]; then
-      set_mode "$main"   1440 900 74.98 0x0 --primary
-      set_mode "$second" 1024 768 70.07 1440x355
-      xrandr --dpi 96
-      sleep 0.3
-      bspc monitor "$main" -d 1 2 3 4 5
-      bspc monitor "$second" -d 6 7 8 9 10
-      bspc wm -O "$main" "$second"
-      for m in $(bspc query -M --names); do
-        [ "$m" = "$main" ] || [ "$m" = "$second" ] || bspc monitor "$m" -r
-      done
-    else
-      xrandr --dpi 96
-      first=$(bspc query -M --names | head -n1)
-      bspc monitor "$first" -d 1 2 3 4 5 6 7 8 9 10
-    fi
-  '';
-
-  wallpaper = pkgs.writeShellScriptBin "bspwm-wallpaper" ''
+  xpkg = name: pkgs.${name} or pkgs.xorg.${name};
+  wallpaper = pkgs.writeShellScriptBin "x11-wallpaper" ''
 
     wall=''${1:-}
     if [ ! -f "$wall" ]; then
-      echo "usage: bspwm-wallpaper <image> [--no-reload]" >&2
+      echo "usage: x11-wallpaper <image> [--no-reload]" >&2
       exit 1
     fi
     wall=$(realpath "$wall")
 
     cache="''${XDG_CACHE_HOME:-$HOME/.cache}"
     mkdir -p "$cache" "${config.xdg.configHome}"/{polybar,rofi,dunst/dunstrc.d,picom,i3lock}
-    printf '%s\n' "$wall" > "$cache/bspwm-wallpaper"
+    printf '%s\n' "$wall" > "$cache/x11-wallpaper"
 
     feh --no-fehbg --bg-fill "$wall"
     matugen image "$wall" --type scheme-content --source-color-index 0
@@ -67,41 +29,13 @@ let
     true
   '';
 
-  autostart = pkgs.writeShellScriptBin "bspwm-autostart" ''
-
-    cache="''${XDG_CACHE_HOME:-$HOME/.cache}/bspwm-wallpaper"
-    default_wall="/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
-    wall=$(cat "$cache" 2>/dev/null || true)
-    [ -f "$wall" ] || wall="$default_wall"
-
-    run() { pgrep -x "$1" >/dev/null || setsid -f "$@" >/dev/null 2>&1; }
-
-    xsetroot -cursor_name left_ptr
-
-    if [ ! -f "${config.xdg.configHome}/polybar/matugen-colors.ini" ]; then
-      ${wallpaper}/bin/bspwm-wallpaper "$wall" --no-reload
-    else
-      feh --no-fehbg --bg-fill "$wall"
-    fi
-
-    pgrep -x picom >/dev/null || picom --daemon
-    run dunst
-    run clipmenud
-    pgrep -f polkit-gnome-authentication-agent-1 >/dev/null || setsid -f ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 >/dev/null 2>&1
-
-    polybar-launch
-
-    command -v AmneziaVPN >/dev/null && run AmneziaVPN
-    true
-  '';
-
-  lock = pkgs.writeShellScriptBin "bspwm-lock" ''
+  lock = pkgs.writeShellScriptBin "x11-lock" ''
 
     pgrep -x 'i3lock(-color)?' >/dev/null && exit 0
 
     [ -f "${config.xdg.configHome}/i3lock/matugen-colors.sh" ] && . "${config.xdg.configHome}/i3lock/matugen-colors.sh"
 
-    img="''${XDG_RUNTIME_DIR:-/tmp}/bspwm-lock.png"
+    img="''${XDG_RUNTIME_DIR:-/tmp}/x11-lock.png"
     maim -u "$img" && magick "$img" -scale 10% -blur 0x2 -resize 1000% "$img" || img=""
 
     paused=$(dunstctl is-paused 2>/dev/null)
@@ -130,7 +64,7 @@ let
     true
   '';
 
-  screenshot = pkgs.writeShellScriptBin "bspwm-screenshot" ''
+  screenshot = pkgs.writeShellScriptBin "x11-screenshot" ''
 
     dir="''${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots"
     mkdir -p "$dir"
@@ -145,14 +79,14 @@ let
     notify-send -i "$file" "Скриншот" "Сохранён и скопирован в буфер"
   '';
 
-  volume = pkgs.writeShellScriptBin "bspwm-volume" ''
+  volume = pkgs.writeShellScriptBin "x11-volume" ''
 
     sink=@DEFAULT_AUDIO_SINK@
     case "''${1:-}" in
       up)   wpctl set-mute "$sink" 0; wpctl set-volume -l 1.0 "$sink" 5%+ ;;
       down) wpctl set-volume "$sink" 5%- ;;
       mute) wpctl set-mute "$sink" toggle ;;
-      *) echo "usage: bspwm-volume up|down|mute" >&2; exit 1 ;;
+      *) echo "usage: x11-volume up|down|mute" >&2; exit 1 ;;
     esac
 
     out=$(wpctl get-volume "$sink")
@@ -171,5 +105,10 @@ let
   '';
 in
 {
-  inherit monitors wallpaper autostart lock screenshot volume;
+  home.packages = with pkgs; [
+    wallpaper lock screenshot volume
+    feh matugen maim xclip imagemagick i3lock-color
+    playerctl wireplumber libnotify clipmenu sxhkd
+    (xpkg "xrandr") (xpkg "xsetroot") (xpkg "xrdb") libxcvt
+  ];
 }

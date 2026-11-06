@@ -1,9 +1,9 @@
-# Polybar: панель для bspwm.
+# Polybar: панель для X11.
 { config, lib, pkgs, ... }:
 
 lib.mkMerge [
   # ════════════════════════════════════════════════════════════
-  # polybar: бар для bspwm.
+  # polybar: бар для X11.
   {
     home.packages = with pkgs; [ polybarFull playerctl dunst ];
     fonts.fontconfig.enable = true;
@@ -114,14 +114,13 @@ lib.mkMerge [
       font-2 = "JetBrainsMono Nerd Font Propo:size=13;4"
       font-3 = "JetBrainsMono Nerd Font Propo:size=11;3"
 
-      modules-left = launcher sep2 bspwm sep2 mplayer
+      modules-left = launcher sep2 mplayer
       modules-center = title
       modules-right = filesystem sep cpu_bar sep memory_bar sep pulseaudio sep2 tray sep notify sep control sep date sep power
 
       separator =
       dim-value = 1.0
 
-      wm-restack = bspwm
       enable-struts = true
       enable-ipc = true
 
@@ -130,7 +129,7 @@ lib.mkMerge [
 
       [bar/isa-bar-secondary]
       inherit = bar/isa-bar
-      modules-left = launcher sep2 bspwm
+      modules-left = launcher
       modules-right = cpu_bar sep memory_bar sep pulseaudio sep2 notify sep date sep power
 
       [settings]
@@ -212,38 +211,6 @@ lib.mkMerge [
       ramp-volume-font = 4
 
       click-right = pavucontrol
-
-      [module/bspwm]
-      type = internal/bspwm
-
-      enable-click = true
-      enable-scroll = true
-      reverse-scroll = true
-      pin-workspaces = true
-      occupied-scroll = false
-
-      format = <label-state>
-      format-font = 3
-
-      label-focused = 󰮯
-      label-focused-padding = 1
-      label-focused-foreground = ''${color.fg}
-      label-focused-font = 3
-
-      label-occupied = 󰊠
-      label-occupied-padding = 1
-      label-occupied-foreground = ''${color.fg}
-      label-occupied-font = 3
-
-      label-urgent = 󰊠
-      label-urgent-padding = 1
-      label-urgent-foreground = ''${color.red}
-      label-urgent-font = 3
-
-      label-empty = 󰑊
-      label-empty-padding = 1
-      label-empty-foreground = ''${color.grey}
-      label-empty-font = 3
 
       [module/title]
       type = internal/xwindow

@@ -318,7 +318,7 @@ lib.mkMerge [
   }
 
   # ════════════════════════════════════════════════════════════
-  # matugen: Цвета экрана блокировки i3lock (bspwm-lock).
+  # matugen: Цвета экрана блокировки i3lock (x11-lock).
   # Регистрация шаблона в config.toml + сам шаблон.
   {
     xdg.configFile."matugen/config.toml".text = ''

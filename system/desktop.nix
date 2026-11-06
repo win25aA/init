@@ -3,7 +3,7 @@
 
 lib.mkMerge [
   # ════════════════════════════════════════════════════════════
-  # X11 (нужен для bspwm и XWayland).
+  # X-сервер и совместимость X11-приложений.
   {
     services.xserver.enable = true;
     services.xserver.dpi = 96;
@@ -55,7 +55,7 @@ lib.mkMerge [
   # SwayFX (системная часть). Пользовательский конфиг: home/sway.nix.
   (
     let
-      nvidia = config.my.gpu == "nvidia";
+      nvidia = config.my.gpu == "nvidia" && !config.my.nvidia.prime.enable;
     in
     {
       programs.sway = {
@@ -77,12 +77,6 @@ lib.mkMerge [
       };
     }
   )
-
-  # ════════════════════════════════════════════════════════════
-  # bspwm (системная часть). Пользовательский конфиг: home/x11.
-  {
-    services.xserver.windowManager.bspwm.enable = true;
-  }
 
   # ════════════════════════════════════════════════════════════
   # XDG-порталы (диалоги файлов, запись экрана). Для Sway — wlr.

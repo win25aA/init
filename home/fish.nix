@@ -80,28 +80,85 @@ lib.mkMerge [
         if test $status -eq 0
             echo ""
             set_color green
-            echo "конфиг собрался, гит пуш."
+            echo "Система пересобрана. Проверь файлы перед отправкой на GitHub:"
             set_color normal
 
-            cd $config_dir
-            git add -A
-            # Метка нужна nback: он откатывает к последнему "auto: successful rebuild"
+            cd $config_dir; or return 1
+            git status --short --untracked-files=all; or return 1
+            echo "Будут добавлены все изменения, включая новые файлы. Проверь, нет ли среди них паролей и личных данных."
+            read -P "Закоммитить и отправить? [y/N] " ans
+            if test "$ans" != y; and test "$ans" != Y
+                echo "Git не изменён и отправки не было. Система уже пересобрана."
+                return 0
+            end
+            git add -A; or return 1
+            # Метка нужна nback. Если коммит не удался, ничего не отправляем.
             if git diff --cached --quiet
                 if git log -1 --format=%s | string match -q "auto: successful rebuild*"
                     echo "Изменений нет, метка уже стоит."
                 else
-                    git commit --allow-empty -m "auto: successful rebuild "(date "+%Y-%m-%d %H:%M")
-                    git push --force-with-lease
+                    git commit --allow-empty -m "auto: successful rebuild "(date "+%Y-%m-%d %H:%M"); or return 1
                 end
             else
-                git commit -m "auto: successful rebuild "(date "+%Y-%m-%d %H:%M")
-                git push --force-with-lease
+                git commit -m "auto: successful rebuild "(date "+%Y-%m-%d %H:%M"); or return 1
+            end
+            set -l branch (git symbolic-ref --quiet --short HEAD)
+            if test -z "$branch"
+                echo "Нет активной ветки. Коммит сохранён локально, push не выполнен."
+                return 1
+            end
+            set -l remote (git config --get "branch.$branch.remote")
+            set -l target (git config --get "branch.$branch.merge")
+            if test -z "$remote"; or test -z "$target"; or not string match -q 'refs/heads/*' -- "$target"
+                echo "У ветки нет настроенной удалённой ветки. Коммит сохранён локально, push не выполнен."
+                return 1
+            end
+            if git push --no-force "$remote" "HEAD:$target"
+                echo "Отправлено."
+            else
+                echo "Push не прошёл. Коммит сохранён локально; проверь изменения на GitHub. Принудительной отправки не было."
+                return 1
             end
         else
             set_color red
             echo "хуйня конфиг переделывай."
             set_color normal
         end
+      '';
+
+      # Диагностика после первой загрузки: только просмотр, ничего не меняет.
+      ncheck = ''
+        echo "=== Система ==="
+        uname -a
+        echo "=== Диски и монтирования ==="
+        lsblk -f
+        echo "=== Неудавшиеся службы ==="
+        systemctl --failed --no-pager
+        echo "=== Сеть ==="
+        if command -q nmcli
+            nmcli general status
+        end
+        echo "=== Звук ==="
+        if command -q wpctl
+            wpctl status
+        else
+            echo "wpctl недоступен в этой сессии."
+        end
+        if command -q nvidia-smi
+            echo "=== NVIDIA ==="
+            nvidia-smi
+        end
+        if set -q HYPRLAND_INSTANCE_SIGNATURE; and command -q hyprctl
+            echo "=== Мониторы Hyprland ==="
+            hyprctl monitors
+        else if set -q SWAYSOCK; and command -q swaymsg
+            echo "=== Мониторы Sway ==="
+            swaymsg -t get_outputs
+        else if set -q DISPLAY; and command -q xrandr
+            echo "=== Мониторы X11 ==="
+            xrandr --query
+        end
+        echo "Проверь также изображение, звук и соединение вручную."
       '';
 
       # nback: откат конфига к успешной сборке
