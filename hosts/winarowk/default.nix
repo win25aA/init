@@ -49,6 +49,9 @@
     options = [ "nofail" ];
   };
 
+  zramSwap.enable = true;
+
   # Версия совместимости данных, не версия NixOS. При обычном обновлении не менять.
+
   system.stateVersion = "26.05";
 }
