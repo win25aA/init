@@ -53,6 +53,12 @@ in
         default = false;
         description = "Открытый модуль ядра NVIDIA (только для поддерживаемых видеокарт).";
       };
+      prime = {
+        enable = mkOption { type = types.bool; default = false; description = "PRIME offload: рабочий стол на встроенной графике."; };
+        integratedGpu = mkOption { type = types.enum [ "intel" "amd" ]; default = "intel"; };
+        integratedBusId = mkOption { type = types.str; default = ""; };
+        nvidiaBusId = mkOption { type = types.str; default = ""; };
+      };
     };
 
     boot = {
@@ -66,6 +72,12 @@ in
         default = "nodev";
         description = "Только для bios: диск, куда ставить GRUB (/dev/disk/by-id/...).";
       };
+    };
+
+    noctaliaSettingsFile = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Личный файл настроек Noctalia для этого ПК; null использует общий.";
     };
 
     monitors = mkOption {

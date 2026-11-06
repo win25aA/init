@@ -20,7 +20,9 @@ lib.mkMerge [
       # NVIDIA: ветка и тип модуля выбираются для каждого ПК.
       (lib.mkIf (gpu == "nvidia") {
         boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
-        services.xserver.videoDrivers = [ "nvidia" ];
+        services.xserver.videoDrivers =
+          lib.optional config.my.nvidia.prime.enable (if config.my.nvidia.prime.integratedGpu == "intel" then "modesetting" else "amdgpu")
+          ++ [ "nvidia" ];
 
         hardware.nvidia = {
           open = config.my.nvidia.open;
@@ -29,8 +31,20 @@ lib.mkMerge [
           powerManagement.finegrained = false;
           nvidiaSettings = true;
           package = config.boot.kernelPackages.nvidiaPackages.${config.my.nvidia.driver};
+          prime = lib.mkIf config.my.nvidia.prime.enable ({
+            offload.enable = true;
+            offload.enableOffloadCmd = true;
+            nvidiaBusId = config.my.nvidia.prime.nvidiaBusId;
+          } // (if config.my.nvidia.prime.integratedGpu == "intel" then {
+            intelBusId = config.my.nvidia.prime.integratedBusId;
+          } else {
+            amdgpuBusId = config.my.nvidia.prime.integratedBusId;
+          }));
         };
 
+        hardware.graphics.extraPackages = lib.optionals
+          (config.my.nvidia.prime.enable && config.my.nvidia.prime.integratedGpu == "intel")
+          [ pkgs.intel-media-driver ];
         environment.systemPackages = [ pkgs.nvtopPackages.nvidia ];
       })
 
