@@ -9,7 +9,7 @@ lib.mkMerge [
   (
     let
       monitors = osConfig.my.monitors;
-      nvidia = osConfig.my.gpu == "nvidia";
+      nvidia = osConfig.my.gpu == "nvidia" && !osConfig.my.nvidia.prime.enable;
 
       monitorLua = m: ''
         hl.monitor({
