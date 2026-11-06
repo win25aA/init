@@ -166,6 +166,41 @@ cat > "$hostdir/default.nix" <<NIX
 }
 NIX
 
+# Генератор иногда выводит systemd automount и сам раздел как два
+# fileSystems для одного пути. Убираем только точно распознанную пару:
+# обычный блок реального устройства + простой служебный autofs-блок.
+tmp_hw=$(mktemp "$hostdir/.hardware-configuration.XXXXXX")
+if ! awk '
+  { lines[NR] = $0 }
+  END {
+    for (i = 1; i <= NR; i++) {
+      if (lines[i] ~ /^[[:space:]]*fileSystems\."[^"]+"[[:space:]]*=[[:space:]]*$/) {
+        name = lines[i]; sub(/^[[:space:]]*fileSystems\."/, "", name); sub(/"[[:space:]]*=.*$/, "", name)
+        count[name]++
+        if (lines[i+1] ~ /^[[:space:]]*\{[[:space:]]*device[[:space:]]*=[[:space:]]*"systemd-1";[[:space:]]*$/ &&
+            lines[i+2] ~ /^[[:space:]]*fsType[[:space:]]*=[[:space:]]*"autofs";[[:space:]]*$/ &&
+            lines[i+3] ~ /^[[:space:]]*\};[[:space:]]*$/) {
+          auto[name]++; auto_line[name] = i
+        } else if (lines[i+1] ~ /^[[:space:]]*\{[[:space:]]*device[[:space:]]*=[[:space:]]*"\/dev\/[^" ]+";[[:space:]]*$/ &&
+                   lines[i+2] ~ /^[[:space:]]*fsType[[:space:]]*=[[:space:]]*"[^" ]+";[[:space:]]*$/ &&
+                   lines[i+2] !~ /"autofs"/ && lines[i+3] ~ /^[[:space:]]*\};[[:space:]]*$/) {
+          disk[name]++
+        }
+      }
+    }
+    for (name in count) if (count[name] == 2 && auto[name] == 1 && disk[name] == 1)
+      for (j = auto_line[name]; j <= auto_line[name]+3; j++) skip[j] = 1
+    for (i = 1; i <= NR; i++) if (!skip[i]) print lines[i]
+  }
+' "$hostdir/hardware-configuration.nix" > "$tmp_hw"; then
+  die "Не удалось проверить настройки дисков. Проверь hosts/$host; система не менялась."
+fi
+if ! cmp -s "$hostdir/hardware-configuration.nix" "$tmp_hw"; then
+  say 'Убран служебный дубль systemd autofs; блок самого диска оставлен.'
+  say 'Важно: параметры старого automount автоматически не перенесены — проверь их отдельно.'
+fi
+mv -- "$tmp_hw" "$hostdir/hardware-configuration.nix"
+
 say
 say 'Обнаруженные настройки файловых систем и дисков:'
 grep -A 5 -E 'fileSystems\.|swapDevices' "$hostdir/hardware-configuration.nix" || true
@@ -177,6 +212,9 @@ if [[ -n "$duplicates" ]]; then
   say 'Найдены повторяющиеся точки монтирования:'
   say "$duplicates"
   die "Проверь и исправь дубли в hosts/$host/hardware-configuration.nix. Host сохранён; система не менялась."
+fi
+if grep -qE '^[[:space:]]*fsType[[:space:]]*=[[:space:]]*"autofs";' "$hostdir/hardware-configuration.nix"; then
+  die "Остался служебный autofs, который нельзя безопасно распознать. Проверь hosts/$host/hardware-configuration.nix вручную."
 fi
 confirm 'Продолжить сборку?' || die "Остановлено. Папка hosts/$host сохранена для проверки."
 # Flake в Git не видит неотслеживаемые файлы. Staging не создаёт коммит и не пушит.
