@@ -27,6 +27,7 @@ confirm() {
 # shellcheck disable=SC1091
 . /etc/os-release
 [[ "${ID:-}" == nixos ]] || die 'Скрипт рассчитан на уже установленную NixOS.'
+[[ "$(uname -m)" == x86_64 ]] || die 'Этот flake сейчас рассчитан только на x86_64; настройки не созданы.'
 for cmd in git nix sudo nixos-generate-config nixos-rebuild lsblk findmnt realpath; do
   command -v "$cmd" >/dev/null || die "Не найдена команда $cmd. Если нет Git: nix-shell -p git"
 done
@@ -45,7 +46,25 @@ say 'Он создаст новый host, проверит сборку и то�
 say 'Общие программы и настройки берутся из этого репозитория; существующий конфиг будет сохранён.'
 say 'Важно: при применении системные службы и настройки заменятся настройками этого конфига.'
 say 'Создай резервную копию важных данных перед применением. На новом ПК нужен доступ к интернету.'
+say 'Wi-Fi-пароли, аккаунты и данные программ скрипт не переносит.'
+say 'Съёмные или не подключённые диски могут не попасть в сгенерированный список.'
 say
+# Проверяем известный риск: для зашифрованного корня требуется отдельная
+# конфигурация разблокировки в initrd, генератор файловых систем её не переносит.
+root_source=$(findmnt -n -o SOURCE --mountpoint / 2>/dev/null || true)
+root_device=${root_source%%\[*}
+root_encrypted=false
+if [[ "$root_device" == /dev/* && -b "$root_device" ]]; then
+  root_types=$(lsblk -snr -o TYPE -- "$root_device" 2>/dev/null || true)
+  if grep -Fxq crypt <<< "$root_types"; then root_encrypted=true; fi
+fi
+if $root_encrypted; then
+  say 'Похоже, корневой диск зашифрован. Настройка его разблокировки автоматически не переносится.'
+  if ! $check_only; then
+    die 'Автоматическое применение остановлено: сначала нужна ручная проверка LUKS/initrd. Система не менялась.'
+  fi
+  say 'Режим --check может проверить только сборку, а не загрузку зашифрованного диска.'
+fi
 
 current_hostname=$(hostname -s 2>/dev/null || true)
 if [[ ! "$current_hostname" =~ ^[a-z][a-z0-9-]{0,62}$ || "$current_hostname" == *- ]]; then current_hostname=pc; fi
