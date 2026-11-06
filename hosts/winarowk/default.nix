@@ -42,6 +42,13 @@
     options = [ "users" "nofail" "x-systemd.automount" "exec" ];
   };
 
+  # HDD: подключать при загрузке, но не останавливать загрузку, если диск недоступен.
+  fileSystems."/mnt/harddisk" = {
+    device = "/dev/disk/by-uuid/d2e1449e-2887-467a-a02c-44369a75cfc3";
+    fsType = "btrfs";
+    options = [ "nofail" ];
+  };
+
   # Версия совместимости данных, не версия NixOS. При обычном обновлении не менять.
   system.stateVersion = "26.05";
 }
