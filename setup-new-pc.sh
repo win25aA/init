@@ -55,29 +55,52 @@ host=${host:-$current_hostname}
 hostdir="$repo/hosts/$host"
 [[ ! -e "$hostdir" && ! -L "$hostdir" ]] || die "Папка hosts/$host уже есть. Она не будет перезаписана; выбери другое имя."
 
-# Определяем только типы PCI-видеокарт. Гибридные и неопределённые варианты не угадываем.
+# Определяем PCI-видеокарты; точную совместимость драйвера не угадываем.
 declare -A vendors=()
+gpu_count=0
+say 'Обнаруженные PCI-видеокарты (vendor:device):'
 for dev in /sys/bus/pci/devices/*; do
-  [[ -r "$dev/class" && -r "$dev/vendor" ]] || continue
+  [[ -r "$dev/class" && -r "$dev/vendor" && -r "$dev/device" ]] || continue
   read -r class < "$dev/class" || continue
   [[ "$class" == 0x03* ]] || continue
   read -r vendor < "$dev/vendor" || continue
+  read -r device < "$dev/device" || continue
+  printf '  %s: %s:%s\n' "${dev##*/}" "$vendor" "$device"
+  ((gpu_count+=1))
   case "$vendor" in 0x10de) vendors[nvidia]=1;; 0x1002) vendors[amd]=1;; 0x8086) vendors[intel]=1;; esac
 done
-if (( ${#vendors[@]} == 1 )); then
-  for gpu in "${!vendors[@]}"; do :; done
-elif (( ${#vendors[@]} == 0 )); then
-  gpu=other
-else
-  say 'Найдено несколько типов видеокарт; автоматически выбрать драйвер нельзя.'
-  printf 'Обнаружено:'; printf ' %s' "${!vendors[@]}"; printf '\n'
-  read -r -p 'Укажи основной тип (nvidia / amd / intel / other): ' gpu
+if command -v lspci >/dev/null; then lspci -nn | grep -iE 'VGA compatible|3D controller|Display controller' || true; fi
+if [[ -n "${vendors[nvidia]:-}" ]] && (( gpu_count > 1 )); then
+  die 'Несколько видеокарт, включая NVIDIA: автоматическая настройка PRIME не поддерживается. Нужна ручная настройка; host не создан.'
 fi
-case "$gpu" in nvidia|amd|intel|other) ;; *) die 'Неизвестный тип видеокарты.';; esac
+if (( gpu_count == 1 && ${#vendors[@]} == 1 )); then
+  for gpu in "${!vendors[@]}"; do :; done
+else
+  say 'Однозначно определить видеокарту не удалось. Посмотри PCI ID выше.'
+  read -r -p 'Укажи тип (nvidia / amd / intel / other), или q для выхода: ' gpu
+fi
+case "$gpu" in nvidia|amd|intel|other) ;; *) die 'Видеокарта не выбрана; host не создан.';; esac
+if [[ "$gpu" == nvidia ]] && (( gpu_count > 1 )); then
+  die 'Несколько видеокарт с выбранной NVIDIA: настройка PRIME требует ручной проверки; host не создан.'
+fi
+nvidia_driver=legacy_580
+nvidia_open=false
 if [[ "$gpu" == nvidia ]]; then
-  say 'В общем конфиге для NVIDIA выбран драйвер legacy 580; он подходит не всем картам.'
-  say 'Для гибридной графики может понадобиться отдельная настройка.'
-  confirm 'Ты проверила, что legacy 580 подходит этой видеокарте?' || die 'Драйвер не подтверждён; настройки не созданы.'
+  say 'Выбери драйвер ПОСЛЕ проверки модели и списка поддерживаемых карт NVIDIA:'
+  say '  1 — 580, закрытый модуль (например, GTX 1050 Ti)'
+  say '  2 — stable, открытый модуль ядра NVIDIA (только поддерживаемые карты)'
+  say '  3 — stable, закрытый модуль (только поддерживаемые карты)'
+  say '  q — выйти, если не знаешь или нужен другой драйвер'
+  say 'Список 580: https://download.nvidia.com/XFree86/Linux-x86_64/580.178.04/README/supportedchips.html'
+  say 'Stable зависит от версии nixpkgs в flake.lock; его совместимость тоже нужно проверить.'
+  read -r -p 'Твой выбор [1/2/3/q]: ' driver_choice
+  case "$driver_choice" in
+    1) nvidia_driver=legacy_580; nvidia_open=false ;;
+    2) nvidia_driver=stable; nvidia_open=true ;;
+    3) nvidia_driver=stable; nvidia_open=false ;;
+    *) die 'Драйвер не выбран; host не создан.' ;;
+  esac
+  confirm 'Ты проверила, что выбранные ветка и тип модуля поддерживают эту карту?' || die 'Совместимость не подтверждена; host не создан.'
 fi
 
 if [[ -d /sys/firmware/efi ]]; then
@@ -112,6 +135,7 @@ fi
 
 say
 say "Будет создан hosts/$host: GPU=$gpu, загрузка=$mode, GRUB=$grub_device, stateVersion=$state_version."
+[[ "$gpu" != nvidia ]] || say "NVIDIA: $nvidia_driver, открытый модуль ядра: $nvidia_open."
 say 'Пользователь нового конфига: winarowk. Общий список программ не меняется.'
 confirm 'Создать host и проверить сборку?' || die 'Отменено; настройки не созданы.'
 
@@ -130,6 +154,8 @@ cat > "$hostdir/default.nix" <<NIX
   ];
 
   my.gpu = "$gpu";
+  my.nvidia.driver = "$nvidia_driver";
+  my.nvidia.open = $nvidia_open;
   my.boot = {
     mode = "$mode";
     grubDevice = "$grub_device";
@@ -144,6 +170,14 @@ say
 say 'Обнаруженные настройки файловых систем и дисков:'
 grep -A 5 -E 'fileSystems\.|swapDevices' "$hostdir/hardware-configuration.nix" || true
 say 'Проверь, нет ли здесь лишних временных или съёмных дисков.'
+# nixos-generate-config иногда дважды показывает одну точку монтирования
+# (например, systemd automount). Удалять один из блоков без проверки нельзя.
+duplicates=$(sed -nE 's/^[[:space:]]*fileSystems\."([^"]+)"[[:space:]]*=.*/\1/p' "$hostdir/hardware-configuration.nix" | sort | uniq -d)
+if [[ -n "$duplicates" ]]; then
+  say 'Найдены повторяющиеся точки монтирования:'
+  say "$duplicates"
+  die "Проверь и исправь дубли в hosts/$host/hardware-configuration.nix. Host сохранён; система не менялась."
+fi
 confirm 'Продолжить сборку?' || die "Остановлено. Папка hosts/$host сохранена для проверки."
 # Flake в Git не видит неотслеживаемые файлы. Staging не создаёт коммит и не пушит.
 git -C "$repo" add -- "hosts/$host/default.nix" "hosts/$host/hardware-configuration.nix"
@@ -166,6 +200,16 @@ else
   fi
   esp_type=$(findmnt -n -o FSTYPE --mountpoint /boot)
   [[ "$esp_type" == vfat ]] || die "UEFI: /boot имеет тип $esp_type, а не vfat. Проверь EFI-раздел перед применением."
+  say 'UEFI: проверь, что /boot — нужный EFI-раздел. GRUB может изменить записи загрузки UEFI.'
+  secure_state=''
+  if command -v mokutil >/dev/null; then secure_state=$(LC_ALL=C mokutil --sb-state 2>/dev/null || true); fi
+  if [[ "$secure_state" == *'SecureBoot enabled'* ]]; then
+    die 'Secure Boot включён. Для этого конфига нужна отдельная настройка подписанной загрузки; автоматически применять не буду.'
+  elif [[ "$secure_state" != *'SecureBoot disabled'* ]]; then
+    say 'Не удалось проверить Secure Boot. Включённый Secure Boot может не загрузить этот конфиг.'
+    confirm 'Ты проверила, что Secure Boot отключён?' || die 'Secure Boot не подтверждён; конфиг не применён.'
+  fi
+  confirm 'Это правильный EFI-раздел для загрузчика?' || die 'EFI-раздел не подтверждён; конфиг не применён.' 
 fi
 
 if [[ "$repo" != /etc/nixos ]]; then
@@ -185,16 +229,22 @@ id winarowk >/dev/null 2>&1 || new_user=1
 if [[ "$repo" != /etc/nixos ]]; then
   backup="/etc/nixos.backup-$(date +%Y%m%d-%H%M%S)"
   [[ ! -e "$backup" && ! -L "$backup" ]] || die "Резервная копия $backup уже существует."
+  staged="/etc/nixos.new-$(date +%Y%m%d-%H%M%S)"
+  [[ ! -e "$staged" && ! -L "$staged" ]] || die "Временный путь $staged уже существует."
+  if ! sudo cp -a -- "$repo" "$staged"; then
+    die "Копия не завершена: $staged. Старый /etc/nixos не тронут; систему не переключали."
+  fi
   if [[ -e /etc/nixos ]]; then
     sudo mv -- /etc/nixos "$backup"
     say "Старый конфиг сохранён: $backup"
   else
     backup=''
   fi
-  if ! sudo cp -a -- "$repo" /etc/nixos; then
-    say 'Копирование не завершилось. Система ещё не переключалась.'
-    [[ -z "$backup" ]] || say "Старый конфиг находится в $backup; не удаляй его."
-    die 'Остановлено. Проверь состояние /etc/nixos и резервной копии.'
+  if ! sudo mv -- "$staged" /etc/nixos; then
+    if [[ -n "$backup" && ! -e /etc/nixos && ! -L /etc/nixos ]]; then
+      sudo mv -- "$backup" /etc/nixos && say 'Старый конфиг возвращён в /etc/nixos.'
+    fi
+    die "Не удалось переместить новый конфиг. Система не переключалась; проверь $staged и ${backup:-/etc/nixos}."
   fi
   repo=/etc/nixos
 fi
