@@ -129,9 +129,15 @@ lib.mkMerge [
           rofi -dmenu -i -p "Сессия" -theme-str 'window { width: 320px; } listview { lines: 5; }')
 
         case "$choice" in
-          "$lock")     bspwm-lock ;;
-          "$suspend")  bspwm-lock & sleep 1; systemctl suspend ;;
-          "$logout")   confirm "Выйти" && bspc quit ;;
+          "$lock")     x11-lock ;;
+          "$suspend")  x11-lock & sleep 1; systemctl suspend ;;
+          "$logout")   if confirm "Выйти"; then
+                         if [ -n "''${XDG_SESSION_ID:-}" ]; then
+                           loginctl terminate-session "$XDG_SESSION_ID"
+                         else
+                           notify-send "Сессия" "Не удалось определить текущую сессию"
+                         fi
+                       fi ;;
           "$reboot")   confirm "Перезагрузить" && systemctl reboot ;;
           "$shutdown") confirm "Выключить" && systemctl poweroff ;;
         esac
@@ -161,7 +167,7 @@ lib.mkMerge [
           "$hist")  rofi-notifications ;;
           "$walls") rofi-wallpaper ;;
           "$sound") pavucontrol & ;;
-          "$shot")  sleep 0.3; bspwm-screenshot region ;;
+          "$shot")  sleep 0.3; x11-screenshot region ;;
           "$power") rofi-power ;;
         esac
         true
@@ -205,7 +211,7 @@ lib.mkMerge [
                 element-icon { size: 160px; }
                 element-text { horizontal-align: 0.5; }')
 
-        [ -n "$idx" ] && bspwm-wallpaper "''${files[$idx]}"
+        [ -n "$idx" ] && x11-wallpaper "''${files[$idx]}"
         true
       '';
     in
