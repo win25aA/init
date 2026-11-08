@@ -211,6 +211,13 @@ cat > "$hostdir/default.nix" <<NIX
     grubDevice = "$grub_device";
   };
 
+  # Noctalia сохраняет настройки обоев в личный файл этого хоста.
+  # Не меняем права остальных файлов репозитория.
+  systemd.tmpfiles.rules = [
+    "z /etc/nixos/hosts/$host - winarowk - - -"
+    "z /etc/nixos/hosts/$host/noctalia-settings.toml - winarowk - - -"
+  ];
+
   # Hyprland и Sway включают мониторы без привязки к старому ПК.
   system.stateVersion = "$state_version";
 }
