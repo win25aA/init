@@ -212,7 +212,7 @@ cat > "$hostdir/default.nix" <<NIX
   };
 
   # Noctalia сохраняет настройки обоев в личный файл этого хоста.
-  # Не меняем права остальных файлов репозитория.
+  # Эти правила не меняют права остальных файлов репозитория.
   systemd.tmpfiles.rules = [
     "z /etc/nixos/hosts/$host - winarowk - - -"
     "z /etc/nixos/hosts/$host/noctalia-settings.toml - winarowk - - -"
@@ -416,6 +416,7 @@ if [[ "$repo" != /etc/nixos ]]; then
   [[ ! -e /etc/nixos/.git ]] || die '/etc/nixos уже содержит Git-репозиторий. Автоматически заменять его скрипт не будет.'
   say "Текущий /etc/nixos будет переименован в резервную копию, а $repo будет скопирован в /etc/nixos."
   say 'Это нужно, потому что Noctalia, обои и nrs пока используют /etc/nixos.'
+  say 'После успешного применения владельцем копии /etc/nixos станет winarowk; root будет доверять этому Git-репозиторию.'
 fi
 if [[ $(id -un) != winarowk ]] && ! id -nG | tr ' ' '\n' | grep -Fxq wheel; then
   die 'Текущий пользователь не состоит в wheel. Перед применением обеспечь себе доступ через sudo в новой конфигурации.'
@@ -425,6 +426,7 @@ read -r -p 'Чтобы применить изменения на ЭТОМ ПК,
 
 new_user=0
 id winarowk >/dev/null 2>&1 || new_user=1
+copied_repo=false
 if [[ "$repo" != /etc/nixos ]]; then
   backup="/etc/nixos.backup-$(date +%Y%m%d-%H%M%S)"
   [[ ! -e "$backup" && ! -L "$backup" ]] || die "Резервная копия $backup уже существует."
@@ -446,6 +448,7 @@ if [[ "$repo" != /etc/nixos ]]; then
     die "Не удалось переместить новый конфиг. Система не переключалась; проверь $staged и ${backup:-/etc/nixos}."
   fi
   repo=/etc/nixos
+  copied_repo=true
 fi
 say 'Применяю конфиг. Git push не выполняется.'
 if ! sudo env NIX_CONFIG="extra-experimental-features = nix-command flakes" nixos-rebuild switch --flake "$repo#$host"; then
@@ -459,6 +462,24 @@ if (( new_user )); then
   say '  sudo passwd winarowk'
 else
   say 'Существующий пароль winarowk не записывался в репозиторий.'
+fi
+# Меняем только копию, которую скрипт сам создал в /etc/nixos, после
+# успешного применения, когда пользователь winarowk уже существует.
+# Не следуем симлинкам и не заходим на другие файловые системы.
+if $copied_repo; then
+  if sudo chown -R -h --one-file-system -- winarowk /etc/nixos; then
+    say 'Владелец скопированного /etc/nixos: winarowk.'
+  else
+    say 'ВНИМАНИЕ: систему применили, но не удалось полностью изменить владельца копии /etc/nixos. Проверь права вручную.'
+  fi
+  # Разрешаем root доверять только этому репозиторию. Не дублируем запись.
+  if sudo git config --global --get-all safe.directory 2>/dev/null | grep -Fx -- /etc/nixos >/dev/null; then
+    say 'Git root уже доверяет /etc/nixos.'
+  elif sudo git config --global --add safe.directory /etc/nixos; then
+    say 'Git root доверяет /etc/nixos.'
+  else
+    say 'ВНИМАНИЕ: систему применили, но не удалось настроить Git root для /etc/nixos. Проверь safe.directory вручную.'
+  fi
 fi
 say 'Готово. После перезагрузки выполни ncheck в fish и проверь графику, звук и сеть.'
 say 'nrs после сборки покажет изменения и попросит подтверждение перед коммитом и push.'
