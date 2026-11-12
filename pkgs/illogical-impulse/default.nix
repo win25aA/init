@@ -112,6 +112,26 @@ stdenvNoCC.mkDerivation {
     source @out@/libexec/environment
     state="''${XDG_STATE_HOME:-$HOME/.local/state}/quickshell/user/generated"
     mkdir -p "$state/wallpaper" "''${XDG_CONFIG_HOME:-$HOME/.config}/hypr/hyprland"
+    # Только для сессии Hyprland: освободить D-Bus уведомлений перед стартом ii.
+    # Не трогаем другие службы и не меняем автозапуск Noctalia в Sway.
+    if [ -n "''${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
+      owner_pid=$(gdbus call --session --dest org.freedesktop.DBus \
+        --object-path /org/freedesktop/DBus \
+        --method org.freedesktop.DBus.GetConnectionUnixProcessID org.freedesktop.Notifications 2>/dev/null \
+        | sed -n 's/.*uint32 \([0-9][0-9]*\).*/\1/p')
+      if [ -n "$owner_pid" ] && [ -r "/proc/$owner_pid/comm" ] \
+        && [ "$(stat -c %u "/proc/$owner_pid" 2>/dev/null)" = "$(id -u)" ]; then
+        case "$(cat "/proc/$owner_pid/comm")" in
+          dunst|mako)
+            kill "$owner_pid" 2>/dev/null || true
+            for _ in 1 2 3 4 5 6 7 8 9 10; do
+              kill -0 "$owner_pid" 2>/dev/null || break
+              sleep 0.1
+            done
+            ;;
+        esac
+      fi
+    fi
     config="''${XDG_CONFIG_HOME:-$HOME/.config}/illogical-impulse/config.json"
     image=$(jq -r '.background.wallpaperPath // empty' "$config")
     if [ ! -s "$state/colors.json" ] && [ -f "$image" ]; then
