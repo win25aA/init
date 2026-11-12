@@ -3,6 +3,8 @@
 { pkgs }:
 
 {
+  illogical-impulse = pkgs.callPackage ./illogical-impulse { };
+  illogical-impulse-fonts = pkgs.callPackage ./illogical-impulse/fonts.nix { };
   spotify-session     = pkgs.callPackage ./spotify-session.nix { };
   noctalia-nvml       = pkgs.callPackage ./noctalia-nvml.nix { };
   simple-sddm-2-theme = pkgs.callPackage ./simple-sddm-2-theme.nix { };

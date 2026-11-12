@@ -1,5 +1,5 @@
 # Matugen: цвета из обоев для всех программ. Ищи нужную программу по заголовку блока.
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 lib.mkMerge [
   # ════════════════════════════════════════════════════════════
@@ -335,6 +335,23 @@ lib.mkMerge [
       LOCK_ACCENT="{{colors.primary.default.hex_stripped}}"
       LOCK_VERIFY="{{colors.secondary.default.hex_stripped}}"
       LOCK_WRONG="{{colors.error.default.hex_stripped}}"
+    '';
+  }
+  # ════════════════════════════════════════════════════════════
+  # Палитра ii и дополнительные цвета Hyprland из тех же обоев.
+  {
+    xdg.configFile."matugen/config.toml".text = ''
+      [templates.ii]
+      input_path = "${pkgs.illogical-impulse}/share/illogical-impulse-matugen/colors.json"
+      output_path = "~/.local/state/quickshell/user/generated/colors.json"
+
+      [templates.ii_hyprland]
+      input_path = "${pkgs.illogical-impulse}/share/illogical-impulse-matugen/hyprland/colors.lua"
+      output_path = "~/.config/hypr/hyprland/colors.lua"
+
+      [templates.ii_wallpaper]
+      input_path = "${pkgs.illogical-impulse}/share/illogical-impulse-matugen/wallpaper.txt"
+      output_path = "~/.local/state/quickshell/user/generated/wallpaper/path.txt"
     '';
   }
 ]

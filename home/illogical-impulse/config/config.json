@@ -1,0 +1,84 @@
+{
+  "language": {
+    "ui": "ru_RU"
+  },
+  "calendar": {
+    "locale": "ru-RU"
+  },
+  "time": {
+    "shortDateFormat": "dd.MM",
+    "dateWithYearFormat": "dd.MM.yyyy",
+    "dateFormat": "ddd, dd.MM"
+  },
+  "policies": {
+    "ai": 1,
+    "weeb": 1
+  },
+  "bar": {
+    "topLeftIcon": "distro",
+    "utilButtons": {
+      "showScreenRecord": true
+    },
+    "weather": {
+      "enable": true,
+      "enableGPS": false,
+      "city": "55.9122,49.3128"
+    }
+  },
+  "appearance": {
+    "fakeScreenRounding": 2,
+    "palette": {
+      "type": "scheme-content"
+    },
+    "wallpaperTheming": {
+      "enableQtApps": false,
+      "enableTerminal": false
+    }
+  },
+  "background": {
+    "wallpaperPath": "/etc/nixos/wallpapers/wallhaven-1qdjv1.jpg",
+    "widgets": {
+      "weather": {
+        "enable": true
+      }
+    }
+  },
+  "wallpaperSelector": {
+    "directory": "/etc/nixos/wallpapers"
+  },
+  "screenRecord": {
+    "savePath": "/home/winarowk/Videos",
+    "audioSource": "both",
+    "fps": 60,
+    "frameRateMode": "cfr"
+  },
+  "launcher": {
+    "pinnedApps": [
+      "org.vinegarhq.Sober",
+      "osu!",
+      "org.prismlauncher.PrismLauncher",
+      "com.usebottles.bottles"
+    ]
+  },
+  "sidebar": {
+    "radio": {
+      "enable": true
+    },
+    "wallhaven": {
+      "enable": true,
+      "downloadPath": "/etc/nixos/wallpapers"
+    }
+  },
+  "updates": {
+    "enableCheck": false
+  },
+  "dock": {
+    "enable": false
+  },
+  "apps": {
+    "bluetooth": "blueman-manager",
+    "network": "nm-connection-editor",
+    "taskManager": "kitty -1 btop",
+    "volumeMixer": "pavucontrol"
+  }
+}
