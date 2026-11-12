@@ -1,0 +1,300 @@
+diff -ruN baseline/dots/.config/quickshell/ii/modules/ii/bar/BarContent.qml modified/dots/.config/quickshell/ii/modules/ii/bar/BarContent.qml
+--- baseline/dots/.config/quickshell/ii/modules/ii/bar/BarContent.qml	2026-11-12 17:24:47.528749929 +0000
++++ modified/dots/.config/quickshell/ii/modules/ii/bar/BarContent.qml	2026-11-12 17:22:47.996020021 +0000
+@@ -17,7 +17,7 @@
+     property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen?.width) ? 2 : (Appearance.sizes.barShortenScreenWidthThreshold >= screen?.width) ? 1 : 0
+     readonly property int preferredCenterSideModuleWidth: (useShortenedForm == 2) ? Appearance.sizes.barCenterSideModuleWidthHellaShortened : (useShortenedForm == 1) ? Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
+     // Резервируем место под погоду, трей и системные индикаторы с обеих сторон.
+-    readonly property real reservedSideWidth: Math.max(rightSectionRowLayout.implicitWidth, leftSidebarButton.implicitWidth + (radioBarButton.visible ? radioBarButton.implicitWidth + 4 : 0) + Appearance.rounding.screenRounding + 12)
++    readonly property real reservedSideWidth: Math.max(rightSectionRowLayout.implicitWidth, leftSidebarButton.implicitWidth + Appearance.rounding.screenRounding + 12)
+     readonly property int centerSideModuleWidth: Math.max(0, Math.min(preferredCenterSideModuleWidth, Math.floor((root.width - middleCenterGroup.implicitWidth - 2 * reservedSideWidth - 16) / 2)))
+ 
+     component VerticalBarSeparator: Rectangle {
+@@ -92,21 +92,6 @@
+                 colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
+             }
+ 
+-            RippleButton {
+-                id: radioBarButton
+-                visible: Config.options.sidebar.radio.enable
+-                Layout.alignment: Qt.AlignVCenter
+-                Layout.leftMargin: 4
+-                implicitWidth: 34; implicitHeight: 34
+-                buttonRadius: Appearance.rounding.full
+-                toggled: GlobalStates.radioOpen
+-                colBackgroundToggled: Appearance.colors.colSecondaryContainer
+-                colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
+-                onClicked: GlobalStates.radioOpen = !GlobalStates.radioOpen
+-                contentItem: MaterialSymbol { text: RadioPlayer.playing ? "graphic_eq" : "radio"; iconSize: 20; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; color: Appearance.colors.colOnLayer0 }
+-                StyledToolTip { text: "Мировое радио" }
+-            }
+-
+             ActiveWindow {
+                 Layout.minimumWidth: 0
+                 Layout.leftMargin: 10 + (leftSidebarButton.visible ? 0 : Appearance.rounding.screenRounding)
+diff -ruN baseline/dots/.config/quickshell/ii/modules/ii/sidebarRight/SidebarRightContent.qml modified/dots/.config/quickshell/ii/modules/ii/sidebarRight/SidebarRightContent.qml
+--- baseline/dots/.config/quickshell/ii/modules/ii/sidebarRight/SidebarRightContent.qml	2026-11-08 11:00:59.000000000 +0000
++++ modified/dots/.config/quickshell/ii/modules/ii/sidebarRight/SidebarRightContent.qml	2026-11-12 17:22:47.995092053 +0000
+@@ -28,6 +28,7 @@
+     property bool showNightLightDialog: false
+     property bool showWifiDialog: false
+     property bool editMode: false
++    onEditModeChanged: if (!editMode) sidebarScroll.contentY = 0
+ 
+     Connections {
+         target: GlobalStates
+@@ -58,9 +59,23 @@
+         border.color: Appearance.colors.colLayer0Border
+         radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
+ 
+-        ColumnLayout {
++        // В режиме редактирования все переключатели могут не поместиться на экран.
++        Flickable {
++            id: sidebarScroll
+             anchors.fill: parent
+             anchors.margins: sidebarPadding
++            clip: true
++            contentWidth: width
++            contentHeight: Math.max(height, sidebarColumn.implicitHeight)
++            flickableDirection: Flickable.VerticalFlick
++            boundsBehavior: Flickable.StopAtBounds
++            interactive: contentHeight > height
++            ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
++
++            ColumnLayout {
++            id: sidebarColumn
++            width: sidebarScroll.width
++            height: sidebarScroll.contentHeight
+             spacing: sidebarPadding
+ 
+             SystemButtonRow {
+@@ -97,17 +112,21 @@
+             }
+ 
+             CenterWidgetGroup {
++                visible: !root.editMode
+                 Layout.alignment: Qt.AlignHCenter
++                Layout.minimumHeight: 0
+                 Layout.fillHeight: true
+                 Layout.fillWidth: true
+             }
+ 
+             BottomWidgetGroup {
++                visible: !root.editMode
+                 Layout.alignment: Qt.AlignHCenter
+                 Layout.fillHeight: false
+                 Layout.fillWidth: true
+                 Layout.preferredHeight: implicitHeight
+             }
++            }
+         }
+     }
+ 
+diff -ruN baseline/dots/.config/quickshell/ii/modules/ii/sidebarRight/notifications/NotificationList.qml modified/dots/.config/quickshell/ii/modules/ii/sidebarRight/notifications/NotificationList.qml
+--- baseline/dots/.config/quickshell/ii/modules/ii/sidebarRight/notifications/NotificationList.qml	2026-11-08 11:00:59.000000000 +0000
++++ modified/dots/.config/quickshell/ii/modules/ii/sidebarRight/notifications/NotificationList.qml	2026-11-12 17:22:47.995499708 +0000
+@@ -8,6 +8,7 @@
+ 
+ Item {
+     id: root
++    clip: true
+ 
+     NotificationListView { // Scrollable window
+         id: listview
+@@ -31,12 +32,21 @@
+     }
+ 
+     // Placeholder when list is empty
+-    PagePlaceholder {
+-        shown: Notifications.list.length === 0
+-        icon: "notifications_active"
+-        description: Translation.tr("Nothing")
+-        shape: MaterialShape.Shape.Ghostish
+-        descriptionHorizontalAlignment: Text.AlignHCenter
++    // Не рисуем заглушку поверх кнопок при нехватке высоты.
++    Item {
++        anchors.left: parent.left
++        anchors.right: parent.right
++        anchors.top: parent.top
++        anchors.bottom: statusRow.top
++        anchors.bottomMargin: 5
++        clip: true
++        PagePlaceholder {
++            shown: Notifications.list.length === 0 && parent.height >= 130
++            icon: "notifications_active"
++            description: Translation.tr("Nothing")
++            shape: MaterialShape.Shape.Ghostish
++            descriptionHorizontalAlignment: Text.AlignHCenter
++        }
+     }
+ 
+     ButtonGroup {
+diff -ruN baseline/dots/.config/quickshell/ii/modules/settings/About.qml modified/dots/.config/quickshell/ii/modules/settings/About.qml
+--- baseline/dots/.config/quickshell/ii/modules/settings/About.qml	2026-11-08 11:00:59.000000000 +0000
++++ modified/dots/.config/quickshell/ii/modules/settings/About.qml	2026-11-12 17:25:41.200061200 +0000
+@@ -1,5 +1,6 @@
+ import QtQuick
+ import QtQuick.Layouts
++import Qt5Compat.GraphicalEffects
+ import Quickshell
+ import Quickshell.Widgets
+ import qs.services
+@@ -87,19 +88,30 @@
+             spacing: 20
+             Layout.topMargin: 10
+             Layout.bottomMargin: 10
+-            IconImage {
+-                implicitSize: 80
+-                source: Quickshell.iconPath("illogical-impulse")
++            StyledImage {
++                id: profileImage
++                Layout.preferredWidth: 80
++                Layout.preferredHeight: 80
++                source: `${Directories.home}/.face`
++                fillMode: Image.PreserveAspectCrop
++                layer.enabled: true
++                layer.effect: OpacityMask {
++                    maskSource: Rectangle {
++                        width: profileImage.width
++                        height: profileImage.height
++                        radius: width / 2
++                    }
++                }
+             }
+             ColumnLayout {
+                 Layout.alignment: Qt.AlignVCenter
+                 // spacing: 10
+                 StyledText {
+-                    text: Translation.tr("illogical-impulse")
++                    text: "win25aA/init"
+                     font.pixelSize: Appearance.font.pixelSize.title
+                 }
+                 StyledText {
+-                    text: "https://github.com/end-4/dots-hyprland"
++                    text: "[github.com/win25aA/init](https://github.com/win25aA/init)"
+                     font.pixelSize: Appearance.font.pixelSize.normal
+                     textFormat: Text.MarkdownText
+                     onLinkActivated: (link) => {
+@@ -110,13 +122,18 @@
+             }
+         }
+ 
++        StyledText {
++            text: "illogical-impulse · end-4"
++            color: Appearance.m3colors.m3outline
++            font.pixelSize: Appearance.font.pixelSize.small
++        }
+         Flow {
+             Layout.fillWidth: true
+             spacing: 5
+ 
+             RippleButtonWithIcon {
+                 materialIcon: "auto_stories"
+-                mainText: Translation.tr("Documentation")
++                mainText: Translation.tr("Documentation") + " ii"
+                 onClicked: {
+                     Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/")
+                 }
+@@ -124,21 +141,21 @@
+             RippleButtonWithIcon {
+                 materialIcon: "adjust"
+                 materialIconFill: false
+-                mainText: Translation.tr("Issues")
++                mainText: Translation.tr("Issues") + " ii"
+                 onClicked: {
+                     Qt.openUrlExternally("https://github.com/end-4/dots-hyprland/issues")
+                 }
+             }
+             RippleButtonWithIcon {
+                 materialIcon: "forum"
+-                mainText: Translation.tr("Discussions")
++                mainText: Translation.tr("Discussions") + " ii"
+                 onClicked: {
+                     Qt.openUrlExternally("https://github.com/end-4/dots-hyprland/discussions")
+                 }
+             }
+             RippleButtonWithIcon {
+                 materialIcon: "favorite"
+-                mainText: Translation.tr("Donate")
++                mainText: Translation.tr("Donate") + " end-4"
+                 onClicked: {
+                     Qt.openUrlExternally("https://github.com/sponsors/end-4")
+                 }
+diff -ruN baseline/dots/.config/quickshell/ii/settings.qml modified/dots/.config/quickshell/ii/settings.qml
+--- baseline/dots/.config/quickshell/ii/settings.qml	2026-11-08 11:00:59.000000000 +0000
++++ modified/dots/.config/quickshell/ii/settings.qml	2026-11-12 17:22:47.997785695 +0000
+@@ -236,65 +236,19 @@
+                 Loader {
+                     id: pageLoader
+                     anchors.fill: parent
+-                    opacity: 1.0
+-
++                    // Асинхронное создание уменьшает задержку на тяжёлых страницах.
++                    // Только прозрачность: смещение всего Layout каждый кадр лишнее.
++                    asynchronous: true
+                     active: Config.ready
+-                    Component.onCompleted: {
+-                        source = root.pages[0].component
+-                    }
+-
+-                    Connections {
+-                        target: root
+-                        function onCurrentPageChanged() {
+-                            switchAnim.complete();
+-                            switchAnim.start();
+-                        }
+-                    }
+-
+-                    SequentialAnimation {
+-                        id: switchAnim
+-
++                    source: root.pages[root.currentPage].component
++                    opacity: status === Loader.Ready ? 1 : 0
++                    Behavior on opacity {
+                         NumberAnimation {
+-                            target: pageLoader
+-                            properties: "opacity"
+-                            from: 1
+-                            to: 0
+-                            duration: 100
+-                            easing.type: Appearance.animation.elementMoveExit.type
+-                            easing.bezierCurve: Appearance.animationCurves.emphasizedFirstHalf
+-                        }
+-                        ParallelAnimation {
+-                            PropertyAction {
+-                                target: pageLoader
+-                                property: "source"
+-                                value: root.pages[root.currentPage].component
+-                            }
+-                            PropertyAction {
+-                                target: pageLoader
+-                                property: "anchors.topMargin"
+-                                value: 20
+-                            }
+-                        }
+-                        ParallelAnimation {
+-                            NumberAnimation {
+-                                target: pageLoader
+-                                properties: "opacity"
+-                                from: 0
+-                                to: 1
+-                                duration: 200
+-                                easing.type: Appearance.animation.elementMoveEnter.type
+-                                easing.bezierCurve: Appearance.animationCurves.emphasizedLastHalf
+-                            }
+-                            NumberAnimation {
+-                                target: pageLoader
+-                                properties: "anchors.topMargin"
+-                                to: 0
+-                                duration: 200
+-                                easing.type: Appearance.animation.elementMoveEnter.type
+-                                easing.bezierCurve: Appearance.animationCurves.emphasizedLastHalf
+-                            }
++                            duration: 120
++                            easing.type: Easing.OutCubic
+                         }
+                     }
++
+                 }
+             }
+         }

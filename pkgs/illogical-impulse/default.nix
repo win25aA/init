@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation {
     rev = "e31ec4cb4ebf6a46b267f5c42eabf6874916fa16";
     hash = "sha256-p1Ia0oQCWnik2saVMgv7IABkaJV43PoY7uuwXjXlc+Q=";
   };
-  patches = [ ./nixos.patch ];
+  patches = [ ./nixos.patch ./ui-fixes.patch ];
   dontBuild = true;
   dontConfigure = true;
   nativeBuildInputs = [ python ];
