@@ -117,13 +117,25 @@ stdenvNoCC.mkDerivation {
     fi
     exec qs -c ii "$@"
     SHELL
+    # IPC для Hyprland: системный PATH не обязан содержать qs.
+    cat > "$out/bin/ii-ipc" <<'IPC'
+    #!${bash}/bin/bash
+    source @out@/libexec/environment
+    exec ${quickshell}/bin/quickshell -c ii ipc call "$@"
+    IPC
+    # wl-paste и cliphist тоже доступны только внутри окружения ii.
+    cat > "$out/bin/ii-clipboard-watch" <<'CLIP'
+    #!${bash}/bin/bash
+    source @out@/libexec/environment
+    exec wl-paste --type "$1" --watch bash -c 'cliphist store && qs -c ii ipc call cliphistService update'
+    CLIP
     cat > "$out/bin/ii-screenshot-full" <<'SHOT'
     #!${bash}/bin/bash
     source @out@/libexec/environment
     monitor=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')
     [ -n "$monitor" ] && grim -o "$monitor" - | wl-copy
     SHOT
-    for file in "$out/libexec/qs" "$out/bin/ii-shell" "$out/bin/ii-screenshot-full"; do
+    for file in "$out/libexec/qs" "$out/bin/ii-shell" "$out/bin/ii-ipc" "$out/bin/ii-clipboard-watch" "$out/bin/ii-screenshot-full"; do
       substituteInPlace "$file" --replace '@out@' "$out"
       chmod +x "$file"
     done

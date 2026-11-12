@@ -1,6 +1,7 @@
 -- Hyprland: все прежние сочетания клавиш, в нативном Lua API.
 local mod = "SUPER"
-local ipc = "qs -c ii ipc call"
+-- Отдельная команда ii не меняет окружение Noctalia в Sway.
+local ipc = "ii-ipc"
 
 -- Воркспейсы 1–10; десятый остаётся на клавише 0.
 for i = 1, 10 do
