@@ -82,7 +82,7 @@ lib.mkMerge [
     users.users."winarowk" = {
       isNormalUser = true;
       description = "winarowk";
-      extraGroups = [ "networkmanager" "wheel" "adbusers" "libvirtd" ];
+      extraGroups = [ "networkmanager" "wheel" "adbusers" "libvirtd" "ydotool" ];
     };
   }
 

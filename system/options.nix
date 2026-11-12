@@ -74,6 +74,12 @@ in
       };
     };
 
+    illogicalImpulseConfigDir = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Каталог живых настроек ii для этого ПК; null использует общий каталог репозитория.";
+    };
+
     noctaliaSettingsFile = mkOption {
       type = types.nullOr types.str;
       default = null;

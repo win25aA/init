@@ -5,6 +5,7 @@
   imports = [
     ./hyprland # Hyprland: settings.lua, binds.lua, animations.lua
     ./sway.nix # SwayFX
+    ./illogical-impulse # Полная оболочка ii для Hyprland
     ./noctalia # Бар и оболочка Noctalia
     ./x11 # X11-утилиты, polybar, rofi, picom, dunst
     ./terminal.nix # kitty, fastfetch, btop

@@ -72,38 +72,25 @@ lib.mkMerge [
         };
 
         extraConfig = ''
-          -- Noctalia 5.x возвращает модуль: одного require недостаточно.
-          -- Тема загружается до личных настроек, как прежний sourceFirst.
-          -- Необязательная/повреждённая тема не должна отключать весь конфиг.
-          local ok, err = pcall(function()
-            local theme = require("noctalia")
-            if type(theme) == "table" and type(theme.apply_theme) == "function" then
-              theme.apply_theme()
-            end
-          end)
-          if not ok then
-            print("Noctalia theme: " .. tostring(err))
-          end
+          -- Цвета генерируются matugen, но личные настройки ниже имеют приоритет.
+          local ok, err = pcall(require, "hyprland.colors")
+          if not ok then print("ii colors: " .. tostring(err)) end
 
           require("hardware")
           require("settings")
           require("animations")
+          local overridesOk, overridesErr = pcall(require, "hyprland.shellOverrides.main")
+          if not overridesOk then print("ii overrides: " .. tostring(overridesErr)) end
         '';
       };
 
-      # Noctalia перезаписывает этот файл при генерации цветов, поэтому он
-      # намеренно НЕ является read-only симлинком Home Manager в /nix/store.
-      # Существующие noctalia.lua и старый noctalia.conf не трогаем.
-      home.activation.ensureNoctaliaLua = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-        hypr_dir=${lib.escapeShellArg "${config.xdg.configHome}/hypr"}
+      # Оба файла генерируются оболочкой и должны оставаться записываемыми.
+      home.activation.ensureIiHyprFiles = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+        hypr_dir=${lib.escapeShellArg "${config.xdg.configHome}/hypr/hyprland"}
         mkdir -p "$hypr_dir"
-        if [ ! -e "$hypr_dir/noctalia.lua" ] && [ ! -L "$hypr_dir/noctalia.lua" ]; then
-          cat > "$hypr_dir/noctalia.lua" <<'LUA'
-        -- Noctalia заменит этот модуль при следующей генерации цветов.
-        return { apply_theme = function() end }
-        LUA
-        fi
+        [ -e "$hypr_dir/colors.lua" ] || printf '%s\n' '-- matugen создаст цвета' > "$hypr_dir/colors.lua"
       '';
+
     }
   )
 

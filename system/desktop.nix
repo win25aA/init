@@ -105,6 +105,14 @@ lib.mkMerge [
   }
 
   # ════════════════════════════════════════════════════════════
+  # Службы для оболочки ii (автозапуск только в Hyprland).
+  {
+    services.gnome.gnome-keyring.enable = true;
+    services.upower.enable = true;
+    programs.ydotool.enable = true;
+  }
+
+  # ════════════════════════════════════════════════════════════
   # Шрифты.
   {
     fonts.enableDefaultPackages = false;
@@ -126,6 +134,9 @@ lib.mkMerge [
       noto-fonts-cjk-serif
       noto-fonts-color-emoji
       corefonts
+      illogical-impulse-fonts
+      material-symbols
+      rubik
     ];
   }
 

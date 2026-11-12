@@ -1,6 +1,6 @@
 -- Hyprland: все прежние сочетания клавиш, в нативном Lua API.
 local mod = "SUPER"
-local ipc = "noctalia msg"
+local ipc = "qs -c ii ipc call"
 
 -- Воркспейсы 1–10; десятый остаётся на клавише 0.
 for i = 1, 10 do
@@ -25,15 +25,32 @@ hl.bind(mod .. " + M", hl.dsp.exec_cmd(
     "command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"
 ))
 
--- Noctalia.
-hl.bind(mod .. " + space", hl.dsp.exec_cmd(ipc .. " panel-toggle launcher"))
-hl.bind(mod .. " + SHIFT + W", hl.dsp.exec_cmd(ipc .. " panel-toggle wallpaper"))
-hl.bind(mod .. " + P", hl.dsp.exec_cmd(ipc .. " panel-toggle session"))
-hl.bind(mod .. " + Z", hl.dsp.exec_cmd(ipc .. " panel-toggle control-center"))
-hl.bind(mod .. " + SHIFT + Z", hl.dsp.exec_cmd(ipc .. " panel-toggle nilsonlinux/world-radio:Panel"))
-hl.bind(mod .. " + SHIFT + R", hl.dsp.exec_cmd(ipc .. " plugin noctalia/screen_recorder:service all toggle"))
-hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd(ipc .. " screenshot-fullscreen"))
-hl.bind(mod .. " + CTRL + S", hl.dsp.exec_cmd(ipc .. " screenshot-region"))
+-- Оболочка ii: прежние действия Noctalia.
+hl.bind(mod .. " + space", hl.dsp.exec_cmd(ipc .. " search toggle"))
+hl.bind(mod .. " + SHIFT + W", hl.dsp.global("quickshell:wallpaperSelectorToggle"))
+hl.bind(mod .. " + P", hl.dsp.global("quickshell:sessionToggle"))
+hl.bind(mod .. " + Z", hl.dsp.global("quickshell:sidebarRightToggle"))
+hl.bind(mod .. " + SHIFT + Z", hl.dsp.global("quickshell:radioToggle"))
+hl.bind(mod .. " + SHIFT + R", hl.dsp.exec_cmd(ipc .. " recorder toggle"))
+hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd("ii-screenshot-full"))
+hl.bind(mod .. " + CTRL + S", hl.dsp.global("quickshell:regionScreenshot"))
+
+-- Дополнительные функции ii без изменений личных сочетаний.
+hl.bind("SUPER_L", hl.dsp.global("quickshell:workspaceNumber"), { ignore_mods = true, transparent = true })
+hl.bind("SUPER_R", hl.dsp.global("quickshell:workspaceNumber"), { ignore_mods = true, transparent = true })
+hl.bind("SUPER_L", hl.dsp.global("quickshell:workspaceNumber"), { ignore_mods = true, transparent = true, release = true })
+hl.bind("SUPER_R", hl.dsp.global("quickshell:workspaceNumber"), { ignore_mods = true, transparent = true, release = true })
+hl.bind(mod .. " + Tab", hl.dsp.global("quickshell:overviewWorkspacesToggle"))
+hl.bind(mod .. " + SHIFT + V", hl.dsp.global("quickshell:overviewClipboardToggle"))
+hl.bind(mod .. " + Period", hl.dsp.global("quickshell:overviewEmojiToggle"))
+hl.bind(mod .. " + B", hl.dsp.global("quickshell:sidebarLeftToggle"))
+hl.bind(mod .. " + Slash", hl.dsp.global("quickshell:cheatsheetToggle"))
+hl.bind(mod .. " + L", hl.dsp.global("quickshell:lock"))
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(ipc .. " brightness increment || brightnessctl s 5%+"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(ipc .. " brightness decrement || brightnessctl s 5%-"), { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+ -l 1.5"), { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"), { locked = true, repeating = true })
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
 hl.bind(mod .. " + mouse:275", hl.dsp.exec_cmd("playerctl previous"))
 hl.bind(mod .. " + mouse:276", hl.dsp.exec_cmd("playerctl next"))
 
