@@ -131,7 +131,7 @@ diff -ruN baseline/dots/.config/quickshell/ii/modules/ii/sidebarRight/notificati
      ButtonGroup {
 diff -ruN baseline/dots/.config/quickshell/ii/modules/settings/About.qml modified/dots/.config/quickshell/ii/modules/settings/About.qml
 --- baseline/dots/.config/quickshell/ii/modules/settings/About.qml	2026-11-08 11:00:59.000000000 +0000
-+++ modified/dots/.config/quickshell/ii/modules/settings/About.qml	2026-11-12 17:25:41.200061200 +0000
++++ modified/dots/.config/quickshell/ii/modules/settings/About.qml	2026-11-12 17:29:12.890546699 +0000
 @@ -1,5 +1,6 @@
  import QtQuick
  import QtQuick.Layouts
@@ -175,51 +175,52 @@ diff -ruN baseline/dots/.config/quickshell/ii/modules/settings/About.qml modifie
                      font.pixelSize: Appearance.font.pixelSize.normal
                      textFormat: Text.MarkdownText
                      onLinkActivated: (link) => {
-@@ -110,13 +122,18 @@
+@@ -110,41 +122,10 @@
              }
          }
  
+-        Flow {
+-            Layout.fillWidth: true
+-            spacing: 5
+-
+-            RippleButtonWithIcon {
+-                materialIcon: "auto_stories"
+-                mainText: Translation.tr("Documentation")
+-                onClicked: {
+-                    Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/")
+-                }
+-            }
+-            RippleButtonWithIcon {
+-                materialIcon: "adjust"
+-                materialIconFill: false
+-                mainText: Translation.tr("Issues")
+-                onClicked: {
+-                    Qt.openUrlExternally("https://github.com/end-4/dots-hyprland/issues")
+-                }
+-            }
+-            RippleButtonWithIcon {
+-                materialIcon: "forum"
+-                mainText: Translation.tr("Discussions")
+-                onClicked: {
+-                    Qt.openUrlExternally("https://github.com/end-4/dots-hyprland/discussions")
+-                }
+-            }
+-            RippleButtonWithIcon {
+-                materialIcon: "favorite"
+-                mainText: Translation.tr("Donate")
+-                onClicked: {
+-                    Qt.openUrlExternally("https://github.com/sponsors/end-4")
+-                }
+-            }
+-
+-            
 +        StyledText {
 +            text: "illogical-impulse · end-4"
 +            color: Appearance.m3colors.m3outline
 +            font.pixelSize: Appearance.font.pixelSize.small
-+        }
-         Flow {
-             Layout.fillWidth: true
-             spacing: 5
- 
-             RippleButtonWithIcon {
-                 materialIcon: "auto_stories"
--                mainText: Translation.tr("Documentation")
-+                mainText: Translation.tr("Documentation") + " ii"
-                 onClicked: {
-                     Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/")
-                 }
-@@ -124,21 +141,21 @@
-             RippleButtonWithIcon {
-                 materialIcon: "adjust"
-                 materialIconFill: false
--                mainText: Translation.tr("Issues")
-+                mainText: Translation.tr("Issues") + " ii"
-                 onClicked: {
-                     Qt.openUrlExternally("https://github.com/end-4/dots-hyprland/issues")
-                 }
-             }
-             RippleButtonWithIcon {
-                 materialIcon: "forum"
--                mainText: Translation.tr("Discussions")
-+                mainText: Translation.tr("Discussions") + " ii"
-                 onClicked: {
-                     Qt.openUrlExternally("https://github.com/end-4/dots-hyprland/discussions")
-                 }
-             }
-             RippleButtonWithIcon {
-                 materialIcon: "favorite"
--                mainText: Translation.tr("Donate")
-+                mainText: Translation.tr("Donate") + " end-4"
-                 onClicked: {
-                     Qt.openUrlExternally("https://github.com/sponsors/end-4")
-                 }
+         }
+     }
+ }
 diff -ruN baseline/dots/.config/quickshell/ii/settings.qml modified/dots/.config/quickshell/ii/settings.qml
 --- baseline/dots/.config/quickshell/ii/settings.qml	2026-11-08 11:00:59.000000000 +0000
 +++ modified/dots/.config/quickshell/ii/settings.qml	2026-11-12 17:22:47.997785695 +0000
