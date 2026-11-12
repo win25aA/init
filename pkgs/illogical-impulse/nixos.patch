@@ -1,6 +1,6 @@
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/common/Config.qml b/dots/.config/quickshell/ii/modules/common/Config.qml
+diff -ruN a/dots/.config/quickshell/ii/modules/common/Config.qml c/dots/.config/quickshell/ii/modules/common/Config.qml
 --- a/dots/.config/quickshell/ii/modules/common/Config.qml	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/modules/common/Config.qml	2026-11-12 16:03:15.653501349 +0000
++++ c/dots/.config/quickshell/ii/modules/common/Config.qml	2026-11-12 16:31:05.250523607 +0000
 @@ -150,15 +150,15 @@
              }
  
@@ -89,9 +89,59 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/common/Co
              }
              
              property JsonObject windows: JsonObject {
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/bar/UtilButtons.qml b/dots/.config/quickshell/ii/modules/ii/bar/UtilButtons.qml
+diff -ruN a/dots/.config/quickshell/ii/modules/ii/bar/BarContent.qml c/dots/.config/quickshell/ii/modules/ii/bar/BarContent.qml
+--- a/dots/.config/quickshell/ii/modules/ii/bar/BarContent.qml	2026-11-08 11:00:59.000000000 +0000
++++ c/dots/.config/quickshell/ii/modules/ii/bar/BarContent.qml	2026-11-12 16:38:34.714980405 +0000
+@@ -15,7 +15,10 @@
+     property var screen: root.QsWindow.window?.screen
+     property var brightnessMonitor: Brightness.getMonitorForScreen(screen)
+     property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen?.width) ? 2 : (Appearance.sizes.barShortenScreenWidthThreshold >= screen?.width) ? 1 : 0
+-    readonly property int centerSideModuleWidth: (useShortenedForm == 2) ? Appearance.sizes.barCenterSideModuleWidthHellaShortened : (useShortenedForm == 1) ? Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
++    readonly property int preferredCenterSideModuleWidth: (useShortenedForm == 2) ? Appearance.sizes.barCenterSideModuleWidthHellaShortened : (useShortenedForm == 1) ? Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
++    // Резервируем место под погоду, трей и системные индикаторы с обеих сторон.
++    readonly property real reservedSideWidth: Math.max(rightSectionRowLayout.implicitWidth, leftSidebarButton.implicitWidth + Appearance.rounding.screenRounding + 12)
++    readonly property int centerSideModuleWidth: Math.max(0, Math.min(preferredCenterSideModuleWidth, Math.floor((root.width - middleCenterGroup.implicitWidth - 2 * reservedSideWidth - 16) / 2)))
+ 
+     component VerticalBarSeparator: Rectangle {
+         Layout.topMargin: Appearance.sizes.baseBarHeight / 3
+@@ -110,6 +113,7 @@
+ 
+         BarGroup {
+             id: leftCenterGroup
++            clip: true
+             anchors.verticalCenter: parent.verticalCenter
+             implicitWidth: root.centerSideModuleWidth
+ 
+@@ -156,6 +160,7 @@
+ 
+         MouseArea {
+             id: rightCenterGroup
++            clip: true
+             anchors.verticalCenter: parent.verticalCenter
+             implicitWidth: root.centerSideModuleWidth
+             implicitHeight: rightCenterGroupContent.implicitHeight
+@@ -169,13 +174,16 @@
+                 anchors.fill: parent
+ 
+                 ClockWidget {
+-                    showDate: (Config.options.bar.verbose && root.useShortenedForm < 2)
++                    id: clockWidget
++                    showDate: (Config.options.bar.verbose && root.useShortenedForm < 2 && root.centerSideModuleWidth >= 240)
+                     Layout.alignment: Qt.AlignVCenter
++                    Layout.minimumWidth: 0
+                     Layout.fillWidth: true
+                 }
+ 
+                 UtilButtons {
+-                    visible: (Config.options.bar.verbose && root.useShortenedForm === 0)
++                    id: utilityButtons
++                    visible: (Config.options.bar.verbose && root.useShortenedForm === 0 && root.centerSideModuleWidth >= clockWidget.implicitWidth + utilityButtons.implicitWidth + 40)
+                     Layout.alignment: Qt.AlignVCenter
+                 }
+ 
+diff -ruN a/dots/.config/quickshell/ii/modules/ii/bar/UtilButtons.qml c/dots/.config/quickshell/ii/modules/ii/bar/UtilButtons.qml
 --- a/dots/.config/quickshell/ii/modules/ii/bar/UtilButtons.qml	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/modules/ii/bar/UtilButtons.qml	2026-11-12 16:00:35.173715613 +0000
++++ c/dots/.config/quickshell/ii/modules/ii/bar/UtilButtons.qml	2026-11-12 16:31:05.250523607 +0000
 @@ -1,5 +1,6 @@
  import qs
  import qs.modules.common
@@ -114,9 +164,34 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/bar/Ut
                      iconSize: Appearance.font.pixelSize.large
                      color: Appearance.colors.colOnLayer2
                  }
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/mediaControls/MediaControls.qml b/dots/.config/quickshell/ii/modules/ii/mediaControls/MediaControls.qml
+diff -ruN a/dots/.config/quickshell/ii/modules/ii/bar/weather/WeatherBar.qml c/dots/.config/quickshell/ii/modules/ii/bar/weather/WeatherBar.qml
+--- a/dots/.config/quickshell/ii/modules/ii/bar/weather/WeatherBar.qml	2026-11-08 11:00:59.000000000 +0000
++++ c/dots/.config/quickshell/ii/modules/ii/bar/weather/WeatherBar.qml	2026-11-12 16:38:34.715161482 +0000
+@@ -31,8 +31,12 @@
+     RowLayout {
+         id: rowLayout
+         anchors.centerIn: parent
++        spacing: 6
+ 
+         MaterialSymbol {
++            Layout.minimumWidth: Math.max(iconSize + 4, implicitWidth)
++            Layout.preferredWidth: Layout.minimumWidth
++            horizontalAlignment: Text.AlignHCenter
+             fill: 0
+             text: Icons.getWeatherIcon(Weather.data.wCode) ?? "cloud"
+             iconSize: Appearance.font.pixelSize.large
+@@ -41,6 +45,8 @@
+         }
+ 
+         StyledText {
++            Layout.minimumWidth: implicitWidth
++            Layout.preferredWidth: implicitWidth
+             visible: true
+             font.pixelSize: Appearance.font.pixelSize.small
+             color: Appearance.colors.colOnLayer1
+diff -ruN a/dots/.config/quickshell/ii/modules/ii/mediaControls/MediaControls.qml c/dots/.config/quickshell/ii/modules/ii/mediaControls/MediaControls.qml
 --- a/dots/.config/quickshell/ii/modules/ii/mediaControls/MediaControls.qml	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/modules/ii/mediaControls/MediaControls.qml	2026-11-12 16:03:15.653811118 +0000
++++ c/dots/.config/quickshell/ii/modules/ii/mediaControls/MediaControls.qml	2026-11-12 16:31:05.250523607 +0000
 @@ -55,7 +55,7 @@
  
      Process {
@@ -126,9 +201,82 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/mediaC
          onRunningChanged: {
              if (!cavaProc.running) {
                  root.visualizerPoints = [];
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/regionSelector/RegionSelection.qml b/dots/.config/quickshell/ii/modules/ii/regionSelector/RegionSelection.qml
+diff -ruN a/dots/.config/quickshell/ii/modules/ii/overview/Overview.qml c/dots/.config/quickshell/ii/modules/ii/overview/Overview.qml
+--- a/dots/.config/quickshell/ii/modules/ii/overview/Overview.qml	2026-11-08 11:00:59.000000000 +0000
++++ c/dots/.config/quickshell/ii/modules/ii/overview/Overview.qml	2026-11-12 16:38:34.714420913 +0000
+@@ -20,7 +20,8 @@
+         property string searchingText: ""
+         readonly property HyprlandMonitor monitor: Hyprland.monitorFor(panelWindow.screen)
+         property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
+-        visible: GlobalStates.overviewOpen
++        property bool renderOverview: false
++        visible: renderOverview
+ 
+         WlrLayershell.namespace: "quickshell:overview"
+         WlrLayershell.layer: WlrLayer.Top
+@@ -28,7 +29,7 @@
+         color: "transparent"
+ 
+         mask: Region {
+-            item: GlobalStates.overviewOpen ? columnLayout : null
++            item: panelWindow.renderOverview ? columnLayout : null
+         }
+ 
+         anchors {
+@@ -45,11 +46,16 @@
+                     searchWidget.disableExpandAnimation();
+                     overviewScope.dontAutoCancelSearch = false;
+                     GlobalFocusGrab.dismiss();
++                    openAnimation.stop();
++                    closeAnimation.restart();
+                 } else {
++                    closeAnimation.stop();
++                    panelWindow.renderOverview = true;
+                     if (!overviewScope.dontAutoCancelSearch) {
+                         searchWidget.cancelSearch();
+                     }
+                     GlobalFocusGrab.addDismissable(panelWindow);
++                    openAnimation.restart();
+                 }
+             }
+         }
+@@ -68,9 +74,23 @@
+             searchWidget.focusFirstItem();
+         }
+ 
++        ParallelAnimation {
++            id: openAnimation
++            NumberAnimation { target: columnLayout; property: "opacity"; from: 0; to: 1; duration: 200; easing.type: Easing.OutCubic }
++            NumberAnimation { target: entryOffset; property: "y"; from: -16; to: 0; duration: 200; easing.type: Easing.OutCubic }
++        }
++        ParallelAnimation {
++            id: closeAnimation
++            NumberAnimation { target: columnLayout; property: "opacity"; to: 0; duration: 150; easing.type: Easing.InCubic }
++            NumberAnimation { target: entryOffset; property: "y"; to: -12; duration: 150; easing.type: Easing.InCubic }
++            onFinished: { if (!GlobalStates.overviewOpen) panelWindow.renderOverview = false }
++        }
++
+         Column {
+             id: columnLayout
+-            visible: GlobalStates.overviewOpen
++            visible: panelWindow.renderOverview
++            opacity: 0
++            transform: Translate { id: entryOffset; y: -16 }
+             anchors {
+                 horizontalCenter: parent.horizontalCenter
+                 top: parent.top
+@@ -94,7 +114,7 @@
+             Loader {
+                 id: overviewLoader
+                 anchors.horizontalCenter: parent.horizontalCenter
+-                active: GlobalStates.overviewOpen && (Config?.options.overview.enable ?? true)
++                active: panelWindow.renderOverview && (Config?.options.overview.enable ?? true)
+                 visible: (panelWindow.searchingText == "")
+                 sourceComponent: OverviewWidget {
+                     screen: panelWindow.screen
+diff -ruN a/dots/.config/quickshell/ii/modules/ii/regionSelector/RegionSelection.qml c/dots/.config/quickshell/ii/modules/ii/regionSelector/RegionSelection.qml
 --- a/dots/.config/quickshell/ii/modules/ii/regionSelector/RegionSelection.qml	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/modules/ii/regionSelector/RegionSelection.qml	2026-11-12 15:51:37.842545366 +0000
++++ c/dots/.config/quickshell/ii/modules/ii/regionSelector/RegionSelection.qml	2026-11-12 16:31:05.250523607 +0000
 @@ -201,7 +201,7 @@
      Process {
          id: checkRecordingProc
@@ -138,75 +286,9 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/region
          onExited: (exitCode, exitStatus) => {
              root.preparationDone = !screenshotProc.running
              root.recordingShouldStop = (exitCode === 0);
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/sidebarLeft/Radio.qml b/dots/.config/quickshell/ii/modules/ii/sidebarLeft/Radio.qml
---- a/dots/.config/quickshell/ii/modules/ii/sidebarLeft/Radio.qml	1970-01-01 00:00:00.000000000 +0000
-+++ b/dots/.config/quickshell/ii/modules/ii/sidebarLeft/Radio.qml	2026-11-12 15:57:11.682009474 +0000
-@@ -0,0 +1,62 @@
-+import QtQuick
-+import QtQuick.Controls
-+import QtQuick.Layouts
-+import Quickshell
-+import qs.services
-+import qs.modules.common
-+import qs.modules.common.widgets
-+
-+Item {
-+    id: root
-+    property var stations: []
-+    property string status: ""
-+    property string view: "search"
-+    function search() {
-+        view = "search"; status = Translation.tr("Loading…")
-+        let u = Config.options.sidebar.radio.apiServer + "/json/stations/search?hidebroken=true&order=clickcount&reverse=true&limit=" + Math.max(1, Math.min(100, Config.options.sidebar.radio.limit))
-+        if (query.text.trim()) u += "&name=" + encodeURIComponent(query.text.trim())
-+        if (Config.options.sidebar.radio.countryCode) u += "&countrycode=" + encodeURIComponent(Config.options.sidebar.radio.countryCode)
-+        let xhr = new XMLHttpRequest()
-+        xhr.onreadystatechange = function() {
-+            if (xhr.readyState !== XMLHttpRequest.DONE) return
-+            if (xhr.status !== 200) { root.status = Translation.tr("Request failed"); return }
-+            try { root.stations = JSON.parse(xhr.responseText); root.status = root.stations.length ? "" : Translation.tr("No results") }
-+            catch(e) { root.status = Translation.tr("Request failed") }
-+        }
-+        xhr.open("GET", u); xhr.send()
-+    }
-+    function favorite(item) {
-+        let list = Array.from(Config.options.sidebar.radio.favorites)
-+        let i = list.findIndex(x => x.stationuuid === item.stationuuid)
-+        if (i >= 0) list.splice(i, 1); else list.unshift(item)
-+        Config.options.sidebar.radio.favorites = list
-+    }
-+    ColumnLayout {
-+        anchors.fill: parent; anchors.margins: 10; spacing: 8
-+        RowLayout {
-+            MaterialTextField { id: query; Layout.fillWidth: true; placeholderText: Translation.tr("Search radio stations"); onAccepted: root.search() }
-+            Button { text: Translation.tr("Search"); onClicked: root.search() }
-+        }
-+        RowLayout {
-+            Button { text: Translation.tr("Search"); onClicked: root.search() }
-+            Button { text: Translation.tr("Favorites"); onClicked: { root.view = "favorites"; root.status = "" } }
-+            Button { text: Translation.tr("Recent"); onClicked: { root.view = "recent"; root.status = "" } }
-+        }
-+        StyledText { Layout.fillWidth: true; text: RadioPlayer.playing ? (Translation.tr("Playing") + ": " + (RadioPlayer.station?.name ?? "")) : root.status; elide: Text.ElideRight }
-+        Button { visible: RadioPlayer.playing; text: Translation.tr("Stop"); onClicked: RadioPlayer.stop() }
-+        ListView {
-+            Layout.fillWidth: true; Layout.fillHeight: true; clip: true; spacing: 4
-+            model: root.view === "favorites" ? Config.options.sidebar.radio.favorites : root.view === "recent" ? Config.options.sidebar.radio.recent : root.stations
-+            delegate: Rectangle {
-+                required property var modelData
-+                width: ListView.view.width; height: 52; radius: Appearance.rounding.small; color: Appearance.colors.colLayer2
-+                RowLayout {
-+                    anchors.fill: parent; anchors.margins: 4
-+                    Button { text: "▶"; onClicked: RadioPlayer.play(modelData) }
-+                    StyledText { Layout.fillWidth: true; text: modelData.name || ""; elide: Text.ElideRight }
-+                    Button { text: Array.from(Config.options.sidebar.radio.favorites).some(x => x.stationuuid === modelData.stationuuid) ? "★" : "☆"; onClicked: root.favorite(modelData) }
-+                }
-+            }
-+        }
-+    }
-+}
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeft.qml b/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeft.qml
+diff -ruN a/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeft.qml c/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeft.qml
 --- a/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeft.qml	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeft.qml	2026-11-12 15:57:11.684536976 +0000
++++ c/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeft.qml	2026-11-12 16:31:05.253132487 +0000
 @@ -200,6 +200,19 @@
          }
      }
@@ -227,9 +309,9 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/sideba
      IpcHandler {
          target: "sidebarLeft"
  
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeftContent.qml b/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeftContent.qml
+diff -ruN a/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeftContent.qml c/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeftContent.qml
 --- a/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeftContent.qml	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeftContent.qml	2026-11-12 15:57:11.684826795 +0000
++++ c/dots/.config/quickshell/ii/modules/ii/sidebarLeft/SidebarLeftContent.qml	2026-11-12 16:38:34.715246397 +0000
 @@ -19,9 +19,17 @@
      property var tabButtonList: [
          ...(root.aiChatEnabled ? [{"icon": "neurology", "name": Translation.tr("Intelligence")}] : []),
@@ -248,7 +330,23 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/sideba
  
      function focusActiveItem() {
          swipeView.currentItem.forceActiveFocus()
-@@ -86,7 +94,9 @@
+@@ -56,6 +64,15 @@
+                 Layout.alignment: Qt.AlignHCenter
+                 tabButtonList: root.tabButtonList
+                 currentIndex: swipeView.currentIndex
++                delegate: ToolbarTabButton {
++                    required property int index
++                    required property var modelData
++                    current: index === tabBar.currentIndex
++                    text: current ? modelData.name : ""
++                    materialSymbol: modelData.icon
++                    onClicked: tabBar.setCurrentIndex(index)
++                    StyledToolTip { text: modelData.name }
++                }
+             }
+         }
+ 
+@@ -86,7 +103,9 @@
                  contentChildren: [
                      ...(root.aiChatEnabled ? [aiChat.createObject()] : []),
                      ...(root.translatorEnabled ? [translator.createObject()] : []),
@@ -259,7 +357,7 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/sideba
                      ...(root.animeEnabled ? [anime.createObject()] : []),
                  ]
              }
-@@ -104,6 +114,8 @@
+@@ -104,6 +123,8 @@
              id: anime
              Anime {}
          }
@@ -268,89 +366,9 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/sideba
          Component {
              id: placeholder
              Item {
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/sidebarLeft/Wallhaven.qml b/dots/.config/quickshell/ii/modules/ii/sidebarLeft/Wallhaven.qml
---- a/dots/.config/quickshell/ii/modules/ii/sidebarLeft/Wallhaven.qml	1970-01-01 00:00:00.000000000 +0000
-+++ b/dots/.config/quickshell/ii/modules/ii/sidebarLeft/Wallhaven.qml	2026-11-12 15:57:11.682546362 +0000
-@@ -0,0 +1,76 @@
-+import QtQuick
-+import QtQuick.Controls
-+import QtQuick.Layouts
-+import Quickshell
-+import Quickshell.Io
-+import qs.modules.common
-+import qs.modules.common.widgets
-+
-+Item {
-+    id: root
-+    property var results: []
-+    property string status: ""
-+    property bool applyAfterDownload: false
-+    function search() {
-+        status = Translation.tr("Loading…")
-+        let c = Config.options.sidebar.wallhaven
-+        let u = "https://wallhaven.cc/api/v1/search?q=" + encodeURIComponent(query.text.trim()) + "&categories=" + encodeURIComponent(c.categories) + "&purity=" + encodeURIComponent(c.purity) + "&sorting=" + encodeURIComponent(c.sorting) + "&topRange=" + encodeURIComponent(c.topRange)
-+        if (c.atleast) u += "&atleast=" + encodeURIComponent(c.atleast)
-+        if (c.ratios) u += "&ratios=" + encodeURIComponent(c.ratios)
-+        if (c.apiKey) u += "&apikey=" + encodeURIComponent(c.apiKey)
-+        let xhr = new XMLHttpRequest()
-+        xhr.onreadystatechange = function() {
-+            if (xhr.readyState !== XMLHttpRequest.DONE) return
-+            if (xhr.status !== 200) { root.status = Translation.tr("Request failed"); return }
-+            try { root.results = JSON.parse(xhr.responseText).data; root.status = root.results.length ? "" : Translation.tr("No results") }
-+            catch(e) { root.status = Translation.tr("Request failed") }
-+        }
-+        xhr.open("GET", u); xhr.send()
-+    }
-+    function download(item, apply) {
-+        if (downloadProc.running) return
-+        root.applyAfterDownload = apply
-+        root.status = Translation.tr("Downloading…")
-+        let directory = Config.options.sidebar.wallhaven.downloadPath || Config.options.wallpaperSelector.directory
-+        downloadProc.command = [Quickshell.shellPath("scripts/wallhaven/download.py"), item.path, directory]
-+        downloadProc.running = true
-+    }
-+    Process {
-+        id: downloadProc
-+        property string result: ""
-+        stdout: StdioCollector { onStreamFinished: downloadProc.result = text.trim() }
-+        onExited: (code, status) => {
-+            if (code !== 0 || !downloadProc.result) { root.status = Translation.tr("Download failed"); return }
-+            root.status = Translation.tr("Downloaded") + ": " + downloadProc.result
-+            if (root.applyAfterDownload) Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, downloadProc.result])
-+            downloadProc.result = ""
-+        }
-+    }
-+    ColumnLayout {
-+        anchors.fill: parent; anchors.margins: 10; spacing: 8
-+        RowLayout {
-+            MaterialTextField { id: query; Layout.fillWidth: true; placeholderText: Translation.tr("Search Wallhaven"); onAccepted: root.search() }
-+            Button { text: Translation.tr("Search"); onClicked: root.search() }
-+        }
-+        StyledText { Layout.fillWidth: true; text: root.status; elide: Text.ElideMiddle }
-+        GridView {
-+            Layout.fillWidth: true; Layout.fillHeight: true; clip: true
-+            cellWidth: Math.max(170, width / 2); cellHeight: 180
-+            model: root.results
-+            delegate: Item {
-+                required property var modelData
-+                width: GridView.view.cellWidth; height: GridView.view.cellHeight
-+                ColumnLayout {
-+                    anchors.fill: parent; anchors.margins: 3; spacing: 3
-+                    Image { Layout.fillWidth: true; Layout.fillHeight: true; source: modelData.thumbs?.small ?? ""; fillMode: Image.PreserveAspectCrop; asynchronous: true; cache: true }
-+                    StyledText { Layout.fillWidth: true; text: (modelData.resolution ?? "") + " • " + (modelData.id ?? ""); elide: Text.ElideRight }
-+                    RowLayout {
-+                        Button { text: Translation.tr("Download"); enabled: !downloadProc.running; onClicked: root.download(modelData, false) }
-+                        Button { text: Translation.tr("Set"); enabled: !downloadProc.running; onClicked: root.download(modelData, true) }
-+                        Button { text: "↗"; onClicked: Qt.openUrlExternally(modelData.url) }
-+                    }
-+                }
-+            }
-+        }
-+    }
-+}
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/wallpaperSelector/WallpaperSelectorContent.qml b/dots/.config/quickshell/ii/modules/ii/wallpaperSelector/WallpaperSelectorContent.qml
+diff -ruN a/dots/.config/quickshell/ii/modules/ii/wallpaperSelector/WallpaperSelectorContent.qml c/dots/.config/quickshell/ii/modules/ii/wallpaperSelector/WallpaperSelectorContent.qml
 --- a/dots/.config/quickshell/ii/modules/ii/wallpaperSelector/WallpaperSelectorContent.qml	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/modules/ii/wallpaperSelector/WallpaperSelectorContent.qml	2026-11-12 15:52:43.008371151 +0000
++++ c/dots/.config/quickshell/ii/modules/ii/wallpaperSelector/WallpaperSelectorContent.qml	2026-11-12 16:31:05.253162843 +0000
 @@ -197,7 +197,7 @@
                              {
                                  icon: "wallpaper",
@@ -360,9 +378,9 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/ii/wallpa
                              },
                              ...(Config.options.policies.weeb === 1 ? [
                                      {
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/settings/ServicesConfig.qml b/dots/.config/quickshell/ii/modules/settings/ServicesConfig.qml
+diff -ruN a/dots/.config/quickshell/ii/modules/settings/ServicesConfig.qml c/dots/.config/quickshell/ii/modules/settings/ServicesConfig.qml
 --- a/dots/.config/quickshell/ii/modules/settings/ServicesConfig.qml	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/modules/settings/ServicesConfig.qml	2026-11-12 16:03:15.654014215 +0000
++++ c/dots/.config/quickshell/ii/modules/settings/ServicesConfig.qml	2026-11-12 16:31:05.253162843 +0000
 @@ -8,6 +8,39 @@
      forceWidth: true
  
@@ -403,9 +421,9 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/modules/settings/
          icon: "neurology"
          title: Translation.tr("AI")
  
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/scripts/colors/switchwall.sh b/dots/.config/quickshell/ii/scripts/colors/switchwall.sh
+diff -ruN a/dots/.config/quickshell/ii/scripts/colors/switchwall.sh c/dots/.config/quickshell/ii/scripts/colors/switchwall.sh
 --- a/dots/.config/quickshell/ii/scripts/colors/switchwall.sh	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/scripts/colors/switchwall.sh	2026-11-12 15:52:04.390770245 +0000
++++ c/dots/.config/quickshell/ii/scripts/colors/switchwall.sh	2026-11-12 16:31:05.253162843 +0000
 @@ -82,18 +82,9 @@
                  if command -v upscayl &>/dev/null; then
                      nohup upscayl > /dev/null 2>&1 &
@@ -497,9 +515,9 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/scripts/colors/sw
              generate_colors_material_args=(--path "$imgpath")
              # Update wallpaper path in config
              set_wallpaper_path "$imgpath"
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/scripts/videos/record.sh b/dots/.config/quickshell/ii/scripts/videos/record.sh
+diff -ruN a/dots/.config/quickshell/ii/scripts/videos/record.sh c/dots/.config/quickshell/ii/scripts/videos/record.sh
 --- a/dots/.config/quickshell/ii/scripts/videos/record.sh	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/scripts/videos/record.sh	2026-11-12 15:56:10.159091991 +0000
++++ c/dots/.config/quickshell/ii/scripts/videos/record.sh	2026-11-12 16:31:05.253162843 +0000
 @@ -1,78 +1,96 @@
  #!/usr/bin/env bash
 +# NixOS: запись экрана через gpu-screen-recorder (вместо wf-recorder из end-4).
@@ -665,9 +683,9 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/scripts/videos/re
 +else
 +    notify-send "Recording failed" "gpu-screen-recorder exited with code $status" -a 'Recorder' -u critical & disown
 +fi
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/scripts/wallhaven/download.py b/dots/.config/quickshell/ii/scripts/wallhaven/download.py
+diff -ruN a/dots/.config/quickshell/ii/scripts/wallhaven/download.py c/dots/.config/quickshell/ii/scripts/wallhaven/download.py
 --- a/dots/.config/quickshell/ii/scripts/wallhaven/download.py	1970-01-01 00:00:00.000000000 +0000
-+++ b/dots/.config/quickshell/ii/scripts/wallhaven/download.py	2026-11-12 15:57:11.682700593 +0000
++++ c/dots/.config/quickshell/ii/scripts/wallhaven/download.py	2026-11-12 16:31:05.253162843 +0000
 @@ -0,0 +1,21 @@
 +#!/usr/bin/env python3
 +# Сохраняем изображения только с CDN Wallhaven, временный файл переименовывается после загрузки.
@@ -690,9 +708,9 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/scripts/wallhaven
 +    print(path)
 +finally:
 +    if os.path.exists(temp): os.unlink(temp)
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/Audio.qml b/dots/.config/quickshell/ii/services/Audio.qml
+diff -ruN a/dots/.config/quickshell/ii/services/Audio.qml c/dots/.config/quickshell/ii/services/Audio.qml
 --- a/dots/.config/quickshell/ii/services/Audio.qml	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/services/Audio.qml	2026-11-12 15:56:10.157955185 +0000
++++ c/dots/.config/quickshell/ii/services/Audio.qml	2026-11-12 16:31:05.253162843 +0000
 @@ -115,8 +115,8 @@
      }
  
@@ -704,9 +722,9 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/Audio.qm
  
          // Try playing .oga first
          let command = [
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/FirstRunExperience.qml b/dots/.config/quickshell/ii/services/FirstRunExperience.qml
+diff -ruN a/dots/.config/quickshell/ii/services/FirstRunExperience.qml c/dots/.config/quickshell/ii/services/FirstRunExperience.qml
 --- a/dots/.config/quickshell/ii/services/FirstRunExperience.qml	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/services/FirstRunExperience.qml	2026-11-12 15:56:10.158189416 +0000
++++ c/dots/.config/quickshell/ii/services/FirstRunExperience.qml	2026-11-12 16:31:05.253425245 +0000
 @@ -26,7 +26,7 @@
      }
  
@@ -716,9 +734,9 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/FirstRun
          Quickshell.execDetached(["bash", "-c", `qs -p '${root.welcomeQmlPath}'`])
      }
  
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/HyprlandXkb.qml b/dots/.config/quickshell/ii/services/HyprlandXkb.qml
+diff -ruN a/dots/.config/quickshell/ii/services/HyprlandXkb.qml c/dots/.config/quickshell/ii/services/HyprlandXkb.qml
 --- a/dots/.config/quickshell/ii/services/HyprlandXkb.qml	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/services/HyprlandXkb.qml	2026-11-12 15:52:56.703988756 +0000
++++ c/dots/.config/quickshell/ii/services/HyprlandXkb.qml	2026-11-12 16:31:05.253437329 +0000
 @@ -17,7 +17,7 @@
      property string currentLayoutName: ""
      property string currentLayoutCode: ""
@@ -728,10 +746,10 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/Hyprland
      property bool needsLayoutRefresh: false
  
      // Update the layout code according to the layout name (Hyprland gives the name not the code)
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/RadioPlayer.qml b/dots/.config/quickshell/ii/services/RadioPlayer.qml
+diff -ruN a/dots/.config/quickshell/ii/services/RadioPlayer.qml c/dots/.config/quickshell/ii/services/RadioPlayer.qml
 --- a/dots/.config/quickshell/ii/services/RadioPlayer.qml	1970-01-01 00:00:00.000000000 +0000
-+++ b/dots/.config/quickshell/ii/services/RadioPlayer.qml	2026-11-12 16:01:50.848760029 +0000
-@@ -0,0 +1,30 @@
++++ c/dots/.config/quickshell/ii/services/RadioPlayer.qml	2026-11-12 16:38:34.715515752 +0000
+@@ -0,0 +1,43 @@
 +pragma Singleton
 +import QtQuick
 +import Quickshell
@@ -743,13 +761,26 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/RadioPla
 +    property var station: null
 +    property bool playing: player.running
 +    property var pendingCommand: null
++    readonly property string socketPath: Quickshell.env("XDG_RUNTIME_DIR") ? Quickshell.env("XDG_RUNTIME_DIR") + "/ii-radio-mpv.sock" : ""
++    function setVolume(value) {
++        Config.options.sidebar.radio.volume = Math.max(0, Math.min(100, Math.round(value)))
++        if (player.running && socketPath) volumeTimer.restart()
++    }
++    Timer {
++        id: volumeTimer
++        interval: 70
++        onTriggered: {
++            const payload = JSON.stringify({command: ["set_property", "volume", Config.options.sidebar.radio.volume]})
++            Quickshell.execDetached(["bash", "-c", 'printf "%s\\n" "$1" | socat - "UNIX-CONNECT:$2"', "ii-radio", payload, root.socketPath])
++        }
++    }
 +    function play(item) {
 +        if (!item || !item.url_resolved) return
 +        root.station = item
 +        let list = Array.from(Config.options.sidebar.radio.recent).filter(x => x.stationuuid !== item.stationuuid)
 +        list.unshift(item)
 +        Config.options.sidebar.radio.recent = list.slice(0, 20)
-+        root.pendingCommand = ["mpv", "--no-video", "--volume=" + Config.options.sidebar.radio.volume, item.url_resolved]
++        root.pendingCommand = ["mpv", "--no-video", "--volume=" + Config.options.sidebar.radio.volume, ...(root.socketPath ? ["--input-ipc-server=" + root.socketPath] : []), item.url_resolved]
 +        if (player.running) player.running = false
 +        else root.startPending()
 +    }
@@ -762,9 +793,9 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/RadioPla
 +    function stop() { root.pendingCommand = null; player.running = false; root.station = null }
 +    Process { id: player; onExited: (code, status) => root.startPending() }
 +}
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/ScreenRecorder.qml b/dots/.config/quickshell/ii/services/ScreenRecorder.qml
+diff -ruN a/dots/.config/quickshell/ii/services/ScreenRecorder.qml c/dots/.config/quickshell/ii/services/ScreenRecorder.qml
 --- a/dots/.config/quickshell/ii/services/ScreenRecorder.qml	1970-01-01 00:00:00.000000000 +0000
-+++ b/dots/.config/quickshell/ii/services/ScreenRecorder.qml	2026-11-12 16:01:50.848976476 +0000
++++ c/dots/.config/quickshell/ii/services/ScreenRecorder.qml	2026-11-12 16:31:05.253460420 +0000
 @@ -0,0 +1,20 @@
 +pragma Singleton
 +import QtQuick
@@ -786,9 +817,9 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/ScreenRe
 +        function toggle(): void { root.toggle() }
 +    }
 +}
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/SessionWarnings.qml b/dots/.config/quickshell/ii/services/SessionWarnings.qml
+diff -ruN a/dots/.config/quickshell/ii/services/SessionWarnings.qml c/dots/.config/quickshell/ii/services/SessionWarnings.qml
 --- a/dots/.config/quickshell/ii/services/SessionWarnings.qml	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/services/SessionWarnings.qml	2026-11-12 15:52:56.703696503 +0000
++++ c/dots/.config/quickshell/ii/services/SessionWarnings.qml	2026-11-12 16:31:05.253471865 +0000
 @@ -23,7 +23,7 @@
  
      Process {
@@ -798,9 +829,9 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/SessionW
          onExited: (exitCode, exitStatus) => {
              root.packageManagerRunning = (exitCode === 0);
          }
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/Wallpapers.qml b/dots/.config/quickshell/ii/services/Wallpapers.qml
+diff -ruN a/dots/.config/quickshell/ii/services/Wallpapers.qml c/dots/.config/quickshell/ii/services/Wallpapers.qml
 --- a/dots/.config/quickshell/ii/services/Wallpapers.qml	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/services/Wallpapers.qml	2026-11-12 15:52:43.008078585 +0000
++++ c/dots/.config/quickshell/ii/services/Wallpapers.qml	2026-11-12 16:31:05.253483523 +0000
 @@ -19,7 +19,11 @@
      property string generateThumbnailsMagickScriptPath: `${FileUtils.trimFileProtocol(Directories.scriptPath)}/thumbnails/generate-thumbnails-magick.sh`
      property alias directory: folderModel.folder
@@ -814,10 +845,19 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/services/Wallpape
      property alias folderModel: folderModel // Expose for direct binding when needed
      property string searchQuery: ""
      readonly property list<string> extensions: [ // TODO: add videos
-diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/translations/ru_RU.json b/dots/.config/quickshell/ii/translations/ru_RU.json
+diff -ruN a/dots/.config/quickshell/ii/translations/ru_RU.json c/dots/.config/quickshell/ii/translations/ru_RU.json
 --- a/dots/.config/quickshell/ii/translations/ru_RU.json	2026-11-08 11:00:59.000000000 +0000
-+++ b/dots/.config/quickshell/ii/translations/ru_RU.json	2026-11-12 16:03:15.656043371 +0000
-@@ -756,5 +756,23 @@
++++ c/dots/.config/quickshell/ii/translations/ru_RU.json	2026-11-12 16:38:34.716765762 +0000
+@@ -416,7 +416,7 @@
+   "The current system prompt is\n\n---\n\n%1": "Текущий системный промпт\n\n---\n\n%1",
+   "About": "Система",
+   "Quick": "Главное",
+-  "General": "Общее",
++  "General": "Общие",
+   "UV Index": "УФ-индекс",
+   "Force dark mode in terminal": "Тёмная тема в терминале",
+   "%1 characters": "%1 символов",
+@@ -756,5 +756,45 @@
    "Fr": "Пт/*keep*/",
    "Font family name": "Назв. семейства",
    "Pin": "Закреп",
@@ -842,5 +882,27 @@ diff -ruN '--exclude=__pycache__' a/dots/.config/quickshell/ii/translations/ru_R
 +  "Set": "Установить",
 +  "Cava visualizer": "Визуализатор Cava",
 +  "Radio volume": "Громкость радио",
-+  "Wallhaven download folder": "Папка загрузки Wallhaven"
++  "Wallhaven download folder": "Папка загрузки Wallhaven",
++  "Stations from around the world": "Станции со всего мира",
++  "Filters": "Фильтры",
++  "Country code": "Код страны",
++  "All countries (e.g. RU)": "Все страны (например RU)",
++  "Radio is off": "Радио выключено",
++  "Select a station": "Выбери станцию",
++  "No favorite stations yet": "Пока нет избранных станций",
++  "Recently played stations appear here": "Здесь появятся недавние станции",
++  "Search by station name or browse popular stations": "Найди станцию по названию или открой популярные",
++  "Online radio": "Интернет-радио",
++  "Toplist": "Популярные",
++  "Newest": "Новые",
++  "Relevance": "По соответствию",
++  "Random": "Случайные",
++  "Views": "Просмотры",
++  "Find your next wallpaper": "Найди новые обои",
++  "People": "Люди",
++  "Minimum size": "Мин. размер",
++  "Search by tag or browse popular wallpapers": "Поиск по тегам или популярным обоям",
++  "Open in browser": "Открыть в браузере",
++  "Previous page": "Предыдущая страница",
++  "Next page": "Следующая страница"
 +}

@@ -2,7 +2,7 @@
 # Установщик dots-hyprland и чужие настройки Hyprland/терминалов не запускаются.
 { lib, stdenvNoCC, fetchFromGitHub, bash, python3, quickshell, qt6, kdePackages,
   coreutils, findutils, gnugrep, gnused, gawk, procps, psmisc, util-linux,
-  jq, bc, curl, wget, ripgrep, wl-clipboard, cliphist, playerctl, wireplumber,
+  jq, bc, socat, curl, wget, ripgrep, wl-clipboard, cliphist, playerctl, wireplumber,
   brightnessctl, ddcutil, hyprland, hyprpicker, hyprshot, hyprsunset,
   grim, slurp, swappy, tesseract, gpu-screen-recorder, ffmpeg, imagemagick, mpvpaper, mpv, mpvScripts, matugen, fuzzel,
   translate-shell, libqalculate, songrec, ydotool, xkeyboard_config, sound-theme-freedesktop, gsettings-desktop-schemas,
@@ -16,7 +16,7 @@ let
   ]);
   runtime = [
     bash coreutils findutils gnugrep gnused gawk procps psmisc util-linux
-    jq bc curl wget ripgrep wl-clipboard cliphist playerctl wireplumber
+    jq bc socat curl wget ripgrep wl-clipboard cliphist playerctl wireplumber
     brightnessctl ddcutil hyprland hyprpicker hyprshot hyprsunset
     grim slurp swappy tesseract gpu-screen-recorder ffmpeg imagemagick mpvpaper (mpv.override { scripts = [ mpvScripts.mpris ]; }) matugen fuzzel
     translate-shell libqalculate songrec ydotool
@@ -59,6 +59,8 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
     mkdir -p "$out/share/illogical-impulse" "$out/bin" "$out/libexec" "$out/python-env/bin"
     cp -R dots/.config/quickshell/ii/. "$out/share/illogical-impulse/"
+    # Локальные вкладки ii в стиле оболочки.
+    cp -R ${./overlay}/. "$out/share/illogical-impulse/"
     cp LICENSE "$out/share/illogical-impulse/LICENSE"
     cp -R "$shapes"/. "$out/share/illogical-impulse/modules/common/widgets/shapes/"
     cp -R dots/.config/matugen/templates "$out/share/illogical-impulse-matugen"
