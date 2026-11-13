@@ -17,12 +17,17 @@ lib.mkMerge [
       extraPackages = with pkgs.kdePackages; [
         qtmultimedia
         qtsvg
+        qtimageformats
         qtvirtualkeyboard
       ];
     };
 
     environment.systemPackages = with pkgs; [
       simple-sddm-2-theme
+    ];
+
+    systemd.tmpfiles.rules = [
+      "d /var/lib/sddm-wallpaper 0755 winarowk users - -"
     ];
   }
 

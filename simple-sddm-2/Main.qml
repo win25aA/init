@@ -190,7 +190,15 @@ Pane {
 
         AnimatedImage {
             id: backgroundImage
-            
+            property bool fallbackUsed: false
+
+            onStatusChanged: {
+                if (status === Image.Error && !fallbackUsed) {
+                    fallbackUsed = true;
+                    source = config.background || config.Background;
+                }
+            }
+
             MediaPlayer {
                 id: player
                 
@@ -243,7 +251,7 @@ Pane {
                     player.play();
                 }
                 else{
-                    backgroundImage.source = config.background || config.Background
+                    backgroundImage.source = "file:///var/lib/sddm-wallpaper/wallpaper"
                 }
             }
         }
