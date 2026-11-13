@@ -158,10 +158,6 @@ lib.mkMerge [
         echo "Проверь также изображение, звук и соединение вручную."
       '';
 
-      # nback: откат конфига к успешной сборке
-      # nback | nback 3 | nback list
-      # nf: найти, в каком файле конфига что-то написано
-      # nf монитор | nf HDMI | nf kitty
       nf = ''
         if test (count $argv) -eq 0
             echo "Что искать? Пример: nf HDMI"

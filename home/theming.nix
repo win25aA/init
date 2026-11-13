@@ -2,7 +2,7 @@
 { lib, pkgs, ... }:
 
 lib.mkMerge [
-  # GTK и Qt: тёмная adw-gtk3, иконки Papirus, цвета от matugen.
+  # GTK и Qt
   {
     gtk = {
       enable = true;
@@ -25,7 +25,7 @@ lib.mkMerge [
     };
   }
 
-  # Курсор Bibata для GTK, X11 и Sway.
+  # Курсор
   {
     home.pointerCursor = {
       enable = true;

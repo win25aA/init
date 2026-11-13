@@ -54,6 +54,6 @@ hl.bind(mod .. " + C", function()
     hl.dispatch(hl.dsp.workspace.toggle_special("music"))
 end)
 
--- Перемещение и изменение размера мышью (бывшие bindm).
+-- Управление окнами мышью
 hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })

@@ -8,7 +8,7 @@ lib.mkMerge [
     services.xserver.dpi = 96;
   }
 
-  # Экран входа SDDM с темой simple-sddm-2 (пакет: pkgs/simple-sddm-2-theme.nix).
+  # SDDM
   {
     services.displayManager.sddm = {
       enable = true;
@@ -26,7 +26,7 @@ lib.mkMerge [
     ];
   }
 
-  # Общее для Wayland-сессий (Hyprland и Sway): оболочка noctalia и утилиты.
+  # Wayland
   {
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
@@ -37,17 +37,15 @@ lib.mkMerge [
     ];
   }
 
-  # Hyprland и его портал из nixpkgs, без отдельного flake и фиксации версии.
-  # Личные настройки: home/hyprland.
+  # Hyprland: настройки в home/hyprland
   {
-    # Стандартный модуль NixOS сам выбирает pkgs.hyprland и совместимый портал.
     programs.hyprland = {
       enable = true;
       xwayland.enable = true;
     };
   }
 
-  # SwayFX (системная часть). Пользовательский конфиг: home/sway.nix.
+  # SwayFX: настройки в home/sway.nix
   (
     let
       nvidia = config.my.gpu == "nvidia" && !config.my.nvidia.prime.enable;
@@ -73,7 +71,7 @@ lib.mkMerge [
     }
   )
 
-  # XDG-порталы (диалоги файлов, запись экрана). Для Sway — wlr.
+  # XDG-порталы
   {
     xdg.portal = {
       enable = true;
@@ -122,8 +120,7 @@ lib.mkMerge [
     ];
   }
 
-  # Темы оформления на уровне системы (GTK, иконки, matugen).
-  # Пользовательские настройки GTK/Qt: home/theming.nix.
+  # Темы: пользовательские настройки в home/theming.nix
   {
     programs.dconf.enable = true;
 

@@ -1,7 +1,6 @@
 -- Hyprland: оформление, автозапуск и правила окон
 
--- Мониторы и NVIDIA-переменные генерируются в default.nix
--- из настроек ПК (hosts/<имя-пк>), см. модуль "hardware".
+-- Мониторы и NVIDIA: hosts/<имя-пк>
 
 hl.config({
     general = {
@@ -34,7 +33,7 @@ hl.config({
     },
 })
 
--- Layer rules: в Lua используются таблицы, а не строки Hyprlang.
+-- Правила слоёв
 hl.layer_rule({
     name = "noctalia-background-blur",
     match = { namespace = "noctalia-background-.*$" },

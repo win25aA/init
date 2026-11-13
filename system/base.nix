@@ -2,7 +2,7 @@
 { config, lib, pkgs, inputs, ... }:
 
 lib.mkMerge [
-  # Настройки самого Nix: flakes, unfree, автоочистка и оптимизация стора.
+  # Nix
   {
     nixpkgs.config.allowUnfree = true;
 
@@ -16,7 +16,7 @@ lib.mkMerge [
     nix.settings.auto-optimise-store = true;
   }
 
-  # Оверлеи: SpotX + собственные пакеты из ./pkgs.
+  # Оверлеи
   {
     nixpkgs.overlays = [
       inputs.spotx-nix.overlays.default
@@ -48,7 +48,7 @@ lib.mkMerge [
     }
   )
 
-  # Часовой пояс, локали и раскладка клавиатуры.
+  # Локализация
   {
     time.timeZone = "Europe/Moscow";
 
@@ -81,7 +81,7 @@ lib.mkMerge [
     };
   }
 
-  # Home Manager: подключаем пользовательские модули из home/.
+  # Home Manager
   {
     home-manager = {
       useGlobalPkgs = true;
@@ -109,7 +109,7 @@ lib.mkMerge [
     ];
   }
 
-  # Запуск «чужих» бинарников: nix-ld, AppImage, Flatpak.
+  # nix-ld, AppImage и Flatpak
   {
     programs.nix-ld.enable = true;
     services.flatpak.enable = true;
