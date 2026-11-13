@@ -54,12 +54,9 @@
     tumbler
     ffmpegthumbnailer
     (symlinkJoin {
-      name = "peazip-themed";
-      paths = [ peazip ];
+      name = "peazip-themed"; paths = [ peazip ];
       nativeBuildInputs = [ makeWrapper ];
-      postBuild = ''
-        wrapProgram "$out/bin/peazip" --set QT_QPA_PLATFORMTHEME qt6ct
-      '';
+      postBuild = ''wrapProgram "$out/bin/peazip" --set QT_QPA_PLATFORMTHEME qt6ct'';
     })
     file-roller
     zip
