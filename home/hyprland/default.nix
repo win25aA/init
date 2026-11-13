@@ -3,9 +3,7 @@
 { config, lib, osConfig, ... }:
 
 lib.mkMerge [
-  # ════════════════════════════════════════════════════════════
-  # Hyprland: Home Manager генерирует hyprland.lua и подключает Lua-модули.
-  # Пакет и портал по-прежнему устанавливает системный модуль NixOS.
+  # Hyprland
   (
     let
       monitors = osConfig.my.monitors;
@@ -107,8 +105,7 @@ lib.mkMerge [
     }
   )
 
-  # ════════════════════════════════════════════════════════════
-  # Горячие клавиши написаны на Lua; файл устанавливает Home Manager.
+  # Горячие клавиши
   {
     wayland.windowManager.hyprland.extraLuaFiles.binds = ./binds.lua;
   }
