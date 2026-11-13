@@ -35,6 +35,49 @@ lib.mkMerge [
     '';
   }
 
+  # SDDM
+  {
+    xdg.configFile."matugen/config.toml".text = ''
+      [templates.sddm]
+      input_path = "${config.xdg.configHome}/matugen/sddm-colors.conf"
+      output_path = "~/.cache/matugen/sddm-colors.conf"
+    '';
+
+    xdg.configFile."matugen/sddm-colors.conf".text = ''
+      [General]
+      HeaderTextColor="{{colors.primary.default.hex}}"
+      DateTextColor="{{colors.primary.default.hex}}"
+      TimeTextColor="{{colors.primary.default.hex}}"
+      FormBackgroundColor="{{colors.surface.default.hex}}"
+      BackgroundColor="{{colors.surface.default.hex}}"
+      DimBackgroundColor="{{colors.surface.default.hex}}"
+      LoginFieldBackgroundColor="{{colors.surface_container_high.default.hex}}"
+      PasswordFieldBackgroundColor="{{colors.surface_container_high.default.hex}}"
+      LoginFieldTextColor="{{colors.on_surface.default.hex}}"
+      PasswordFieldTextColor="{{colors.on_surface.default.hex}}"
+      UserIconColor="{{colors.primary.default.hex}}"
+      PasswordIconColor="{{colors.primary.default.hex}}"
+      PlaceholderTextColor="{{colors.on_surface_variant.default.hex}}"
+      WarningColor="{{colors.error.default.hex}}"
+      LoginButtonTextColor="{{colors.on_primary.default.hex}}"
+      LoginButtonBackgroundColor="{{colors.primary.default.hex}}"
+      SystemButtonsIconsColor="{{colors.primary.default.hex}}"
+      SessionButtonTextColor="{{colors.primary.default.hex}}"
+      VirtualKeyboardButtonTextColor="{{colors.primary.default.hex}}"
+      DropdownTextColor="{{colors.on_surface.default.hex}}"
+      DropdownSelectedBackgroundColor="{{colors.primary_container.default.hex}}"
+      DropdownBackgroundColor="{{colors.surface_container_high.default.hex}}"
+      HighlightTextColor="{{colors.on_primary.default.hex}}"
+      HighlightBackgroundColor="{{colors.primary.default.hex}}"
+      HighlightBorderColor="{{colors.outline.default.hex}}"
+      HoverUserIconColor="{{colors.secondary.default.hex}}"
+      HoverPasswordIconColor="{{colors.secondary.default.hex}}"
+      HoverSystemButtonsIconsColor="{{colors.secondary.default.hex}}"
+      HoverSessionButtonTextColor="{{colors.secondary.default.hex}}"
+      HoverVirtualKeyboardButtonTextColor="{{colors.secondary.default.hex}}"
+    '';
+  }
+
   # kitty
   {
     xdg.configFile."matugen/config.toml".text = ''
