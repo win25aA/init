@@ -2,15 +2,13 @@
 { config, lib, pkgs, ... }:
 
 lib.mkMerge [
-  # ════════════════════════════════════════════════════════════
-  # polybar: бар для X11.
+  # Polybar
   {
     home.packages = with pkgs; [ polybarFull playerctl dunst ];
     fonts.fontconfig.enable = true;
   }
 
-  # ════════════════════════════════════════════════════════════
-  # polybar: скрипты запуска бара, плеера и уведомлений.
+  # Скрипты
   (
     let
       launch = pkgs.writeShellScriptBin "polybar-launch" ''
@@ -65,8 +63,7 @@ lib.mkMerge [
     }
   )
 
-  # ════════════════════════════════════════════════════════════
-  # polybar: сами бары (основной и для второго монитора).
+  # Бары
   {
     xdg.configFile."polybar/config.ini".text = ''
 
@@ -145,8 +142,7 @@ lib.mkMerge [
     '';
   }
 
-  # ════════════════════════════════════════════════════════════
-  # polybar: модули (часы, звук, воркспейсы, трей и т.д.).
+  # Модули
   {
     xdg.configFile."polybar/modules.ini".text = ''
 

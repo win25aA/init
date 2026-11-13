@@ -1,4 +1,4 @@
--- Hyprland: все прежние сочетания клавиш, в нативном Lua API.
+-- Горячие клавиши Hyprland
 local mod = "SUPER"
 local ipc = "noctalia msg"
 
@@ -9,7 +9,7 @@ for i = 1, 10 do
     hl.bind(mod .. " + CTRL + " .. key, hl.dsp.window.move({ workspace = i }))
 end
 
--- Направление колеса сохранено именно как в исходном конфиге.
+-- Переключение рабочих столов колёсиком
 hl.bind(mod .. " + mouse_up", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mod .. " + mouse_down", hl.dsp.focus({ workspace = "e-1" }))
 hl.bind(mod .. " + left", hl.dsp.focus({ direction = "left" }))
@@ -44,8 +44,7 @@ hl.bind(mod .. " + W", hl.dsp.exec_cmd("firefox"))
 hl.bind(mod .. " + T", hl.dsp.exec_cmd("AyuGram"))
 hl.bind(mod .. " + S", hl.dsp.exec_cmd("steam"))
 
--- На SUPER+D и SUPER+C прежде были по два действия.
--- Сохраняем оба и их порядок: запустить приложение, затем переключить special.
+-- SUPER+D и SUPER+C запускают приложение и переключают special.
 hl.bind(mod .. " + D", function()
     hl.dispatch(hl.dsp.exec_cmd("vesktop"))
     hl.dispatch(hl.dsp.workspace.toggle_special("communication"))
@@ -55,6 +54,6 @@ hl.bind(mod .. " + C", function()
     hl.dispatch(hl.dsp.workspace.toggle_special("music"))
 end)
 
--- Перемещение и изменение размера мышью (бывшие bindm).
+-- Управление окнами мышью
 hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })

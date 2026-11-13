@@ -1,11 +1,8 @@
-# Matugen: цвета из обоев для всех программ. Ищи нужную программу по заголовку блока.
+# Matugen: цвета из обоев
 { lib, ... }:
 
 lib.mkMerge [
-  # ════════════════════════════════════════════════════════════
-  # matugen: генерирует цвета из обоев для всех программ.
-  # Общие настройки здесь, шаблоны для каждой программы — в ./templates.
-  # Каждый шаблон сам дописывает свою секцию в config.toml.
+  # Общие настройки
   {
     # mkBefore: секция [config] всегда первой в файле
     xdg.configFile."matugen/config.toml".text = lib.mkBefore ''
@@ -19,9 +16,7 @@ lib.mkMerge [
     '';
   }
 
-  # ════════════════════════════════════════════════════════════
-  # matugen: Цвета для kitty.
-  # Регистрация шаблона в config.toml + сам шаблон.
+  # kitty
   {
     xdg.configFile."matugen/config.toml".text = ''
       [templates.kitty]
@@ -56,9 +51,7 @@ lib.mkMerge [
     '';
   }
 
-  # ════════════════════════════════════════════════════════════
-  # matugen: Цвета для btop.
-  # Регистрация шаблона в config.toml + сам шаблон.
+  # btop
   {
     xdg.configFile."matugen/config.toml".text = ''
       [templates.btop]
@@ -112,9 +105,7 @@ lib.mkMerge [
     '';
   }
 
-  # ════════════════════════════════════════════════════════════
-  # matugen: Цвета для fish.
-  # Регистрация шаблона в config.toml + сам шаблон.
+  # fish
   {
     xdg.configFile."matugen/config.toml".text = ''
       [templates.fish]
@@ -136,9 +127,7 @@ lib.mkMerge [
     '';
   }
 
-  # ════════════════════════════════════════════════════════════
-  # matugen: Цвета для GTK 3 и GTK 4.
-  # Регистрация шаблона в config.toml + сам шаблон.
+  # GTK 3 и GTK 4
   {
     xdg.configFile."matugen/config.toml".text = ''
       [templates.gtk3]
@@ -200,9 +189,7 @@ lib.mkMerge [
     '';
   }
 
-  # ════════════════════════════════════════════════════════════
-  # matugen: Цвета OSD для mpv.
-  # Регистрация шаблона в config.toml + сам шаблон.
+  # mpv
   {
     xdg.configFile."matugen/config.toml".text = ''
       [templates.mpv]
@@ -220,9 +207,7 @@ lib.mkMerge [
     '';
   }
 
-  # ════════════════════════════════════════════════════════════
-  # matugen: Цвета для polybar.
-  # Регистрация шаблона в config.toml + сам шаблон.
+  # polybar
   {
     xdg.configFile."matugen/config.toml".text = ''
       [templates.polybar]
@@ -245,9 +230,7 @@ lib.mkMerge [
     '';
   }
 
-  # ════════════════════════════════════════════════════════════
-  # matugen: Цвета для rofi.
-  # Регистрация шаблона в config.toml + сам шаблон.
+  # rofi
   {
     xdg.configFile."matugen/config.toml".text = ''
       [templates.rofi]
@@ -269,9 +252,7 @@ lib.mkMerge [
     '';
   }
 
-  # ════════════════════════════════════════════════════════════
-  # matugen: Цвета для dunst.
-  # Регистрация шаблона в config.toml + сам шаблон.
+  # dunst
   {
     xdg.configFile."matugen/config.toml".text = ''
       [templates.dunst]
@@ -302,9 +283,7 @@ lib.mkMerge [
     '';
   }
 
-  # ════════════════════════════════════════════════════════════
-  # matugen: Цвет теней picom.
-  # Регистрация шаблона в config.toml + сам шаблон.
+  # picom
   {
     xdg.configFile."matugen/config.toml".text = ''
       [templates.picom]
@@ -317,9 +296,7 @@ lib.mkMerge [
     '';
   }
 
-  # ════════════════════════════════════════════════════════════
-  # matugen: Цвета экрана блокировки i3lock (x11-lock).
-  # Регистрация шаблона в config.toml + сам шаблон.
+  # i3lock
   {
     xdg.configFile."matugen/config.toml".text = ''
       [templates.i3lock]

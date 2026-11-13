@@ -1,8 +1,6 @@
--- Hyprland 0.55+: мониторы, оформление, автозапуск и правила окон.
--- Устанавливается Home Manager; редактировать нужно этот исходный файл.
+-- Hyprland: оформление, автозапуск и правила окон
 
--- Мониторы и NVIDIA-переменные генерируются в default.nix
--- из настроек ПК (hosts/<имя-пк>), см. модуль "hardware".
+-- Мониторы и NVIDIA: hosts/<имя-пк>
 
 hl.config({
     general = {
@@ -35,7 +33,7 @@ hl.config({
     },
 })
 
--- Layer rules: в Lua используются таблицы, а не строки Hyprlang.
+-- Правила слоёв
 hl.layer_rule({
     name = "noctalia-background-blur",
     match = { namespace = "noctalia-background-.*$" },
@@ -50,8 +48,7 @@ hl.layer_rule({
     ignore_alpha = 0.4,
 })
 
--- Все три исходных правила и их порядок сохранены.
--- Для vesktop позднее правило special:communication перекрывает workspace 4.
+-- Для vesktop правило special:communication перекрывает workspace 4.
 hl.window_rule({
     name = "vesktop-workspace-four",
     match = { class = "^(vesktop)$" },

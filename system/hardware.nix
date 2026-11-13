@@ -2,14 +2,13 @@
 { config, lib, pkgs, ... }:
 
 lib.mkMerge [
-  # ════════════════════════════════════════════════════════════
-  # Видеокарта. Включается то, что указано в my.gpu (hosts/<имя-пк>).
+  # Видеокарта: my.gpu в hosts/<имя-пк>
   (
     let
       gpu = config.my.gpu;
     in
     lib.mkMerge [
-      # Общее для любой видеокарты.
+      # Общие настройки
       {
         hardware.graphics = {
           enable = true;
@@ -48,12 +47,12 @@ lib.mkMerge [
         environment.systemPackages = [ pkgs.nvtopPackages.nvidia ];
       })
 
-      # AMD: драйвер уже в ядре, нужен только мониторинг.
+      # AMD
       (lib.mkIf (gpu == "amd") {
         environment.systemPackages = [ pkgs.nvtopPackages.amd ];
       })
 
-      # Intel: драйвер уже в ядре, добавляем аппаратное декодирование видео.
+      # Intel
       (lib.mkIf (gpu == "intel") {
         hardware.graphics.extraPackages = [ pkgs.intel-media-driver ];
         environment.systemPackages = [ pkgs.nvtopPackages.intel ];
@@ -61,8 +60,7 @@ lib.mkMerge [
     ]
   )
 
-  # ════════════════════════════════════════════════════════════
-  # Звук: PipeWire вместо PulseAudio.
+  # Звук
   {
     services.pulseaudio.enable = false;
     security.rtkit.enable = true;
@@ -81,27 +79,22 @@ lib.mkMerge [
     ];
   }
 
-  # ════════════════════════════════════════════════════════════
   # Bluetooth.
   {
     hardware.bluetooth.enable = true;
     hardware.bluetooth.powerOnBoot = true;
   }
 
-  # ════════════════════════════════════════════════════════════
-  # Файловые системы (дисковые утилиты — в system/programs.nix).
-  # Дополнительные диски конкретного ПК подключаются в hosts/<имя-пк>.
+  # Файловые системы; диски ПК подключаются в hosts/<имя-пк>
   {
     boot.supportedFilesystems = [ "btrfs" ];
   }
 
-  # ════════════════════════════════════════════════════════════
   # Печать (CUPS).
   {
     services.printing.enable = true;
   }
 
-  # ════════════════════════════════════════════════════════════
   # Внешние устройства: iPhone, Android, Nintendo Switch, MediaTek.
   {
     # iPhone
