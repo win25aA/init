@@ -1,6 +1,9 @@
 # Matugen: цвета из обоев
-{ lib, ... }:
+{ config, lib, ... }:
 
+let
+  qtColors = "{{colors.on_background.default.hex}}, {{colors.surface.default.hex}}, #ffffff, #cacaca, #9f9f9f, #b8b8b8, {{colors.on_background.default.hex}}, #ffffff, {{colors.on_surface.default.hex}}, {{colors.background.default.hex}}, {{colors.background.default.hex}}, {{colors.shadow.default.hex}}, {{colors.primary_container.default.hex}}, {{colors.on_primary_container.default.hex}}, {{colors.secondary.default.hex}}, {{colors.primary.default.hex}}, {{colors.surface.default.hex}}, {{colors.scrim.default.hex}}, {{colors.surface.default.hex}}, {{colors.on_surface.default.hex}}, {{colors.secondary.default.hex}}";
+in
 lib.mkMerge [
   # Общие настройки
   {
@@ -13,6 +16,22 @@ lib.mkMerge [
       # --source-color-index, он передаётся в хуке noctalia), но оставляем
       # на будущее — после обновления matugen флаг станет не нужен.
       source_color_index = 0
+    '';
+  }
+
+  # Qt 5/6
+  {
+    xdg.configFile."matugen/config.toml".text = ''
+      [templates.qtct]
+      input_path = "${config.xdg.configHome}/matugen/qtct-colors.conf"
+      output_path = "${config.xdg.configHome}/qt6ct/colors/matugen.conf"
+    '';
+
+    xdg.configFile."matugen/qtct-colors.conf".text = ''
+      [ColorScheme]
+      active_colors=${qtColors}
+      inactive_colors=${qtColors}
+      disabled_colors=${qtColors}
     '';
   }
 
