@@ -2,7 +2,6 @@
 { config, lib, pkgs, ... }:
 
 lib.mkMerge [
-  # ════════════════════════════════════════════════════════════
   # Видеокарта. Включается то, что указано в my.gpu (hosts/<имя-пк>).
   (
     let
@@ -61,7 +60,6 @@ lib.mkMerge [
     ]
   )
 
-  # ════════════════════════════════════════════════════════════
   # Звук: PipeWire вместо PulseAudio.
   {
     services.pulseaudio.enable = false;
@@ -81,27 +79,23 @@ lib.mkMerge [
     ];
   }
 
-  # ════════════════════════════════════════════════════════════
   # Bluetooth.
   {
     hardware.bluetooth.enable = true;
     hardware.bluetooth.powerOnBoot = true;
   }
 
-  # ════════════════════════════════════════════════════════════
   # Файловые системы (дисковые утилиты — в system/programs.nix).
   # Дополнительные диски конкретного ПК подключаются в hosts/<имя-пк>.
   {
     boot.supportedFilesystems = [ "btrfs" ];
   }
 
-  # ════════════════════════════════════════════════════════════
   # Печать (CUPS).
   {
     services.printing.enable = true;
   }
 
-  # ════════════════════════════════════════════════════════════
   # Внешние устройства: iPhone, Android, Nintendo Switch, MediaTek.
   {
     # iPhone

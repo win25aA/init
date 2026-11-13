@@ -2,8 +2,7 @@
 { config, lib, pkgs, ... }:
 
 lib.mkMerge [
-  # ════════════════════════════════════════════════════════════
-  # rofi: лаунчер и тема.
+  # Лаунчер и тема
   {
     home.packages = with pkgs; [ rofi jq gammastep clipmenu pavucontrol ];
 
@@ -109,8 +108,7 @@ lib.mkMerge [
     '';
   }
 
-  # ════════════════════════════════════════════════════════════
-  # rofi: меню (сессия, центр управления, уведомления, обои).
+  # Меню
   (
     let
       power = pkgs.writeShellScriptBin "rofi-power" ''

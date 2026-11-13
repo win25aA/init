@@ -2,8 +2,7 @@
 { config, lib, pkgs, inputs, ... }:
 
 lib.mkMerge [
-  # ════════════════════════════════════════════════════════════
-  # kitty: терминал.
+  # kitty
   {
     programs.kitty = {
       enable = true;
@@ -48,8 +47,7 @@ lib.mkMerge [
     };
   }
 
-  # ════════════════════════════════════════════════════════════
-  # fastfetch: информация о системе при запуске fish.
+  # fastfetch
   (
     let
       esc = builtins.fromJSON ''"\u001b"'';
@@ -119,8 +117,7 @@ lib.mkMerge [
     }
   )
 
-  # ════════════════════════════════════════════════════════════
-  # btop: монитор ресурсов (с поддержкой CUDA/NVIDIA).
+  # btop
   {
     programs.btop = {
       enable = true;

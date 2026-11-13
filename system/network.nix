@@ -2,13 +2,11 @@
 { lib, ... }:
 
 lib.mkMerge [
-  # ════════════════════════════════════════════════════════════
   # NetworkManager.
   {
     networking.networkmanager.enable = true;
   }
 
-  # ════════════════════════════════════════════════════════════
   # DNS Cloudflare через DNS-over-TLS.
   {
     networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
@@ -19,7 +17,6 @@ lib.mkMerge [
     };
   }
 
-  # ════════════════════════════════════════════════════════════
   # zapret — обход DPI (сейчас выключен: enable = false).
   {
     services.zapret = {
@@ -31,7 +28,7 @@ lib.mkMerge [
         "--dpi-desync-any-protocol"
         "--dpi-desync-repeats=6"
         "--new"
-        # профиль 2 — обычные сайты (TCP), твоя рабочая стратегия
+        # профиль 2 — обычные сайты (TCP)
         "--filter-tcp=443"
         "--dpi-desync=fakedsplit"
         "--dpi-desync-fooling=ts"
@@ -50,7 +47,6 @@ lib.mkMerge [
     };
   }
 
-  # ════════════════════════════════════════════════════════════
   # AmneziaVPN.
   {
     programs.amnezia-vpn.enable = true;
