@@ -12,7 +12,7 @@
 # Если Git ещё не установлен:
 nix-shell -p git
 
-git clone -b feature/portable-setup https://github.com/win25aA/init.git ~/init
+git clone -b universal https://github.com/win25aA/init.git ~/init
 cd ~/init
 bash setup-new-pc.sh
 ```
