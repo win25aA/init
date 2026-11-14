@@ -41,7 +41,7 @@ lib.mkMerge [
       functions = {
         fish_greeting = ''
           set_color normal
-          fastfetch --key-padding-left 5
+          fastfetch
         '';
 
         mark_prompt_start = {
