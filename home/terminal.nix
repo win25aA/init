@@ -50,65 +50,41 @@ lib.mkMerge [
   # fastfetch
   (
     let
-      esc = builtins.fromJSON ''"\u001b"'';
+      logo = pkgs.runCommand "nixowos.png" { nativeBuildInputs = [ pkgs.librsvg ]; } ''
+        rsvg-convert --width 320 --height 320 ${./fastfetch/nixowos.svg} > "$out"
+      '';
     in
     {
       programs.fastfetch = {
         enable = true;
         settings = {
           "$schema" = "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json";
-
-
           logo = {
-            source = "${./fastfetch/nixowos.txt}";
-            type = "file";
-            padding.left = 3;
-            padding.top = 5;
-            color = {
-              "1" = "38;2;82;119;195";
-              "2" = "38;2;126;186;228";
-              "3" = "38;2;223;144;175";
-              "4" = "38;2;45;120;158";
-              "5" = "38;2;95;146;211";
-            };
+            source = "${logo}";
+            type = "kitty";
+            width = 25;
+            height = 12;
+            padding = { left = 2; right = 3; top = 1; };
           };
-
-
+          display = {
+            separator = "  ";
+            color.keys = "white";
+          };
           modules = [
-            "break"
-            { type = "custom"; format = "${esc}[90m┌──────────────────────Hardware──────────────────────┐"; }
-            { type = "host"; key = "󰌢  PC"; keyColor = "green"; }
-            { type = "cpu"; key = "│ ├󰻠 "; keyColor = "green"; }
-            { type = "gpu"; key = "│ ├󰍹 "; keyColor = "green"; }
-            { type = "memory"; key = "│ ├󰑭 "; keyColor = "green"; }
-            { type = "disk"; key = "└ └󰋊 "; keyColor = "green"; }
-            { type = "custom"; format = "${esc}[90m└────────────────────────────────────────────────────┘"; }
-            "break"
-            { type = "custom"; format = "${esc}[90m┌──────────────────────Software──────────────────────┐"; }
-            { type = "os"; key = "  OS"; keyColor = "yellow"; }
-            { type = "kernel"; key = "│ ├󰌽 "; keyColor = "yellow"; }
-            { type = "bios"; key = "│ ├󰖡 "; keyColor = "yellow"; }
-            { type = "packages"; key = "│ ├󰏗 "; keyColor = "yellow"; }
-            { type = "shell"; key = "└ └󰞷 "; keyColor = "yellow"; }
-            "break"
-            { type = "de"; key = "󰧨  DE"; keyColor = "blue"; }
-            { type = "lm"; key = "│ ├󰍁 "; keyColor = "blue"; }
-            { type = "wm"; key = "│ ├󱂬 "; keyColor = "blue"; }
-            { type = "wmtheme"; key = "│ ├󰉦 "; keyColor = "blue"; }
-            { type = "terminal"; key = "└ └󰆍 "; keyColor = "blue"; }
-            { type = "custom"; format = "${esc}[90m└────────────────────────────────────────────────────┘"; }
-            "break"
-            { type = "custom"; format = "${esc}[90m┌────────────────────Uptime / Age / DT────────────────────┐"; }
-            {
-              type = "command";
-              key = "  ›  OS Age  ";
-              keyColor = "magenta";
-              text = "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days";
-            }
-            { type = "uptime"; key = "  ›  Uptime  "; keyColor = "magenta"; }
-            { type = "datetime"; key = "  ›  DateTime  "; keyColor = "magenta"; }
-            { type = "custom"; format = "${esc}[90m└─────────────────────────────────────────────────────────┘"; }
-            { type = "colors"; paddingLeft = 2; symbol = "circle"; }
+            { type = "os"; key = ""; }
+            { type = "kernel"; key = ""; }
+            { type = "packages"; key = "󰏖"; }
+            { type = "shell"; key = ""; }
+            { type = "terminal"; key = ""; }
+            { type = "wm"; key = ""; }
+            { type = "cursor"; key = "󰇀"; }
+            { type = "terminalfont"; key = ""; }
+            { type = "cpu"; key = ""; }
+            { type = "gpu"; key = "󰍹"; }
+            { type = "uptime"; key = ""; }
+            { type = "datetime"; key = ""; }
+            { type = "memory"; key = ""; format = "{used} / {total} ({percentage})"; }
+            { type = "display"; key = "󰍹"; }
           ];
         };
       };
