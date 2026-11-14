@@ -6,7 +6,7 @@ concave_edge_corners = false
 end = [ "group:g1", "tray", "volume", "group:g3" ]
 font_weight = 700
 radius = 10
-start = [ "workspaces", "clock", "radio" ]
+start = [ "workspaces", "clock" ]
 
     [[bar.default.capsule_group]]
     accordion = false
@@ -44,6 +44,7 @@ start = [ "workspaces", "clock", "radio" ]
 [control_center]
 hidden_tabs = [ "monitor", "power", "network", "screen-time" ]
 sidebar = "full"
+width = 800
 
     [[control_center.shortcuts]]
     type = "nightlight"
@@ -268,6 +269,9 @@ settings_window_translucent = true
     [shell.launcher]
     pinned = [ "org.vinegarhq.Sober", "osu!", "org.prismlauncher.PrismLauncher", "com.usebottles.bottles" ]
 
+    [shell.panel]
+    control_center_placement = "floating"
+
     [shell.screen_corners]
     size = 30
 
@@ -284,16 +288,16 @@ source = "wallpaper"
 directory = "/etc/nixos/wallpapers"
 
     [wallpaper.default]
-    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/etc/nixos/wallpapers/astolfo-wallpapers.jpg"
 
     [wallpaper.last]
-    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/etc/nixos/wallpapers/astolfo-wallpapers.jpg"
 
     [wallpaper.monitors.DVI-D-1]
-    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/etc/nixos/wallpapers/astolfo-wallpapers.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/etc/nixos/wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/etc/nixos/wallpapers/astolfo-wallpapers.jpg"
 
 [widget.audio_visualizer]
 enabled = false
@@ -304,9 +308,6 @@ custom_image_colorize = true
 
 [widget.cpu]
 display = "text"
-
-[widget.radio]
-type = "nilsonlinux/world-radio:radio"
 
 [widget.ram]
 display = "text"
