@@ -39,9 +39,21 @@ lib.mkMerge [
       };
 
       functions = {
+        fastfetch = ''
+          set -l colors ~/.config/kitty/matugen-colors.conf
+          if test -r $colors
+            set -l accent (string match -r --groups-only '^color2[[:space:]]+(#[[:xdigit:]]{6})' < $colors)
+            if test -n "$accent"
+              command fastfetch --color-keys "$accent" --color-title "$accent" --color-output "$accent" $argv
+              return $status
+            end
+          end
+          command fastfetch $argv
+        '';
+
         fish_greeting = ''
           set_color normal
-          fastfetch --key-padding-left 5
+          fastfetch
         '';
 
         mark_prompt_start = {

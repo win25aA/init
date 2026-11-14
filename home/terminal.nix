@@ -68,23 +68,20 @@ lib.mkMerge [
           };
           display = {
             separator = "  ";
-            color.keys = "white";
+            color = { keys = "green"; title = "green"; output = "green"; };
           };
           modules = [
-            { type = "os"; key = ""; }
-            { type = "kernel"; key = ""; }
-            { type = "packages"; key = "󰏖"; }
-            { type = "shell"; key = ""; }
-            { type = "terminal"; key = ""; }
-            { type = "wm"; key = ""; }
-            { type = "cursor"; key = "󰇀"; }
-            { type = "terminalfont"; key = ""; }
-            { type = "cpu"; key = ""; }
-            { type = "gpu"; key = "󰍹"; }
-            { type = "uptime"; key = ""; }
-            { type = "datetime"; key = ""; }
-            { type = "memory"; key = ""; format = "{used} / {total} ({percentage})"; }
-            { type = "display"; key = "󰍹"; }
+            "title"
+            { type = "custom"; format = "--------------------------"; }
+            { type = "os"; key = "-"; }
+            { type = "kernel"; key = "-"; }
+            { type = "packages"; key = "-"; }
+            { type = "shell"; key = "-"; }
+            { type = "terminal"; key = "-"; }
+            { type = "wm"; key = "-"; }
+            { type = "uptime"; key = "-"; }
+            { type = "media"; key = "-"; }
+            { type = "player"; key = "-"; }
           ];
         };
       };
