@@ -51,9 +51,9 @@ lib.mkMerge [
   (
     let
       theme = builtins.fromJSON (builtins.readFile ./fastfetch/scroll-old.json);
-      logo = pkgs.fetchurl {
-        url = "https://raw.githubusercontent.com/zxzxn3/fastfetch-themes/b636f1234ab2ace740ff156f453c8ff38758da01/assets/frieren_v29_fastfetch_transparent.gif";
-        hash = "sha256-cA0iWO8HEOT+37cZ5voE7ZA62WhxeB2dkaz9Dh6iLAE=";
+      logo = builtins.path {
+        path = ../wallpapers/.face;
+        name = "fastfetch-logo.png";
       };
     in
     {
