@@ -47,6 +47,36 @@ lib.mkMerge [
     };
   }
 
+  # ghostty
+  {
+    programs.ghostty = {
+      enable = true;
+      settings = {
+        font-family = "JetBrains Mono Nerd Font";
+        font-size = 11;
+        cursor-style = "bar";
+        window-save-state = "never";
+        confirm-close-surface = false;
+        window-decoration = "none";
+        window-padding-x = 0;
+        window-padding-y = 0;
+        window-show-tab-bar = "always";
+        background-opacity = 0.6;
+        background-blur = true;
+        command = "fish";
+        config-file = "?${config.xdg.configHome}/ghostty/matugen-colors.conf";
+        keybind = [
+          "performable:ctrl+c=copy_to_clipboard"
+          "ctrl+v=paste_from_clipboard"
+          "ctrl+f=start_search"
+          "ctrl+shift+f=start_search"
+          "page_up=scroll_page_up"
+          "page_down=scroll_page_down"
+        ];
+      };
+    };
+  }
+
   # fastfetch
   (
     let

@@ -113,6 +113,40 @@ lib.mkMerge [
     '';
   }
 
+  # ghostty
+  {
+    xdg.configFile."matugen/config.toml".text = ''
+      [templates.ghostty]
+      input_path = "${config.xdg.configHome}/matugen/ghostty.conf"
+      output_path = "${config.xdg.configHome}/ghostty/matugen-colors.conf"
+    '';
+
+    xdg.configFile."matugen/ghostty.conf".text = ''
+      background = {{colors.surface.default.hex}}
+      foreground = {{colors.on_surface.default.hex}}
+      selection-foreground = {{colors.surface.default.hex}}
+      selection-background = {{colors.primary.default.hex}}
+      cursor-color = {{colors.primary.default.hex}}
+      cursor-text = {{colors.surface.default.hex}}
+      palette = 0={{colors.surface.default.hex}}
+      palette = 1={{colors.error.default.hex}}
+      palette = 2={{colors.primary.default.hex}}
+      palette = 3={{colors.secondary.default.hex}}
+      palette = 4={{colors.tertiary.default.hex}}
+      palette = 5={{colors.primary.default.hex}}
+      palette = 6={{colors.secondary.default.hex}}
+      palette = 7={{colors.on_surface.default.hex}}
+      palette = 8={{colors.surface_variant.default.hex}}
+      palette = 9={{colors.error.default.hex}}
+      palette = 10={{colors.primary.default.hex}}
+      palette = 11={{colors.secondary.default.hex}}
+      palette = 12={{colors.tertiary.default.hex}}
+      palette = 13={{colors.primary.default.hex}}
+      palette = 14={{colors.secondary.default.hex}}
+      palette = 15={{colors.on_surface.default.hex}}
+    '';
+  }
+
   # btop
   {
     xdg.configFile."matugen/config.toml".text = ''
