@@ -51,7 +51,6 @@ lib.mkMerge [
   (
     let
       esc = builtins.fromJSON ''"\u001b"'';
-
     in
     {
       programs.fastfetch = {
@@ -61,9 +60,16 @@ lib.mkMerge [
 
 
           logo = {
-            source = "nixos";
-            type = "builtin";
+            source = "${./fastfetch/nixowos.txt}";
+            type = "file";
             padding.left = 3;
+            color = {
+              "1" = "38;2;82;119;195";
+              "2" = "38;2;126;186;228";
+              "3" = "38;2;223;144;175";
+              "4" = "38;2;45;120;158";
+              "5" = "38;2;95;146;211";
+            };
           };
 
 
