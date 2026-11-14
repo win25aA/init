@@ -63,6 +63,7 @@ lib.mkMerge [
             source = "${./fastfetch/nixowos.txt}";
             type = "file";
             padding.left = 3;
+            padding.top = 5;
             color = {
               "1" = "38;2;82;119;195";
               "2" = "38;2;126;186;228";
