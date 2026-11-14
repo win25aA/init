@@ -52,10 +52,6 @@ lib.mkMerge [
     let
       esc = builtins.fromJSON ''"\u001b"'';
 
-      logoFile = builtins.path {
-        path = ../wallpapers/.face;
-        name = "fastfetch-logo.png";
-      };
     in
     {
       programs.fastfetch = {
@@ -65,14 +61,9 @@ lib.mkMerge [
 
 
           logo = {
-            source = "${logoFile}";
-            type = "kitty";
-            height = 15;
-            width = 35;
-            padding = {
-              top = 5;
-              left = 3;
-            };
+            source = "nixos";
+            type = "builtin";
+            padding.left = 3;
           };
 
 
