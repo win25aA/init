@@ -31,6 +31,7 @@
     ayugram-desktop
     spotify-session # pkgs/spotify-session.nix
     vlc
+    codex
     musikcube
     amberol
     pinta
