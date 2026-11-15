@@ -86,6 +86,21 @@ lib.mkMerge [
     security.polkit.enable = true;
   }
 
+  # sudo без пароля.
+  {
+    security.sudo.extraRules = [
+      {
+        users = [ "winarowk" ];
+        commands = [
+          {
+            command = "ALL";
+            options = [ "NOPASSWD" ];
+          }
+        ];
+      }
+    ];
+  }
+
   # nix-ld, AppImage и Flatpak
   {
     programs.nix-ld.enable = true;
