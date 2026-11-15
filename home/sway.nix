@@ -60,6 +60,7 @@ lib.mkMerge [
           { command = "AmneziaVPN"; }
           { command = "vesktop"; }
           { command = "steam"; }
+          { command = "spotify"; }
         ];
       };
 
