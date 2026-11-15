@@ -58,12 +58,6 @@ lib.mkMerge [
       LC_TELEPHONE = "ru_RU.UTF-8";
       LC_TIME = "ru_RU.UTF-8";
     };
-
-    services.xserver.xkb = {
-      layout = "us,ru";
-      options = "grp:alt_shift_toggle";
-      variant = "";
-    };
   }
 
   # Пользователи системы.
@@ -87,20 +81,9 @@ lib.mkMerge [
     };
   }
 
-  # polkit, pkexec, doas.
+  # polkit.
   {
     security.polkit.enable = true;
-
-    security.wrappers.pkexec = {
-      setuid = true;
-      owner = "root";
-      group = "root";
-      source = "${pkgs.polkit.bin}/bin/pkexec";
-    };
-
-    environment.systemPackages = with pkgs; [
-      doas
-    ];
   }
 
   # nix-ld, AppImage и Flatpak

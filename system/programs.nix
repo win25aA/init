@@ -62,7 +62,6 @@
     file-roller
     zip
     unzip
-    gzip
     micro
     mousepad
     eza
@@ -76,7 +75,6 @@
     gptfdisk
     ncdu
     btrfs-progs
-    exfat
     exfatprogs
     ntfs3g
     dosfstools

@@ -2,12 +2,6 @@
 { config, lib, pkgs, ... }:
 
 lib.mkMerge [
-  # X-сервер и совместимость X11-приложений.
-  {
-    services.xserver.enable = true;
-    services.xserver.dpi = 96;
-  }
-
   # SDDM
   {
     services.displayManager.sddm = {

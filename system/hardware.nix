@@ -73,7 +73,6 @@ lib.mkMerge [
     };
 
     environment.systemPackages = with pkgs; [
-      wireplumber
       socat
       playerctl
     ];
