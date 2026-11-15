@@ -21,13 +21,7 @@ lib.mkMerge [
     nixpkgs.overlays = [
       inputs.spotx-nix.overlays.default
       (final: prev: import ../pkgs { pkgs = final; })
-    ]
-    # Особая версия gpu-screen-recorder нужна только для NVIDIA 580.
-    ++ lib.optional (config.my.gpu == "nvidia" && config.my.nvidia.driver == "legacy_580") (final: prev: {
-      gpu-screen-recorder = import ../pkgs/gpu-screen-recorder-nvidia580.nix {
-        inherit (prev) gpu-screen-recorder ffmpeg_7;
-      };
-    });
+    ];
   }
 
   # Загрузчик GRUB с темой. Режим (uefi/bios) и диск задаются в hosts/<имя-пк>.

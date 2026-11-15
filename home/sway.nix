@@ -58,6 +58,8 @@ lib.mkMerge [
           }
           { command = "noctalia"; }
           { command = "AmneziaVPN"; }
+          { command = "vesktop"; }
+          { command = "steam"; }
         ];
       };
 

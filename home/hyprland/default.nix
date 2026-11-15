@@ -89,9 +89,6 @@ lib.mkMerge [
         '';
       };
 
-      # Noctalia перезаписывает этот файл при генерации цветов, поэтому он
-      # намеренно НЕ является read-only симлинком Home Manager в /nix/store.
-      # Существующие noctalia.lua и старый noctalia.conf не трогаем.
       home.activation.ensureNoctaliaLua = config.lib.dag.entryAfter [ "writeBoundary" ] ''
         hypr_dir=${lib.escapeShellArg "${config.xdg.configHome}/hypr"}
         mkdir -p "$hypr_dir"

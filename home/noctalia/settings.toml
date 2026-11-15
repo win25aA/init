@@ -1,4 +1,4 @@
-config_version = 15
+config_version = 16
 
 [bar.default]
 center = [ "group:g2" ]
@@ -13,7 +13,7 @@ start = [ "workspaces", "clock" ]
     accordion_direction = "end"
     border_width = 1.0
     enabled = true
-    fill = "surface_variant"
+    fill = "surface_container"
     id = "g2"
     members = [ "media", "audio_visualizer" ]
     opacity = 1.0
@@ -24,7 +24,7 @@ start = [ "workspaces", "clock" ]
     accordion_direction = "end"
     border_width = 1.0
     enabled = false
-    fill = "surface_variant"
+    fill = "surface_container"
     id = "g1"
     members = [ "cpu", "ram" ]
     opacity = 1.0
@@ -35,7 +35,7 @@ start = [ "workspaces", "clock" ]
     accordion_direction = "end"
     border_width = 1.0
     enabled = true
-    fill = "surface_variant"
+    fill = "surface_container"
     id = "g3"
     members = [ "control-center", "session" ]
     opacity = 1.0
@@ -79,6 +79,9 @@ widget_order = [ "desktop-widget-0000000000000001" ]
         background = false
         shadow = false
 
+[idle]
+pre_action_fade_seconds = 0
+
 [location]
 address = "vysokaya gora tatarstan"
 latitude = 55.912199999999999
@@ -112,7 +115,7 @@ widget_order = [
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@DVI-D-1".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
         center_password_text = false
@@ -140,7 +143,7 @@ widget_order = [
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
         center_password_text = false
@@ -168,7 +171,7 @@ widget_order = [
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@WAYLAND-1".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
         center_password_text = false
@@ -196,7 +199,7 @@ widget_order = [
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@WL-1".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
         center_password_text = false
@@ -224,7 +227,7 @@ widget_order = [
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@winit".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
         center_password_text = false
@@ -259,7 +262,7 @@ download_dir = "/etc/nixos/wallpapers/"
 copy_to_wallpaper_dir = true
 
 [plugins]
-enabled = [ "nilsonlinux/world-radio", "noctalia/screen_recorder", "aabidk20/yt-music", "noctalia/mpvpaper" ]
+enabled = [ "nilsonlinux/world-radio", "noctalia/screen_recorder" ]
 
 [shell]
 avatar_path = "/etc/nixos/wallpapers/.158.jpg"
@@ -267,10 +270,16 @@ lang = "ru"
 settings_window_translucent = true
 
     [shell.launcher]
+    categories = false
+    compact = true
+    default_view = "pinned"
+    layout = "simple"
     pinned = [ "org.vinegarhq.Sober", "osu!", "org.prismlauncher.PrismLauncher", "com.usebottles.bottles" ]
 
     [shell.panel]
     control_center_placement = "floating"
+    launcher_placement = "attached"
+    open_near_click_launcher = true
 
     [shell.screen_corners]
     size = 30
