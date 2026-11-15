@@ -10,7 +10,6 @@ lib.mkMerge [
       # Сокращения команд
       shellAbbrs = {
         # --- git ---
-        lg = "lazygit";
         gd = "git diff";
         ga = "git add .";
         gc = "git commit -am";
@@ -64,9 +63,6 @@ lib.mkMerge [
 
       interactiveShellInit = ''
         starship init fish | source
-
-        command -v direnv &> /dev/null && direnv hook fish | source
-        command -v zoxide &> /dev/null && zoxide init fish --cmd cd | source
       '';
 
       shellInit = ''
