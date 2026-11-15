@@ -32,6 +32,9 @@
     spotify-session # pkgs/spotify-session.nix
     vlc
     musikcube
+    amberol
+    pinta
+    gimp
     cava
     mpv
     loupe
