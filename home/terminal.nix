@@ -80,8 +80,7 @@ lib.mkMerge [
             { type = "terminal"; key = "-"; }
             { type = "wm"; key = "-"; }
             { type = "uptime"; key = "-"; }
-            { type = "media"; key = "-"; }
-            { type = "player"; key = "-"; }
+            { type = "disk"; key = "-"; }
           ];
         };
       };
