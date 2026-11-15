@@ -50,6 +50,7 @@
     python3Packages.pip
     uv
     opencode-desktop
+    opencode
     thunar
     tumbler
     ffmpegthumbnailer
