@@ -58,6 +58,11 @@ lib.mkMerge [
       LC_TELEPHONE = "ru_RU.UTF-8";
       LC_TIME = "ru_RU.UTF-8";
     };
+
+    services.xserver.xkb = {
+      layout = "us,ru";
+      options = "grp:alt_shift_toggle";
+    };
   }
 
   # Пользователи системы.
@@ -84,6 +89,7 @@ lib.mkMerge [
   # polkit.
   {
     security.polkit.enable = true;
+    security.polkit.enablePkexecWrapper = true;
   }
 
   # nix-ld, AppImage и Flatpak
