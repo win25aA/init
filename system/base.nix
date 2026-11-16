@@ -90,6 +90,17 @@ lib.mkMerge [
   {
     security.polkit.enable = true;
     security.polkit.enablePkexecWrapper = true;
+
+    systemd.user.services.polkit-gnome-authentication-agent = {
+      description = "Polkit authentication agent";
+      wantedBy = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        Restart = "on-failure";
+      };
+    };
   }
 
   # nix-ld, AppImage и Flatpak
