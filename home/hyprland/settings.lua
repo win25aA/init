@@ -71,6 +71,7 @@ hl.env("XDG_SESSION_TYPE", "wayland")
 -- Systemd/D-Bus hook Home Manager уже зарегистрирован перед этим модулем.
 hl.on("hyprland.start", function()
     hl.exec_cmd("noctalia")
+    hl.exec_cmd("gsr-ui")
     hl.exec_cmd("AmneziaVPN")
     hl.exec_cmd("vesktop")
     hl.exec_cmd("steam")

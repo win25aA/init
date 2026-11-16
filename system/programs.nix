@@ -5,7 +5,11 @@
   # Программы с отдельными настройками
   programs.firefox.enable = true;
 
-  programs.gpu-screen-recorder.enable = true;
+  programs.gpu-screen-recorder = {
+    enable = true;
+    ui.enable = true;
+    gtk.enable = true;
+  };
 
   programs.steam = {
     enable = true;
@@ -16,24 +20,6 @@
 
   # Нужен Thunar: превью, корзина, монтирование.
   services.gvfs.enable = true;
-  
-  systemd.user.services.gvfs-heal = {
-    description = "Heal gvfs: поднять демоны после сбоя gvfsd-fuse";
-    wantedBy = [ "default.target" ];
-    path = with pkgs; [ coreutils ];
-    serviceConfig.Type = "oneshot";
-    serviceConfig.ExecStart = pkgs.writeShellScript "gvfs-heal" ''
-      sleep 10
-      ls "$HOME/.gvfs" >/dev/null 2>&1 \
-        && ls "/run/user/$(id -u)/gvfs" >/dev/null 2>&1 && exit 0
-      /run/wrappers/bin/fusermount3 -u "$HOME/.gvfs" 2>/dev/null || true
-      /run/wrappers/bin/fusermount3 -u "/run/user/$(id -u)/gvfs" \
-        2>/dev/null || true
-      systemctl --user restart gvfs-daemon.service \
-        gvfs-udisks2-volume-monitor.service gvfs-mtp-volume-monitor.service \
-        gvfs-gphoto2-volume-monitor.service
-    '';
-  };
 
   programs.virt-manager.enable = true;
   virtualisation.libvirtd = {
@@ -58,7 +44,6 @@
     mpv
     loupe
     yt-dlp
-    gpu-screen-recorder-gtk
     mpvpaper
     wine64
     winetricks
