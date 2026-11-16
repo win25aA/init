@@ -57,6 +57,7 @@ lib.mkMerge [
             command = "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE";
           }
           { command = "noctalia"; }
+          { command = "gsr-ui"; }
           { command = "AmneziaVPN"; }
           { command = "vesktop"; }
           { command = "steam"; }
